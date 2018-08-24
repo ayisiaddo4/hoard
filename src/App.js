@@ -1,32 +1,13 @@
-import React from 'react';
-import { Provider } from 'react-redux';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Provider, connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 import { UrbanAirship } from 'urbanairship-react-native';
-import {
-  Alert,
-  AppRegistry,
-  Button,
-  Dimensions,
-  Image,
-  ImageBackground,
-  KeyboardAvoidingView,
-  ListView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Switch,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, YellowBox, View } from 'react-native';
 
 import NavigatorService from 'lib/navigator';
 import configureStore from './configureStore';
-import { StyleSheet, YellowBox } from 'react-native';
 
-/* import HockeyApp from 'react-native-hockeyapp';*/
-// import Config from 'react-native-config';
 import Login from 'screens/Login';
 import Mnemonic from 'screens/Wallet/Mnemonic';
 import Track from 'screens/Wallet/Track';
@@ -158,11 +139,11 @@ const ModalStack = createStackNavigator(
 
 /*
   Example usage:
-  handleDeepLink('org.reactjs.native.example.Hoard://confirm_transaction/?params={"tx":"123","uid":"12"}')
+  handleDeepLink('com.hoardinc.Hoard://confirm_transaction/?params={"tx":"123","uid":"12"}')
  */
 
 function handleDeepLink(deepLink) {
-  const SCHEME = 'org.reactjs.native.example.Hoard://';
+  const SCHEME = 'com.hoardinc.Hoard://';
   let paths, params;
 
   let link = deepLink.replace(SCHEME, '');
@@ -187,7 +168,7 @@ function handleDeepLink(deepLink) {
   }
 }
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor() {
     super();
     if (__DEV__) {
@@ -195,58 +176,74 @@ export default class App extends React.Component {
     }
   }
 
-  componentWillMount() {
-    /* HockeyApp.configure(Config.HOCKEYAPP_API_KEY, true);*/
-  }
-
   componentDidMount() {
-    /* HockeyApp.start();*/
-    /* HockeyApp.checkForUpdate();*/
     SplashScreen.hide();
+    this.handleNotificationsEnabled(this.props.enablePushNotifications);
   }
 
   refDidLoad = navigatorRef => {
     NavigatorService.setContainer(navigatorRef);
 
-    if (!store.getState().app.hasPreviouslyInitialized) {
-      store.dispatch({ type: INIT_REQUESTING });
+    if (!this.props.hasPreviouslyInitialized) {
+      this.props.store.dispatch({ type: INIT_REQUESTING });
     }
   };
 
   componentWillMount() {
     UrbanAirship.getChannelId().then(channelId => {
-      // this.setState({channelId:channelId})
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log((channelId: channelId));
+      }
     });
 
     UrbanAirship.addListener('notificationResponse', response => {
-      console.log('notificationResponse:', JSON.stringify(response));
-      alert('notificationResponse: ' + response.notification.alert);
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log('notificationResponse:', JSON.stringify(response));
+      }
     });
 
     UrbanAirship.addListener('pushReceived', notification => {
-      console.log('pushReceived:', JSON.stringify(notification));
-      alert('pushReceived: ' + notification.alert);
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log('pushReceived:', JSON.stringify(notification));
+      }
     });
 
     UrbanAirship.addListener('deepLink', event => {
-      console.log('deepLink:', JSON.stringify(event));
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log('deepLink:', JSON.stringify(event));
+      }
       handleDeepLink(event.deepLink);
     });
 
     UrbanAirship.addListener('registration', event => {
-      console.log('registration:', JSON.stringify(event));
-      // this.state.channelId = event.channelId;
-      // this.setState(this.state);
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log('registration:', JSON.stringify(event));
+      }
     });
 
     UrbanAirship.addListener('notificationOptInStatus', event => {
-      console.log('notificationOptInStatus:', JSON.stringify(event));
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log('notificationOptInStatus:', JSON.stringify(event));
+      }
     });
   }
 
+  handleNotificationsEnabled = enabled => {
+    UrbanAirship.setUserNotificationsEnabled(enabled);
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.log('Enabled Notifications');
+    }
+  };
+
   render() {
     return (
-      <Provider store={store}>
         <LinearGradient
           start={gradients.topLeft.start}
           end={gradients.topLeft.end}
@@ -257,10 +254,15 @@ export default class App extends React.Component {
             <ModalStack ref={this.refDidLoad} />
           </Notifications>
         </LinearGradient>
-      </Provider>
     );
   }
 }
+
+App.propTypes = {
+  hasPreviouslyInitialized: PropTypes.bool.isRequired,
+  store: PropTypes.object.isRequired,
+  enablePushNotifications: PropTypes.bool.isRequired,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -272,3 +274,24 @@ const styles = StyleSheet.create({
     left: 0,
   },
 });
+
+// We will want the root-level app aware of user preferences, in order
+// to intercept and reroute push notification action, so we need to connect()
+// the app.
+
+const mapStateToProps = state => {
+  return {
+    hasPreviouslyInitialized: state.app.hasPreviouslyInitialized,
+    enablePushNotifications: state.settings.enablePushNotifications,
+  };
+};
+
+const ConnectedApp = connect(mapStateToProps)(App);
+
+const ProviderApp = () => (
+  <Provider store={store}>
+    <ConnectedApp store={store} />
+  </Provider>
+);
+
+export default ProviderApp;
