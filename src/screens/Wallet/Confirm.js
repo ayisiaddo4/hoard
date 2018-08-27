@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Config from 'react-native-config';
 import { View, Text, Alert, TouchableOpacity, StyleSheet } from 'react-native';
 import Button from 'components/Button';
 
-const TRANSACTION_URL = 'https://erebor.hoardinvest.com/transactions/confirm'
+const TRANSACTION_URL = `${Config.EREBOR_ENDPOINT}/transactions/confirm`;
+
+export function makeQueryString(queries) {
+  if (queries && queries.length) {
+    return `?${queries.map(q => `${q.name}=${q.value}`).join('&')}`;
+  }
+
+  return '';
+}
 
 export async function makeTransactionRequest(url, queries) {
   return api.get(`${url}${makeQueryString(queries)}`);
 }
 
-export default class MyComponent extends Component {
+export default class ConfirmTransaction extends Component {
 
   handleRequest = async (confirm) => {
     return `{success: ${confirm}}`;
