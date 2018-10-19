@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Provider, connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 import { UrbanAirship } from 'urbanairship-react-native';
-import { StyleSheet, Text, YellowBox, View } from 'react-native';
+import { Alert, StyleSheet, Text, YellowBox, View } from 'react-native';
 
 import NavigatorService from 'lib/navigator';
 import configureStore from './configureStore';
@@ -149,18 +149,25 @@ function handleDeepLink(deepLink) {
   let link = deepLink.replace(SCHEME, '');
 
   link = link.split('/');
-  alert(`Deep Link: ${link[0]}`);
+  Alert.alert(`Deep Link: ${link[0]}`);
 
   if (link[link.length - 1].includes('?params=')) {
     params = link[link.length - 1];
     params = params.replace('?params=', '');
-    alert(`Params: ${params}`);
+    Alert.alert(`Params: ${params}`);
   }
 
   if (link[0] === 'confirm_transaction') {
+
+    try {
+      params = JSON.parse(params);
+    } catch (e) {
+      params = '{}';
+    }
+
     NavigatorService.navigateDeep([
       { routeName: 'Wallet' },
-      { routeName: 'Confirm', params: JSON.parse(params) },
+      { routeName: 'Confirm', params: params},
     ]);
   } else {
     // TODO handle default or unhandled deeplinks
