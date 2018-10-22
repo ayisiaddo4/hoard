@@ -183,6 +183,11 @@ class App extends React.Component {
     }
   }
 
+  state = {
+    notificationsEnabled: 'na',
+    channelId: 'na',
+  }
+
   componentDidMount() {
     SplashScreen.hide();
     this.handleNotificationsEnabled(this.props.enablePushNotifications);
@@ -198,6 +203,7 @@ class App extends React.Component {
 
   componentWillMount() {
     UrbanAirship.getChannelId().then(channelId => {
+    this.setState({channelId:channelId});
       if (__DEV__) {
         // eslint-disable-next-line no-console
         console.log((channelId: channelId));
@@ -227,6 +233,7 @@ class App extends React.Component {
     });
 
     UrbanAirship.addListener('registration', event => {
+      this.setState({channelId: event.channelId});
       if (__DEV__) {
         // eslint-disable-next-line no-console
         console.log('registration:', JSON.stringify(event));
@@ -239,10 +246,17 @@ class App extends React.Component {
         console.log('notificationOptInStatus:', JSON.stringify(event));
       }
     });
+
+    UrbanAirship.isUserNotificationsEnabled().then ((enabled) => {
+      this.setState({notificationsEnabled:enabled});
+    });
+
   }
 
   handleNotificationsEnabled = enabled => {
-    UrbanAirship.setUserNotificationsEnabled(enabled);
+    UrbanAirship.setUserNotificationsEnabled(true || enabled);
+    this.setState({notificationsEnabled:enabled});
+
     if (__DEV__) {
       // eslint-disable-next-line no-console
       console.log('Enabled Notifications');
@@ -250,6 +264,7 @@ class App extends React.Component {
   };
 
   render() {
+    const {notificationsEnabled, channelId} = this.state;
     return (
         <LinearGradient
           start={gradients.topLeft.start}
@@ -280,6 +295,18 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
   },
+  debug: {
+    position: 'absolute',
+    backgroundColor: 'yellow',
+    padding: 3,
+    zIndex: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  },
+  debugText: {
+    fontSize: 8
+  }
 });
 
 // We will want the root-level app aware of user preferences, in order

@@ -20,9 +20,18 @@ const loginUrl = `${Config.EREBOR_ENDPOINT}/login/`;
 const userInfoUrl = `${Config.EREBOR_ENDPOINT}/users/`;
 
 // Handle logging in via the API
-export async function loginApi(username_or_email, password) {
+export async function loginApi(username_or_email, password, device_info = null) {
+  const loginOptions = {
+    username_or_email,
+    password
+  };
+
+  if (device_info && device_info.device_type && device_info.channel) {
+    loginOptions.device_info = device_info;
+  }
+
   try {
-    const {user_uid} = await api.post(loginUrl, { username_or_email, password });
+    const {user_uid} = await api.post(loginUrl, loginOptions );
     const fullUrl = `${userInfoUrl}${user_uid}`;
     const res = await api.get(fullUrl);
     return {

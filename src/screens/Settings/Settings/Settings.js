@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import { StyleSheet, Switch } from 'react-native';
 
-import { Layout, Body } from 'components/Base';
+import { Layout, Body, Footer } from 'components/Base';
+import T from 'components/Typography';
 import Link from 'components/Link';
 
 export default function Settings(props) {
@@ -27,6 +28,9 @@ export default function Settings(props) {
           }
         />
       </Body>
+      <Footer>
+        <T.Light style={styles.debug}></T.Light>
+      </Footer>
     </Layout>
   );
 }
@@ -40,4 +44,9 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
   },
+  debug: {
+    fontSize: 20,
+    color: 'red',
+    padding: 50
+  }
 });
