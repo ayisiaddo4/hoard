@@ -6,13 +6,9 @@
  */
 
 #import "AppDelegate.h"
-#import "SplashScreen.h"
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-@import AirshipKit;
 
 @implementation AppDelegate
 
@@ -20,11 +16,7 @@
 {
   NSURL *jsCodeLocation;
 
-  /** Uncomment for development, comment for release **/
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-  /** Uncomment for release, comment for development
-  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-  **/
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Hoard"
@@ -37,9 +29,6 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  [SplashScreen show];
-  [Fabric with:@[[Crashlytics class]]];
-  [UAirship takeOff];
   return YES;
 }
 

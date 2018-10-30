@@ -7,10 +7,6 @@
 #import "UAAPNSRegistration+Internal.h"
 #import "UAComponent+Internal.h"
 
-#if !TARGET_OS_TV
-#import "UALegacyAPNSRegistration+Internal.h"
-#endif
-
 @class UAPreferenceDataStore;
 @class UAConfig;
 @class UATagGroupsAPIClient;
@@ -118,16 +114,6 @@ extern NSString *const UAPushEnabledKey;
 @property (nonatomic, assign, getter=isChannelCreationEnabled) BOOL channelCreationEnabled;
 
 /**
- * Channel ID as a string.
- */
-@property (nonatomic, copy, nullable) NSString *channelID;
-
-/**
- * Channel location as a string.
- */
-@property (nonatomic, copy, nullable) NSString *channelLocation;
-
-/**
  * The UAChannelRegistrar that handles registering the device with Urban Airship.
  */
 @property (nonatomic, strong) UAChannelRegistrar *channelRegistrar;
@@ -136,11 +122,6 @@ extern NSString *const UAPushEnabledKey;
  * Notification that launched the application.
  */
 @property (nullable, nonatomic, strong) UANotificationResponse *launchNotificationResponse;
-
-/**
- * Background task identifier used to do any registration in the background.
- */
-@property (nonatomic, assign) UIBackgroundTaskIdentifier registrationBackgroundTask;
 
 /**
  * Indicates whether APNS registration is out of date or not.
@@ -153,9 +134,17 @@ extern NSString *const UAPushEnabledKey;
 @property (nonatomic, strong) UAPreferenceDataStore *dataStore;
 
 /**
- * The current authorized notification options.
+ * The current authorized notification settings.
+ *
+ * Note: this value reflects all the notification settings currently enabled in the
+ * Settings app and does not take into account which options were originally requested.
  */
-@property (nonatomic, assign) UANotificationOptions authorizedNotificationOptions;
+@property (nonatomic, assign) UAAuthorizedNotificationSettings authorizedNotificationSettings;
+
+/**
+ * The current authorization status.
+ */
+@property (nonatomic, assign) UAAuthorizationStatus authorizationStatus;
 
 /**
  * Indicates whether the user has been prompted for notifications or not.
@@ -175,18 +164,28 @@ extern NSString *const UAPushEnabledKey;
  * Factory method to create a push instance.
  * @param config The Urban Airship config
  * @param dataStore The preference data store.
+ * @param tagGroupsregistrar The tag groups registrar.
  * @return A new push instance.
  */
-+ (instancetype)pushWithConfig:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore;
++ (instancetype)pushWithConfig:(UAConfig *)config
+                     dataStore:(UAPreferenceDataStore *)dataStore
+            tagGroupsRegistrar:(UATagGroupsRegistrar *)tagGroupsregistrar;
+
 
 /**
  * Factory method to create a push instance. For testing
  * @param config The Urban Airship config
  * @param dataStore The preference data store.
  * @param tagGroupsregistrar The tag groups registrar.
+ * @param notificationCenter The notification center.
+ * @param pushRegistration The push registration instance.
  * @return A new push instance.
  */
-+ (instancetype)pushWithConfig:(UAConfig *)config dataStore:(UAPreferenceDataStore *)dataStore tagGroupsRegistrar:(UATagGroupsRegistrar *)tagGroupsregistrar;
++ (instancetype)pushWithConfig:(UAConfig *)config
+                     dataStore:(UAPreferenceDataStore *)dataStore
+            tagGroupsRegistrar:(UATagGroupsRegistrar *)tagGroupsregistrar
+            notificationCenter:(NSNotificationCenter *)notificationCenter
+              pushRegistration:(id<UAAPNSRegistrationProtocol>)pushRegistration;
 
 /**
  * Get the local time zone, considered the default.
@@ -212,18 +211,6 @@ extern NSString *const UAPushEnabledKey;
  */
 - (void)applicationBackgroundRefreshStatusChanged;
 #endif
-
-/**
- * Called when the channel registrar failed to register.
- * @param payload The registration payload.
- */
-- (void)registrationFailedWithPayload:(UAChannelRegistrationPayload *)payload;
-
-/**
- * Called when the channel registrar succesfully registered.
- * @param payload The registration payload.
- */
-- (void)registrationSucceededWithPayload:(UAChannelRegistrationPayload *)payload;
 
 /**
  * Called when the channel registrar creates a new channel.
@@ -323,18 +310,6 @@ extern NSString *const UAPushEnabledKey;
  * @param error An NSError object that encapsulates information why registration did not succeed.
  */
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error;
-#if !TARGET_OS_TV
-/**
- * Called by the UIApplicationDelegate's application:didRegisterUserNotificationSettings:
- * so UAPush can forward the delegate call to its registration delegate.
- *
- * @param application The application instance.
- * @param notificationSettings The resulting notification settings.
- *
- * @deprecated Deprecated in iOS 10.
- */
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings NS_DEPRECATED_IOS(8_0, 10_0, "Deprecated in iOS 10");
-#endif
 
 /**
  * Called to update the tag groups for the current channel.

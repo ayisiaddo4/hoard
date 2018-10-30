@@ -14,7 +14,17 @@
     "android:clean-images": "rm android/app/src/main/res/drawable-*/*.png",
     "build:android:signed": "source .env && cd android && ./gradlew assembleRelease",
     "android:adb": "adb install -r ./android/app/build/outputs/apk/release/app-release.apk",
-    "postinstall": "patch-package"
+    "xpostinstall": "patch-package",
+    "clean": "rm -rf $TMPDIR/metro-* && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/haste-*",
+    "cleaner": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf node_modules/ &&",
+    "thirdparty": "cd node_modules/react-native/third-party/glog-0.3.5/ && ../../scripts/ios-configure-glog.sh && cd ../../../../"
+  },
+  "metro": {
+    "transformer": {
+      "minifierConfig": {
+        "mangle": false
+      }
+    }
   },
   "jest": {
     "preset": "react-native",
@@ -36,17 +46,19 @@
   },
   "dependencies": {
     "assert": "^1.4.1",
+    "axios": "^0.18.0",
     "babel-eslint": "^8.2.3",
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-rewrite-require": "^1.14.5",
     "bitcoinjs-lib": "^3.3.2",
+    "brorand": "https://github.com/HoardInvest/brorand",
     "brorand-shim": "https://github.com/HoardInvest/brorand",
     "ethers": "^3.0.9",
     "lodash": "^4.17.10",
-    "lottie-react-native": "^2.5.0",
+    "lottie-react-native": "^2.5.9",
     "prop-types": "^15.6.1",
-    "react": "16.3.1",
-    "react-native": "0.55.3",
+    "react": "16.6.0-alpha.8af6728",
+    "react-native": "0.57.4",
     "react-native-animatable": "^1.2.4",
     "react-native-bip39": "^2.3.0",
     "react-native-camera": "^1.1.4",
@@ -64,7 +76,7 @@
     "react-native-search-filter": "^0.1.4",
     "react-native-splash-screen": "3.0.9",
     "react-native-stream": "^0.1.9",
-    "react-native-svg": "^6.3.1",
+    "react-native-svg": "^6.5.0",
     "react-native-svg-circular-progress": "^1.0.4",
     "react-native-swipeable": "^0.6.0",
     "react-native-touch-id": "^4.0.1",
@@ -74,8 +86,8 @@
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
     "reselect": "^3.0.1",
-    "urbanairship-react-native": "^1.6.2",
-    "victory-native": "^0.17.4",
+    "urbanairship-react-native": "2.1.1",
+    "victory-native": "30.0.0",
     "vm-browserify": "^1.0.1",
     "wallet-address-validator": "^0.1.7"
   },
@@ -86,9 +98,9 @@
     "android": {
       "mainFilePath": "./src/main/java/com/hoard/MainApplication.java"
     }
-
   },
   "devDependencies": {
+    "@babel/plugin-external-helpers": "^7.0.0",
     "babel-eslint": "^8.2.3",
     "babel-jest": "22.4.3",
     "babel-preset-react-native": "4.0.0",
@@ -100,7 +112,8 @@
     "jest": "22.4.3",
     "patch-package": "^5.1.1",
     "prettier": "^1.12.0",
-    "react-test-renderer": "16.3.1"
+    "react-test-renderer": "16.3.1",
+    "schedule": "0.4.0"
   },
   "detox": {
     "configurations": {

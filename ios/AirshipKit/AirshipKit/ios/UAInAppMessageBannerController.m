@@ -136,7 +136,7 @@ CGFloat const BannerExcessiveSafeAreaPadding = 14;
 
 - (void)showWithParentView:(UIView *)parentView completionHandler:(void (^)(UAInAppMessageResolution * _Nonnull))completionHandler {
     if (self.isShowing) {
-        UA_LWARN(@"In-app message banner has already been displayed");
+        UA_LTRACE(@"In-app message banner has already been displayed");
         return;
     }
 
@@ -221,7 +221,7 @@ CGFloat const BannerExcessiveSafeAreaPadding = 14;
                                          situation:UASituationManualInvocation
                                           metadata:nil
                                  completionHandler:^(UAActionResult *result) {
-                                     UA_LINFO(@"Message tap actions finished running.");
+                                     UA_LTRACE(@"Message tap actions finished running.");
                                  }];
     }
 

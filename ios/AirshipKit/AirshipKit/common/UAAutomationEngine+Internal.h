@@ -5,37 +5,35 @@
 #import "UAScheduleEdits.h"
 #import "UASchedule.h"
 #import "UAScheduleInfo.h"
+#import "UATimerScheduler+Internal.h"
+#import "UADispatcher+Internal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- * Schedule execution states.
+ * Prepare results
  */
-typedef NS_ENUM(NSUInteger, UAScheduleState) {
+typedef NS_ENUM(NSInteger, UAAutomationSchedulePrepareResult) {
     /**
-     * Schedule is idle.
+     * Schedule should continue executing.
      */
-    UAScheduleStateIdle = 0,
+    UAAutomationSchedulePrepareResultContinue,
 
     /**
-     * Schedule is pending execution.
+     * Schedule should skip executing.
      */
-    UAScheduleStatePendingExecution = 1,
+    UAAutomationSchedulePrepareResultSkip,
 
     /**
-     * Schedule is executing.
+     * Schedule should skip executing. The schedule's execution count should be incremented
+     * and its execution interval should be handled.
      */
-    UAScheduleStateExecuting = 2,
+    UAAutomationSchedulePrepareResultPenalize,
 
     /**
-     * Schedule is paused.
+     * Schedule should be cancelled.
      */
-    UAScheduleStatePaused = 3,
-
-    /**
-     * Schedule is finished.
-     */
-    UAScheduleStateFinished = 4
+    UAAutomationSchedulePrepareResultCancel
 };
 
 /**
@@ -50,6 +48,15 @@ typedef NS_ENUM(NSUInteger, UAScheduleState) {
  * @returns Schedule info.
  */
 - (UAScheduleInfo *)createScheduleInfoWithBuilder:(UAScheduleInfoBuilder *)builder;
+
+/**
+ * Prepares the schedule.
+ *
+ * @param schedule The schedule.
+ * @param completionHandler Completion handler when the schedule is finished preparing.
+ */
+- (void)prepareSchedule:(UASchedule *)schedule
+      completionHandler:(void (^)(UAAutomationSchedulePrepareResult))completionHandler;
 
 /**
  * Checks if a schedule is ready to execute.
@@ -93,15 +100,27 @@ typedef NS_ENUM(NSUInteger, UAScheduleState) {
  */
 @property (nonatomic, strong) UAAutomationStore *automationStore;
 
-
 /**
  * Automation Engine constructor.
  *
  * @param automationStore An initialized UAAutomationStore
- * @param limit Maximum schedules to maintain
  * @return Initialized Automation Engine instance
  */
-+ (instancetype)automationEngineWithAutomationStore:(UAAutomationStore *)automationStore scheduleLimit:(NSUInteger)limit;
++ (instancetype)automationEngineWithAutomationStore:(UAAutomationStore *)automationStore;
+
+/**
+ * Automation Engine constructor. Used for testing.
+ *
+ * @param automationStore An initialized UAAutomationStore
+ * @param timerScheduler A timer scheduler
+ * @param notificationCenter The notification center.
+ * @param dispatcher The dispatcher to dispatch main queue blocks.
+ * @return Initialized Automation Engine instance
+ */
++ (instancetype)automationEngineWithAutomationStore:(UAAutomationStore *)automationStore
+                                     timerScheduler:(UATimerScheduler *)timerScheduler
+                                 notificationCenter:(NSNotificationCenter *)notificationCenter
+                                         dispatcher:(UADispatcher *)dispatcher;
 
 /**
  * Starts the Automation Engine.

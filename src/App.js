@@ -178,19 +178,28 @@ function handleDeepLink(deepLink) {
 class App extends React.Component {
   constructor() {
     super();
+
     if (__DEV__) {
-      YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated']);
+      YellowBox.ignoreWarnings([
+        'Warning: isMounted(...) is deprecated',
+        'Require cycle:',
+        'Require cycle: ',
+      ]);
     }
   }
 
   state = {
-    notificationsEnabled: 'na',
+    notificationsEnabled: false,
     channelId: 'na',
-  }
+  };
 
-  componentDidMount() {
-    SplashScreen.hide();
-    this.handleNotificationsEnabled(this.props.enablePushNotifications);
+  static getDerivedStateFromProps(props, state) {
+    if (state.notificationsEnabled !== props.enablePushNotifications) {
+      const newState = state;
+      newState.notificationsEnabled = props.enablePushNotifications;
+      return newState;
+    }
+    return null;
   }
 
   refDidLoad = navigatorRef => {
@@ -201,70 +210,71 @@ class App extends React.Component {
     }
   };
 
-  componentWillMount() {
-    UrbanAirship.getChannelId().then(channelId => {
-    this.setState({channelId:channelId});
-      if (__DEV__) {
-        // eslint-disable-next-line no-console
-        console.log((channelId: channelId));
-      }
-    });
+  async getChannelId() {
+    const id = await UrbanAirship.getChannelId();
+    console.log('id---->', id);
+    this.setState({ channelId: id });
+  }
 
-    UrbanAirship.addListener('notificationResponse', response => {
-      if (__DEV__) {
+  componentDidMount() {
+    SplashScreen.hide();
+
+    this.getChannelId().done();
+
+    this.handleNotificationResponse = UrbanAirship.addListener(
+      'notificationResponse',
+      response => {
         // eslint-disable-next-line no-console
         console.log('notificationResponse:', JSON.stringify(response));
       }
-    });
+    );
 
-    UrbanAirship.addListener('pushReceived', notification => {
-      if (__DEV__) {
+    this.handlePushReceived = UrbanAirship.addListener(
+      'pushReceived',
+      notification => {
         // eslint-disable-next-line no-console
         console.log('pushReceived:', JSON.stringify(notification));
       }
-    });
+    );
 
-    UrbanAirship.addListener('deepLink', event => {
-      if (__DEV__) {
-        // eslint-disable-next-line no-console
-        console.log('deepLink:', JSON.stringify(event));
-      }
+    this.handleDeepLink = UrbanAirship.addListener('deepLink', event => {
+      // eslint-disable-next-line no-console
+      console.log('deepLink:', JSON.stringify(event));
       handleDeepLink(event.deepLink);
     });
 
-    UrbanAirship.addListener('registration', event => {
-      this.setState({channelId: event.channelId});
-      if (__DEV__) {
+    this.handleRegistration = UrbanAirship.addListener(
+      'registration',
+      event => {
+        this.setState({ channelId: event.channelId });
         // eslint-disable-next-line no-console
         console.log('registration:', JSON.stringify(event));
       }
-    });
+    );
 
-    UrbanAirship.addListener('notificationOptInStatus', event => {
-      if (__DEV__) {
+    this.handleNotificationOptInStatus = UrbanAirship.addListener(
+      'notificationOptInStatus',
+      event => {
         // eslint-disable-next-line no-console
         console.log('notificationOptInStatus:', JSON.stringify(event));
       }
-    });
+    );
 
-    UrbanAirship.isUserNotificationsEnabled().then ((enabled) => {
-      this.setState({notificationsEnabled:enabled});
+    UrbanAirship.isUserNotificationsEnabled().then(enabled => {
+      this.setState({ notificationsEnabled: enabled });
     });
-
   }
 
-  handleNotificationsEnabled = enabled => {
-    UrbanAirship.setUserNotificationsEnabled(true || enabled);
-    this.setState({notificationsEnabled:enabled});
-
-    if (__DEV__) {
-      // eslint-disable-next-line no-console
-      console.log('Enabled Notifications');
-    }
-  };
+  componentWillUnmount() {
+    this.handleNotificationResponse.remove();
+    this.handlePushReceived.remove();
+    this.handleDeepLink.remove();
+    this.handleRegistration.remove();
+    this.handleNotificationOptInStatus.remove();
+  }
 
   render() {
-    const {notificationsEnabled, channelId} = this.state;
+    const { notificationsEnabled, channelId } = this.state;
     return (
         <LinearGradient
           start={gradients.topLeft.start}

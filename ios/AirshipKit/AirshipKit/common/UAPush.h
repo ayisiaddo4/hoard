@@ -46,11 +46,36 @@ extern NSString *const UAChannelCreatedEventExistingKey;
  */
 typedef NS_OPTIONS(NSUInteger, UANotificationOptions) {
     UANotificationOptionBadge   = (1 << 0),
-#if !TARGET_OS_TV   // Only badges available on tvOS
     UANotificationOptionSound   = (1 << 1),
     UANotificationOptionAlert   = (1 << 2),
-    UANotificationOptionCarPlay = (1 << 3)
-#endif
+    UANotificationOptionCarPlay = (1 << 3),
+    UANotificationOptionCriticalAlert = (1 << 4),
+    UANotificationOptionProvidesAppNotificationSettings = (1 << 5),
+    UANotificationOptionProvisional = (1 << 6),
+};
+
+/**
+ * Authorized notification settings
+ */
+typedef NS_OPTIONS(NSUInteger, UAAuthorizedNotificationSettings) {
+    UAAuthorizedNotificationSettingsNone = 0,
+    UAAuthorizedNotificationSettingsBadge   = (1 << 0),
+    UAAuthorizedNotificationSettingsSound   = (1 << 1),
+    UAAuthorizedNotificationSettingsAlert   = (1 << 2),
+    UAAuthorizedNotificationSettingsCarPlay = (1 << 3),
+    UAAuthorizedNotificationSettingsLockScreen = (1 << 4),
+    UAAuthorizedNotificationSettingsNotificationCenter = (1 << 5),
+    UAAuthorizedNotificationSettingsCriticalAlert = (1 << 6),
+};
+
+/**
+ * Authorization status
+ */
+typedef NS_ENUM(NSInteger, UAAuthorizationStatus) {
+    UAAuthorizationStatusNotDetermined = 0,
+    UAAuthorizationStatusDenied,
+    UAAuthorizationStatusAuthorized,
+    UAAuthorizationStatusProvisional,
 };
 
 /**
@@ -72,7 +97,7 @@ static const UANotificationOptions UANotificationOptionNone =  0;
 @optional
 
 /**
- * Called when the device channel registers with Urban Airship. Successful
+ * Called after the device channel registers with Urban Airship. Successful
  * registrations could be disabling push, enabling push, or updating the device
  * registration settings.
  *
@@ -81,6 +106,10 @@ static const UANotificationOptions UANotificationOptionNone =  0;
  *
  * When registration finishes in the background, any async tasks that are triggered
  * from this call should request a background task.
+ *
+ * @note This method may be called at any time. It does not guarantee a channel 
+ * registration just occurred.
+ *
  * @param channelID The channel ID string.
  * @param deviceToken The device token string.
  */
@@ -97,17 +126,49 @@ static const UANotificationOptions UANotificationOptionNone =  0;
 /**
  * Called when APNS registration completes.
  *
- * @param options UANotificationOptions that were most recently registered.
+ * @param authorizedSettings The settings that were authorized at the time of registration.
+ * @param categories NSSet of the categories that were most recently registered.
+ * @param status The authorization status.
+ */
+- (void)notificationRegistrationFinishedWithAuthorizedSettings:(UAAuthorizedNotificationSettings)authorizedSettings
+                                                    categories:(NSSet *)categories
+                                                        status:(UAAuthorizationStatus)status;
+
+/**
+ * Called when APNS registration completes.
+ *
+ * @param authorizedSettings The settings that were authorized at the time of registration.
  * @param categories NSSet of the categories that were most recently registered.
  */
-- (void)notificationRegistrationFinishedWithOptions:(UANotificationOptions)options categories:(NSSet *)categories;
+- (void)notificationRegistrationFinishedWithAuthorizedSettings:(UAAuthorizedNotificationSettings)authorizedSettings
+                                                    categories:(NSSet *)categories;
+
+/**
+ * Called when notification authentication changes with the new authorized settings.
+ *
+ * @param authorizedSettings UAAuthorizedNotificationSettings The newly changed authorized settings.
+ */
+- (void)notificationAuthorizedSettingsDidChange:(UAAuthorizedNotificationSettings)authorizedSettings;
+
+/**
+ * Called when APNS registration completes.
+ *
+ * @param options UANotificationOptions that were most recently registered.
+ * @param categories NSSet of the categories that were most recently registered.
+ *
+ * @deprecated Deprecated - to be removed in SDK version 11.0. Please use notificationRegistrationFinishedWithAuthorizedSettings:categories:
+ */
+- (void)notificationRegistrationFinishedWithOptions:(UANotificationOptions)options
+                                         categories:(NSSet *)categories DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 11.0. Please use notificationRegistrationFinishedWithAuthorizedSettings:categories");
 
 /**
  * Called when APNS authentication changes with the new authorized options.
  *
  * @param options UANotificationOptions that were most recently registered.
+ *
+ * @deprecated Deprecated - to be removed in SDK version 11.0. Please use notificationAuthorizedSettingsDidChange:
  */
-- (void)notificationAuthorizedOptionsDidChange:(UANotificationOptions)options;
+- (void)notificationAuthorizedOptionsDidChange:(UANotificationOptions)options DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 11.0. Please use notificationAuthorizedSettingsDidChange");
 
 /**
  * Called when the UIApplicationDelegate's application:didRegisterForRemoteNotificationsWithDeviceToken:
@@ -211,10 +272,6 @@ static const UANotificationOptions UANotificationOptionNone =  0;
 /**
  * Enables/disables user notifications on this device through Urban Airship.
  * Defaults to `NO`. Once set to `YES`, the user will be prompted for remote notifications.
- *
- * On iOS 8+, we recommend that you do not change this value to `NO` and instead direct users to
- * the iOS Settings App. As such, the transition from `YES` to `NO` is disabled by default on iOS 8+.
- * Please see requireSettingsAppToDisableUserNotifications for details.
  */
 @property (nonatomic, assign) BOOL userPushNotificationsEnabled;
 
@@ -224,43 +281,6 @@ static const UANotificationOptions UANotificationOptionNone =  0;
  * notifications.
  */
 @property (nonatomic, assign) BOOL pushTokenRegistrationEnabled;
-
-/**
- * This setting controls the underlying behavior of the SDK when user notifications are disabled.
- * When set to `NO` and user notifications are disabled with the userPushNotificationsEnabled
- * property, this SDK will mark the device as opted-out on the Urban Airship server but the OS-level
- * settings will still show this device as able to receive user notifications.
- *
- * This is a temporary flag to work around an issue in iOS 8 where
- * unregistering user notification types may prevent the device from being able to
- * register with other types without a device restart. It will be removed once
- * the issue is addressed in iOS 8.
- *
- * This setting defaults to `YES` due to the new flag requireSettingsAppToDisableUserNotifications.
- * To enable UA SDK 5 behavior, set this flag and requireSettingsAppToDisableUserNotifications
- * to `NO`.
- *
- */
-@property (nonatomic, assign) BOOL allowUnregisteringUserNotificationTypes;
-
-/**
- * This setting controls the behavior of the userPushNotificationsEnabled setting. If set to `YES`, the
- * application will not be allowed to set userPushNotificationsEnabled to `NO`, and instead, the user should
- * be directed to the iOS Settings app via the UIApplicationOpenSettingsURLString URL constant. The iOS
- * Settings app is the preferred method of disabling user notifications as of iOS 8.
- * 
- * The setting defaults to `YES` on iOS 8+. Changing this setting to `NO` could allow notifications with user-visible components
- * (badge, alert, or sound) to be processed by the OS if the notification also has a background `content-available`
- * flag in the `aps` section of the notification.
- *
- * On versions of iOS prior to iOS 8, this flag will always return `NO`. Those iOS versions do not allow linking
- * to the Settings app and are unaffected by the opt-out after opt-in bug.
- *
- * To open the iOS Settings app directly to your application's settings:
- * `[[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]]`
- */
-@property (nonatomic, assign) BOOL requireSettingsAppToDisableUserNotifications;
-
 
 /**
  * Sets the default value for userPushNotificationsEnabled. The default is `NO`.
@@ -328,9 +348,28 @@ static const UANotificationOptions UANotificationOptionNone =  0;
 @property (nonatomic, readonly, strong, nullable) UANotificationResponse *launchNotificationResponse;
 
 /**
- * The current authorized notification options.
+ * The current authorized notification settings.
+ *
+ * Note: this value reflects all the notification settings currently enabled in the
+ * Settings app and does not take into account which options were originally requested.
  */
-@property (nonatomic, assign, readonly) UANotificationOptions authorizedNotificationOptions;
+@property (nonatomic, readonly) UAAuthorizedNotificationSettings authorizedNotificationSettings;
+
+/**
+ * The current authorization status.
+ */
+@property (nonatomic, readonly) UAAuthorizationStatus authorizationStatus;
+
+/**
+ * The current authorized notification options.
+ *
+ * Note: Unlike authorizedNotificationSettings, this value may diverge from the settings enabled in the
+ * Settings app depending on whether user push notifications are enabled and which options were originally requested.
+ * This behavior has been maintained for backwards compatibility.
+ 
+ * @deprecated Deprecated - to be removed in SDK version 11.0. Please use authorizedNotificationSettings.
+ */
+@property (nonatomic, assign, readonly) UANotificationOptions authorizedNotificationOptions DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 11.0. Please use authorizedNotificationSettings");
 
 /**
  * Indicates whether the user has been prompted for notifications or not.
@@ -357,6 +396,8 @@ static const UANotificationOptions UANotificationOptionNone =  0;
 /**
  * Sets the badge number on the device and on the Urban Airship server.
  * 
+ * @note This method must be called on the main thread.
+ *
  * @param badgeNumber The new badge number
  */
 - (void)setBadgeNumber:(NSInteger)badgeNumber;
@@ -364,20 +405,10 @@ static const UANotificationOptions UANotificationOptionNone =  0;
 /**
  * Resets the badge to zero (0) on both the device and on Urban Airships servers. This is a
  * convenience method for `setBadgeNumber:0`.
+ *
+ * @note This method must be called on the main thread.
  */
 - (void)resetBadge;
-
-
-
-///---------------------------------------------------------------------------------------
-/// @name Alias
-///
-/// @deprecated Deprecated - to be removed in SDK version 10.0
-///---------------------------------------------------------------------------------------
- 
-/** Alias for this device */
-@property (nonatomic, copy, nullable) NSString *alias DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 10.0");
-
 
 ///---------------------------------------------------------------------------------------
 /// @name Tags
@@ -395,6 +426,17 @@ static const UANotificationOptions UANotificationOptionNone =  0;
  * server-side tagging. Defaults to `YES`.
  */
 @property (nonatomic, assign, getter=isChannelTagRegistrationEnabled) BOOL channelTagRegistrationEnabled;
+
+/**
+ * Enables user notifications on this device through Urban Airship.
+ *
+ * Note: The completion handler will return the success state of system push authorization as it is defined by the
+ * user's response to the push authorization prompt. The completion handler success state does NOT represent the
+ * state of the userPushNotificationsEnabled flag, which will be invariably set to YES after the completion of this call.
+ *
+ * @param completionHandler The completion handler with success flag representing the system authorization state.
+ */
+- (void)enableUserPushNotifications:(void(^)(BOOL success))completionHandler;
 
 /**
  * Adds a tag to the list of tags for the device.

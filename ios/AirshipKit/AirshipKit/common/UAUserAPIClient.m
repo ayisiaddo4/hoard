@@ -6,6 +6,8 @@
 #import "NSJSONSerialization+UAAdditions.h"
 #import "UAUser.h"
 #import "UAUserData+Internal.h"
+#import "NSURLResponse+UAAdditions.h"
+#import "UAJSONSerialization+Internal.h"
 
 @implementation UAUserAPIClient
 
@@ -31,16 +33,7 @@
 
 
     [self.session dataTaskWithRequest:request retryWhere:^BOOL(NSData * _Nullable data, NSURLResponse * _Nullable response) {
-        NSHTTPURLResponse *httpResponse = nil;
-        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            httpResponse = (NSHTTPURLResponse *) response;
-        }
-
-        if (httpResponse.statusCode >= 500 && httpResponse.statusCode <= 599) {
-            return YES;
-        }
-
-        return NO;
+        return [response hasRetriableStatus];
     } completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *httpResponse = nil;
         if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -85,16 +78,7 @@
     UARequest *request = [self requestToUpdateUser:user payload:payload];
 
     [self.session dataTaskWithRequest:request retryWhere:^BOOL(NSData * _Nullable data, NSURLResponse * _Nullable response) {
-        NSHTTPURLResponse *httpResponse = nil;
-        if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-            httpResponse = (NSHTTPURLResponse *) response;
-        }
-
-        if (httpResponse.statusCode >= 500 && httpResponse.statusCode <= 599) {
-            return YES;
-        }
-
-        return NO;
+        return [response hasRetriableStatus];
     } completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *httpResponse = nil;
         if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -131,11 +115,11 @@
         [builder setValue:@"application/json" forHeader:@"Content-Type"];
         [builder setValue:@"application/vnd.urbanairship+json; version=3;" forHeader:@"Accept"];
 
-        builder.body = [NSJSONSerialization dataWithJSONObject:payload
+        builder.body = [UAJSONSerialization dataWithJSONObject:payload
                                                        options:0
                                                          error:nil];
 
-        UA_LDEBUG(@"Request to create user with body: %@", builder.body);
+        UA_LTRACE(@"Request to create user with body: %@", builder.body);
     }];
 
     return request;
@@ -156,11 +140,11 @@
         [builder setValue:@"application/json" forHeader:@"Content-Type"];
         [builder setValue:@"application/vnd.urbanairship+json; version=3;" forHeader:@"Accept"];
 
-        builder.body = [NSJSONSerialization dataWithJSONObject:payload
+        builder.body = [UAJSONSerialization dataWithJSONObject:payload
                                                        options:0
                                                          error:nil];
 
-        UA_LDEBUG(@"Request to update user with body: %@", builder.body);
+        UA_LTRACE(@"Request to update user with body: %@", builder.body);
     }];
 
     return request;

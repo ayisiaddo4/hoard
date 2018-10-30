@@ -6,6 +6,7 @@ import { StyleSheet, Switch } from 'react-native';
 import { Layout, Body, Footer } from 'components/Base';
 import T from 'components/Typography';
 import Link from 'components/Link';
+import { UrbanAirship } from 'urbanairship-react-native';
 
 export default function Settings(props) {
   return (
@@ -19,17 +20,18 @@ export default function Settings(props) {
           }
           arrowOverride={
             <Switch
-              onTintColor="#00DC40"
-              onValueChange={value =>
-                props.updateEnablePushNotifications(value)
-              }
+              trackColor="#00DC40"
+              onValueChange={value => {
+                UrbanAirship.setUserNotificationsEnabled(value);
+                props.updateEnablePushNotifications(value);
+              }}
               value={props.enablePushNotifications}
             />
           }
         />
       </Body>
       <Footer>
-        <T.Light style={styles.debug}></T.Light>
+        <T.Light style={styles.debug} />
       </Footer>
     </Layout>
   );

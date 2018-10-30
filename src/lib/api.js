@@ -1,57 +1,91 @@
-import { handleApiErrors } from 'lib/api-errors';
+import axios from 'axios';
 
-async function apiWrapper(url, options) {
-  const response = await fetch(url, options);
-  await handleApiErrors(response);
+const onSuccess = function(response) {
+  console.debug('Request Successful!', response);
+  return response.data;
+};
 
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.indexOf("application/json") !== -1) {
-    return response.json();
+const onError = function(error) {
+  // const contentType = response.headers.get("content-type");
+  // if (contentType && contentType.indexOf("application/json") !== -1) {
+  //   return response.json();
+  // } else {
+  //   return response.text();
+  // }
+
+  console.error('Request Failed:', error.config);
+
+  if (error.response) {
+    // Request was made but server responded with something
+    // other than 2xx
+    console.error('Status:', error.response.status);
+    console.error('Data:', error.response.data);
+    console.error('Headers:', error.response.headers);
   } else {
-    return response.text();
+    // Something else happened while setting up the request
+    // triggered the error
+    console.error('Error Message:', error.message);
   }
-}
+
+  return Promise.reject(error.response || error.message);
+};
 
 const api = {
   async get(url, options = {}) {
-    return apiWrapper(url, {
+    return axios({
+      url: url,
       method: 'GET',
       headers: {
         Accept: 'application/json',
       },
+      withCredentials: true,
       ...options,
-    });
+    })
+      .then(onSuccess)
+      .catch(onError);
   },
 
   async post(url, body, options = {}) {
-    return apiWrapper(url, {
+    return axios({
+      url: url,
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: body && JSON.stringify(body),
+      withCredentials: true,
+      data: body && JSON.stringify(body),
       ...options,
-    });
+    })
+      .then(onSuccess)
+      .catch(onError);
   },
 
   async put(url, body, options = {}) {
-    return apiWrapper(url, {
+    return axios({
+      url: url,
       method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: body && JSON.stringify(body),
+      withCredentials: true,
+      data: body && JSON.stringify(body),
       ...options,
-    });
+    })
+      .then(onSuccess)
+      .catch(onError);
   },
 
   async delete(url, options = {}) {
-    return apiWrapper(url, {
+    return axios({
+      url: url,
       method: 'DELETE',
+      withCredentials: true,
       ...options,
-    });
+    })
+      .then(onSuccess)
+      .catch(onError);
   },
 };
 
