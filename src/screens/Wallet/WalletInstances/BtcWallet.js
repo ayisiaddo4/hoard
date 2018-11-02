@@ -6,40 +6,41 @@ import { SYMBOL_BTC } from "containers/App/constants";
 import { getNetworkForCoin } from "lib/currency-metadata";
 import api from 'lib/api';
 
-const config = {
+export const config = {
   endpoint: Config.BTC_NODE_ENDPOINT,
   network: Bitcoin.networks[getNetworkForCoin(SYMBOL_BTC)],
   coinPath: Config.BTC_COINPATH
 };
 
 export default class BtcWallet {
-  constructor(isMnemonic, initializer) {
+  constructor(isMnemonic, initializer, configOverride = config) {
     if (isMnemonic) {
-      this._wallet = Bitcoin.HDNode.fromSeedBuffer(bip39.mnemonicToSeed(initializer), config.network);
+      this._wallet = Bitcoin.HDNode.fromSeedBuffer(bip39.mnemonicToSeed(initializer), configOverride.network);
     } else {
-      this._wallet = Bitcoin.HDNode.fromBase58(initializer, config.network);
+      this._wallet = Bitcoin.HDNode.fromBase58(initializer, configOverride.network);
     }
   }
 
   symbol = SYMBOL_BTC;
+  config = config;
 
-  _derivationPath = `m/44'/${config.coinPath}'/0'/0/0`;
+  _derivationPath = `m/44'/${this.config.coinPath}'/0'/0/0`;
 
   _getUtxos = async () => {
     const address = await this.getPublicAddress();
-    const endpoint = `${Config.BTC_NODE_ENDPOINT}/addr/${address}/utxo`;
+    const endpoint = `${this.config.endpoint}/addr/${address}/utxo`;
     const utxos = await api.get(endpoint);
     return utxos;
   }
 
   _broadcastTransaction = async (rawtx) => {
-    const endpoint = `${Config.BTC_NODE_ENDPOINT}/tx/send`;
+    const endpoint = `${this.config.endpoint}/tx/send`;
     return api.post(endpoint, {rawtx});
   }
 
   _estimateFee = async () => {
     const numBlocks = 2;
-    const endpoint = `${Config.BTC_NODE_ENDPOINT}/utils/estimatefee?nbBlocks=${numBlocks}`;
+    const endpoint = `${this.config.endpoint}/utils/estimatefee?nbBlocks=${numBlocks}`;
     const feeResponse = await api.get(endpoint);
     return Number(feeResponse[numBlocks]);
   }
@@ -51,14 +52,14 @@ export default class BtcWallet {
   getBalance = async () => {
     try {
       const address = await this.getPublicAddress();
-      const endpoint = `${Config.BTC_NODE_ENDPOINT}/addr/${address}/balance`;
+      const endpoint = `${this.config.endpoint}/addr/${address}/balance`;
       const balanceSatoshis = await api.get(endpoint);
       const balance = balanceSatoshis * 1e-8;
       return balance;
     } catch(e) {
       if (__DEV__) {
         // eslint-disable-next-line no-console
-        console.log('error in btc balance fetching', e);
+        console.log(`error in ${this.symbol} balance fetching`, e);
       }
       return 0;
     }
@@ -74,7 +75,7 @@ export default class BtcWallet {
 
   send = async (amount, toAddress) => {
     const amountSatoshis = Math.round(amount * 1e8);
-    const tx = new Bitcoin.TransactionBuilder(config.network);
+    const tx = new Bitcoin.TransactionBuilder(this.config.network);
 
     const balance = await this.getBalance();
     const balanceSatoshis = Math.round(balance * 1e8);

@@ -8,12 +8,14 @@ export const SYMBOL_ETH = 'ETH';
 export const SYMBOL_BOAR = 'BOAR';
 export const SYMBOL_DASH = 'DASH';
 export const SYMBOL_BTC = 'BTC';
+export const SYMBOL_RVN = 'RVN';
 export const SYMBOL_XRP = 'XRP';
 export const SYMBOL_LTC = 'LTC';
 
 export const SUPPORTED_COINS_PRICING = [
   SYMBOL_DASH,
   SYMBOL_BOAR,
+  SYMBOL_RVN,
   SYMBOL_ETH,
   SYMBOL_BTC,
   SYMBOL_LTC,
@@ -28,5 +30,6 @@ export const SUPPORTED_COINS_ICO = [
 export const SUPPORTED_COINS_WALLET = [
   SYMBOL_ETH,
   SYMBOL_BTC,
+  SYMBOL_RVN,
   SYMBOL_BOAR
 ];

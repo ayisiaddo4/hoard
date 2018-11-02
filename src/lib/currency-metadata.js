@@ -1,4 +1,7 @@
 import Config from 'react-native-config';
+// bip39 is needed to be able to import Validator without errors, due to nodejs shimming
+import bip39 from 'react-native-bip39';
+import Validator from 'wallet-address-validator';
 
 export function getCoinMetadata(symbol) {
   switch (symbol) {
@@ -16,6 +19,13 @@ export function getCoinMetadata(symbol) {
       return {
         image: require('assets/ripple_logo.png'),
         fullName: 'Ripple',
+      };
+    case 'RVN':
+      return {
+        icon: require('assets/ravencoin_logo.png'),
+        image: require('assets/ravencoin.png'),
+        colors: ['#0c00ed', '#080092'],
+        fullName: 'Ravencoin',
       };
     case 'BTC':
       return {
@@ -54,6 +64,7 @@ export function getNetworkForCoin(symbol) {
         return 'homestead';
       }
       case 'BTC':
+      case 'RVN':
       case 'LTC': {
         return 'mainnet';
       }
@@ -67,6 +78,7 @@ export function getNetworkForCoin(symbol) {
         return 'rinkeby';
       }
       case 'BTC':
+      case 'RVN':
       case 'LTC': {
         return 'testnet';
       }
@@ -85,6 +97,9 @@ export function getInfoUrl(symbol, hash) {
     }
     case 'BTC':
       return `https://live.blockcypher.com/btc/tx/${hash}`;
+    case 'RVN': {
+      return `https://ravencoin.network/tx/${hash}`;
+    }
     default:
       return '';
     }
@@ -94,10 +109,30 @@ export function getInfoUrl(symbol, hash) {
     case 'BOAR': {
       return `https://rinkeby.etherscan.io/tx/${hash}`;
     }
-    case 'BTC':
+    case 'BTC': {
       return `https://live.blockcypher.com/btc-testnet/tx/${hash}`;
+    }
+    case 'RVN': {
+      return `https://testnet.ravencoin.network/tx/${hash}`;
+    }
     default:
       return 'test';
+    }
+  }
+}
+
+export function validateAddress(symbol, address) {
+  const network = Config.CURRENCY_NETWORK_TYPE === 'main' ? 'prod' : 'testnet';
+
+  switch (symbol) {
+    case 'BOAR': {
+      return Validator.validate(address, 'ETH', network);
+    }
+    case 'RVN': {
+      return Validator.validate(address, 'BTC', network);
+    }
+    default: {
+      return Validator.validate(address, symbol, network);
     }
   }
 }

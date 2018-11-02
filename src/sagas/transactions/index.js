@@ -2,7 +2,8 @@ import {
   INIT_REQUESTING,
   SYMBOL_BTC,
   SYMBOL_ETH,
-  SYMBOL_BOAR
+  SYMBOL_BOAR,
+  SYMBOL_RVN,
 } from "containers/App/constants";
 import { AsyncStorage } from 'react-native';
 import { throttle, fork, all, put, takeLatest, select, takeEvery, call } from "redux-saga/effects";
@@ -94,6 +95,7 @@ export function* fetchHistory(action) {
     yield call(fetchHistoryEth, action);
     return;
   }
+  case SYMBOL_RVN:
   case SYMBOL_BTC: {
     yield call(fetchHistoryBTC, action);
     return;

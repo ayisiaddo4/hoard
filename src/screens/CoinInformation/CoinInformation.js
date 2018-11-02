@@ -20,8 +20,6 @@ import T from 'components/Typography';
 import Scene from 'components/Scene';
 import Swipeable from 'react-native-swipeable';
 import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
-import { SYMBOL_BTC, SYMBOL_ETH, SYMBOL_BOAR } from 'containers/App/constants';
-import Config from 'react-native-config';
 import { NOTIFICATION_FLOW_TYPE_CONTACT_FULFILLMENT } from 'containers/Notifications/constants';
 import { t } from 'translations/i18n';
 

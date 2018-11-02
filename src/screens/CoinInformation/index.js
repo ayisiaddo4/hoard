@@ -5,7 +5,6 @@ import { walletSelector } from "screens/Wallet/selectors";
 import { isSignedInSelector } from "containers/User/selectors";
 import { sortedTransactionsForWalletSelector, sortedContactTransactionsForSymbolSelector } from "sagas/transactions/selectors";
 import { updateTransaction, cancelContactTransaction } from "sagas/transactions/actions";
-import { SYMBOL_ETH, SYMBOL_BTC } from 'containers/App/constants';
 import {showReceiveModal} from 'containers/ReceiveModal/actions';
 import {showSendModal} from 'containers/SendModal/actions';
 import { startNotificationFlow } from "containers/Notifications/actions";

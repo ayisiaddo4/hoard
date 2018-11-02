@@ -1,6 +1,6 @@
 import { TRANSACTION_FOUND } from './constants';
 import { WALLET_TRACK_SYMBOL_SUCCESS } from 'screens/Wallet/constants';
-import { SYMBOL_BTC } from 'containers/App/constants';
+import { SYMBOL_BTC, SYMBOL_RVN } from 'containers/App/constants';
 import { fork, all, takeEvery, call, put, select } from 'redux-saga/effects';
 import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
 
@@ -10,9 +10,15 @@ import {
 } from './selectors';
 
 import { timestampPriceApi } from './ethsagas';
-import Config from 'react-native-config';
+import { config as BtcConfig } from 'screens/Wallet/WalletInstances/BtcWallet';
+import { config as RvnConfig } from 'screens/Wallet/WalletInstances/RvnWallet';
 
 import api from 'lib/api';
+
+const configForCoin = {
+  [SYMBOL_RVN]: RvnConfig,
+  [SYMBOL_BTC]: BtcConfig,
+};
 
 export default function* btcTransactionsSagaWatcher() {
   yield all([takeEvery(WALLET_TRACK_SYMBOL_SUCCESS, fetchTransactions)]);
@@ -42,8 +48,7 @@ export function* fetchTransaction(action, transaction) {
     if (wasSend) {
       from = action.payload.publicAddress;
       const firstOtherVout = transaction.vout.find(
-        vout =>
-          vout.scriptPubKey.addresses[0] !== action.payload.publicAddress
+        vout => vout.scriptPubKey.addresses[0] !== action.payload.publicAddress
       );
 
       if (firstOtherVout) {
@@ -61,15 +66,14 @@ export function* fetchTransaction(action, transaction) {
       from = inAddresses[0];
       to = action.payload.publicAddress;
       const firstMyVout = transaction.vout.find(
-        vout =>
-          vout.scriptPubKey.addresses[0] === action.payload.publicAddress
+        vout => vout.scriptPubKey.addresses[0] === action.payload.publicAddress
       );
       amount = Number(firstMyVout.value);
     }
 
     const price = yield call(
       timestampPriceApi,
-      SYMBOL_BTC,
+      action.payload.symbol,
       'USD',
       transaction.time
     );
@@ -79,7 +83,7 @@ export function* fetchTransaction(action, transaction) {
       transaction: {
         type: wasSend ? TYPE_SEND : TYPE_REQUEST,
         date: transaction.time * 1000,
-        symbol: SYMBOL_BTC,
+        symbol: action.payload.symbol,
         from,
         to,
         amount,
@@ -106,7 +110,8 @@ export function* fetchTransaction(action, transaction) {
 
 export function* fetchPage(action, pageNum) {
   try {
-    const endpoint = `${Config.BTC_NODE_ENDPOINT}/txs?address=${
+    const config = configForCoin[action.payload.symbol];
+    const endpoint = `${config.endpoint}/txs?address=${
       action.payload.publicAddress
     }&pageNum=${pageNum}`;
     const response = yield api.get(endpoint);
@@ -129,7 +134,10 @@ export function* fetchPage(action, pageNum) {
   }
 }
 export function* fetchTransactions(action) {
-  if (action.payload.symbol === SYMBOL_BTC) {
+  if (
+    action.payload.symbol === SYMBOL_BTC ||
+    action.payload.symbol === SYMBOL_RVN
+  ) {
     yield call(fetchPage, action, 0);
   }
 }
