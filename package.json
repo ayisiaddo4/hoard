@@ -14,9 +14,9 @@
     "android:clean-images": "rm android/app/src/main/res/drawable-*/*.png",
     "build:android:signed": "source .env && cd android && ./gradlew assembleRelease",
     "android:adb": "adb install -r ./android/app/build/outputs/apk/release/app-release.apk",
-    "xpostinstall": "patch-package",
+    "postinstall": "patch-package",
     "clean": "rm -rf $TMPDIR/metro-* && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/haste-*",
-    "cleaner": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf node_modules/ &&",
+    "cleaner": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf node_modules/",
     "thirdparty": "cd node_modules/react-native/third-party/glog-0.3.5/ && ../../scripts/ios-configure-glog.sh && cd ../../../../"
   },
   "metro": {
