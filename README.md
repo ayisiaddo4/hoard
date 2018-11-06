@@ -2,6 +2,8 @@
 
 # HoardInvest Mobile 
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/HoardInvest/hoard.svg)](https://greenkeeper.io/)
+
 ![Build](https://img.shields.io/badge/Platform-IOS-blue.svg) ![Build](https://img.shields.io/badge/Platform-Android-brightgreen.svg) 
 
 This is the main mobile application for Hoard. This is a React Native application that will be able to be deployed on both iOS and Android.
