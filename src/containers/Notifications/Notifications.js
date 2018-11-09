@@ -9,7 +9,7 @@ export default function Notifications({
   notificationDismissed
 }) {
   return (
-    <View style={{flex: 1, background: 'transparent'}}>
+    <View style={{flex: 1, backgroundColor: 'transparent'}}>
       {children}
       {notifications.length
        ? (
