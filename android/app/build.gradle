@@ -99,7 +99,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.hoard"
+        applicationId "com.hoardinc.Hoard"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 70
@@ -118,6 +118,7 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -135,6 +136,15 @@ android {
             }
         }
     }
+}
+
+signingConfigs {
+   release {
+           storeFile file("../app/" + project.env.get("KEYFILE"))
+           storePassword project.env.get("STORE_PASSWORD")
+           keyAlias project.env.get("KEY_ALIAS")
+           keyPassword project.env.get("KEY_PASSWORD")
+   }
 }
 
 dependencies {
@@ -168,3 +178,6 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+apply plugin: 'com.google.gms.google-services'
+com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
