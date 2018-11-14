@@ -19,6 +19,8 @@
 		07A39C992188CC32007D31FE /* AirshipKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A39C532188CBBE007D31FE /* AirshipKit.framework */; };
 		07A39C9A2188CC32007D31FE /* AirshipKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07A39C532188CBBE007D31FE /* AirshipKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		07AB59F3218B95520040B01E /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07AB59F2218B95520040B01E /* AirshipConfig.plist */; };
+		07D774BA219CC10500B9FCCB /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07D774B8219CC10500B9FCCB /* Crashlytics.framework */; };
+		07D774BB219CC10500B9FCCB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07D774B9219CC10500B9FCCB /* Fabric.framework */; };
 		09AF989068D54F0E9B12B01A /* Exo-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F75168BB3755477DBFA16EFB /* Exo-SemiBold.ttf */; };
 		0B0CB6DBF5ED433D9CC494B3 /* Exo-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FE2C6C28C7C1408C8BAD73FD /* Exo-ExtraLightItalic.ttf */; };
 		11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
@@ -624,6 +626,8 @@
 		07A39B912188C5E1007D31FE /* Hoard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Hoard.entitlements; path = Hoard/Hoard.entitlements; sourceTree = "<group>"; };
 		07A39C492188CBBD007D31FE /* AirshipKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AirshipKit.xcodeproj; path = AirshipKit/AirshipKit.xcodeproj; sourceTree = "<group>"; };
 		07AB59F2218B95520040B01E /* AirshipConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
+		07D774B8219CC10500B9FCCB /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		07D774B9219CC10500B9FCCB /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		08EBC2E5058C4BAEBA00FDC2 /* libRNRandomBytes-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNRandomBytes-tvOS.a"; sourceTree = "<group>"; };
 		0B046FF1BBF742C4835DAE43 /* Exo-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo-ThinItalic.ttf"; path = "../src/assets/fonts/Exo-ThinItalic.ttf"; sourceTree = "<group>"; };
 		0C139C3D6FF4452BA74D5D69 /* Exo-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo-Light.ttf"; path = "../src/assets/fonts/Exo-Light.ttf"; sourceTree = "<group>"; };
@@ -740,6 +744,7 @@
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
+				07D774BB219CC10500B9FCCB /* Fabric.framework in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				2121A55FB6954550A69DA4A3 /* libLottieReactNative.a in Frameworks */,
@@ -754,6 +759,7 @@
 				95017A152BAD42ACA608FB62 /* libRNRandomBytes.a in Frameworks */,
 				FE5FA0B57C514558B0CA61A4 /* libSplashScreen.a in Frameworks */,
 				867E5D27E1A448549302E271 /* libRNSVG.a in Frameworks */,
+				07D774BA219CC10500B9FCCB /* Crashlytics.framework in Frameworks */,
 				A328B639AE304ECB9CA65B49 /* libTouchID.a in Frameworks */,
 				A46BCC2F016F4E73B295EB89 /* libRNVectorIcons.a in Frameworks */,
 				CAD36F01F5814B19816C0C04 /* libUARCTModule.a in Frameworks */,
@@ -852,6 +858,8 @@
 		07A39B162188C574007D31FE /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
+				07D774B8219CC10500B9FCCB /* Crashlytics.framework */,
+				07D774B9219CC10500B9FCCB /* Fabric.framework */,
 				A624BDAD1DF14C97BE45A6A5 /* libLottieReactNative.a */,
 				ADBEC0E658AC47AC804893D2 /* libRNCamera.a */,
 				6D82A7D0F2974081B1F51BB7 /* libReactNativeConfig.a */,
@@ -1258,6 +1266,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				07A39C122188C663007D31FE /* Embed Frameworks */,
+				07D77477219CC06000B9FCCB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2030,6 +2039,23 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
+		07D77477219CC06000B9FCCB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run ea30950005c7e255aadef53ee98833bd4a2e068c 7703fea3604fca6f733e5e437cbdac31968c75747bb9664accea52443b3e5ab7\n";
+		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2175,7 +2201,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.hoardinc.Hoard";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hoardinc.Hoard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hoard.app/Hoard";
 			};
@@ -2234,7 +2260,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.hoardinc.Hoard";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hoardinc.Hoard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hoard.app/Hoard";
 			};
@@ -2248,6 +2274,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 72LCGV4DW6;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/lottie-react-native/src/ios/LottieReactNative",
@@ -2286,6 +2316,10 @@
 				CODE_SIGN_ENTITLEMENTS = Hoard/Hoard.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 72LCGV4DW6;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/lottie-react-native/src/ios/LottieReactNative",
