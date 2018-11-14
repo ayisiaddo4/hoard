@@ -13,7 +13,7 @@ export function* fetchHistoryBoar({wallet}) {
   try {
     const previousBlock = yield call(AsyncStorage.getItem, LAST_BOAR_BLOCK_STORAGE_KEY);
 
-    const fromBlock = previousBlock && Number(previousBlock) || 0;
+    const fromBlock = previousBlock && Number(previousBlock) || '0x305FC6';
     const address = yield call(wallet.getPublicAddress);
     let logs = yield call(() => wallet._wallet.provider.getLogs({
       fromBlock,
