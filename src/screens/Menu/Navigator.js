@@ -1,6 +1,7 @@
 import { createDrawerNavigator, createStackNavigator } from 'react-navigation';
 import { Dimensions } from 'react-native';
 import Wallet from 'screens/Wallet';
+import Confirm from 'screens/Wallet/Confirm';
 import KYC from 'screens/KYC';
 import Settings from 'screens/Settings';
 import About from 'screens/About';
@@ -76,6 +77,9 @@ const RouteConfigs = {
   },
   Settings: {
     screen: Settings,
+  },
+  Confirm: {
+    screen: Confirm,
   },
   KYC: {
     screen: KYC,
