@@ -304,18 +304,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-  },
-  debug: {
-    position: 'absolute',
-    backgroundColor: 'yellow',
-    padding: 3,
-    zIndex: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-  },
-  debugText: {
-    fontSize: 8
   }
 });
 

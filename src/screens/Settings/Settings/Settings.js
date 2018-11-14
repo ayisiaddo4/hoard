@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 
 import { StyleSheet, Switch } from 'react-native';
 
-import { Layout, Body, Footer } from 'components/Base';
-import T from 'components/Typography';
+import { Layout, Body } from 'components/Base';
 import Link from 'components/Link';
 import { UrbanAirship } from 'urbanairship-react-native';
 
@@ -30,9 +29,6 @@ export default function Settings(props) {
           }
         />
       </Body>
-      <Footer>
-        <T.Light style={styles.debug} />
-      </Footer>
     </Layout>
   );
 }
@@ -45,10 +41,5 @@ Settings.propTypes = {
 const styles = StyleSheet.create({
   content: {
     padding: 20,
-  },
-  debug: {
-    fontSize: 20,
-    color: 'red',
-    padding: 50
   }
 });
