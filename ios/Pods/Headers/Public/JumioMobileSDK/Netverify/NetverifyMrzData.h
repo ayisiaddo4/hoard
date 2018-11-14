@@ -1,1 +1,0 @@
-../../../../JumioMobileSDK/frameworks/Netverify.framework/Headers/NetverifyMrzData.h

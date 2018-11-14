@@ -40,7 +40,7 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
 @interface UAWhitelist ()
 
 /**
- * Dictionary of sets of UAWhitelistMatcher blocks per scope.
+ * Set of UAWhitelistEntry objects.
  */
 @property(nonatomic, strong) NSMutableSet *entries;
 /**
@@ -151,7 +151,7 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
     NSURL *url = [NSURL URLWithString:pattern];
 
     if (!url) {
-        UA_LDEBUG(@"unable to parse URL for pattern: %@", pattern);
+        UA_LERR(@"unable to parse URL for pattern: %@", pattern);
         return nil;
     }
 
@@ -175,7 +175,7 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
     NSURL *url = [NSURL URLWithString:pattern];
 
     if (!url){
-        UA_LDEBUG(@"unable to parse URL for pattern: %@", pattern);
+        UA_LERR(@"unable to parse URL for pattern: %@", pattern);
         return nil;
     }
 
@@ -199,7 +199,7 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
     NSURL *url = [NSURL URLWithString:pattern];
 
     if (!url) {
-        UA_LDEBUG(@"unable to parse URL for pattern: %@", pattern);
+        UA_LERR(@"unable to parse URL for pattern: %@", pattern);
         return nil;
     }
 
@@ -287,7 +287,7 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
 - (BOOL)addEntry:(NSString *)patternString scope:(UAWhitelistScope)scope {
 
     if (!patternString || ![self validatePattern:patternString]) {
-        UA_LWARN(@"Invalid whitelist pattern: %@", patternString);
+        UA_LERR(@"Invalid whitelist pattern: %@", patternString);
         return NO;
     }
 
@@ -307,7 +307,7 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
 
     // If any of these are nil, something went wrong
     if (!schemeMatcher || !hostMatcher || !pathMatcher) {
-        UA_LINFO(@"Unable to build pattern matchers for whitelist entry: %@", patternString);
+        UA_LERR(@"Unable to build pattern matchers for whitelist entry: %@", patternString);
         return NO;
     }
 
@@ -330,20 +330,31 @@ typedef BOOL (^UAWhitelistMatcher)(NSURL *);
 }
 
 - (BOOL)isWhitelisted:(NSURL *)url scope:(UAWhitelistScope)scope {
-
+    BOOL match = NO;
+    
     if (scope == UAWhitelistScopeOpenURL && !self.isOpenURLWhitelistingEnabled) {
-        return YES;
+        match = YES;
+    } else {
+        NSUInteger matchedScope = 0;
+        
+        for (UAWhitelistEntry *entry in self.entries) {
+            if (entry.matcher(url)) {
+                matchedScope |= entry.scope;
+            }
+        }
+        
+        match = (((UAWhitelistScope)matchedScope & scope) == scope);
     }
-
-    NSUInteger matchedScope = 0;
-
-    for (UAWhitelistEntry *entry in self.entries) {
-        if (entry.matcher(url)) {
-            matchedScope |= entry.scope;
+    
+    // if the url is whitelisted, allow the delegate to reject the whitelisting
+    if (match) {
+        id<UAWhitelistDelegate> delegate = self.delegate;
+        if ([delegate respondsToSelector:@selector(acceptWhitelisting:scope:)]) {
+            match = [delegate acceptWhitelisting:url scope:scope];
         }
     }
-
-    return (((UAWhitelistScope)matchedScope & scope) == scope);
+    
+    return match;
 }
 
 - (BOOL)isWhitelisted:(NSURL *)url {

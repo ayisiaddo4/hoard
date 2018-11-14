@@ -1,16 +1,16 @@
 buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-    }
+   repositories {
+      maven { url 'https://maven.fabric.io/public' }
+   }
 
-    dependencies {
-        // These docs use an open ended version so that our plugin
-        // can be updated quickly in response to Android tooling updates
+   dependencies {
+      // These docs use an open ended version so that our plugin
+      // can be updated quickly in response to Android tooling updates
 
-        // We recommend changing it to the latest version from our changelog:
-        // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
+      // We recommend changing it to the latest version from our changelog:
+      // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
+      classpath 'io.fabric.tools:gradle:1.+'
+   }
 }
 
 apply plugin: "com.android.application"
@@ -30,7 +30,7 @@ import com.android.build.OutputFile
  * cycle. By default, bundleDebugJsAndAssets is skipped, as in debug/dev mode we prefer to load the
  * bundle directly from the development server. Below you can see all the possible configurations
  * and their defaults. If you decide to add a configuration block, make sure to add it before the
- * `apply from: "../../node_modules/react-nativereact-native-search-filter/react.gradle"` line.
+ * `apply from: "../../node_modules/react-native/react.gradle"` line.
  *
  * project.ext.react = [
  *   // the name of the generated asset file containing your JS bundle
@@ -116,11 +116,7 @@ def enableProguardInReleaseBuilds = false
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-
-    compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
-    }
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.hoardinc.Hoard"
@@ -140,6 +136,7 @@ android {
             include "armeabi-v7a", "x86"
         }
     }
+
     signingConfigs {
         release {
                 storeFile file("../app/" + project.env.get("KEYFILE"))

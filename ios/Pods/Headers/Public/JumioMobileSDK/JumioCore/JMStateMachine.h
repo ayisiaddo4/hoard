@@ -1,1 +1,0 @@
-../../../../JumioMobileSDK/frameworks/JumioCore.framework/Headers/JMStateMachine.h

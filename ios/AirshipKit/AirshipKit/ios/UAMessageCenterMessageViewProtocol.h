@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol UAMessageCenterMessageViewProtocol
 
+
 /**
  * The UAInboxMessage being displayed.
  */
@@ -23,16 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) void (^closeBlock)(BOOL animated);
 
 /**
- * Load a UAInboxMessage.
- * @param message The message to load and display.
- * @param onlyIfChanged Only load the message if it is different from the currently displayed message
- *
- * @deprecated Deprecated - to be removed in SDK version 10.0
- */
-
-- (void)loadMessage:(nullable UAInboxMessage *)message onlyIfChanged:(BOOL)onlyIfChanged  DEPRECATED_MSG_ATTRIBUTE("Deprecated - to be removed in SDK version 10.0");
-
-/**
  * Load a UAInboxMessage by message ID.
  *
  * @param messageID The message ID of the message.
@@ -40,6 +31,18 @@ NS_ASSUME_NONNULL_BEGIN
  * @param errorCompletion Called on loading error
  */
 - (void)loadMessageForID:(NSString *)messageID onlyIfChanged:(BOOL)onlyIfChanged onError:(nullable void (^)(void))errorCompletion;
+
+
+@optional
+
+/**
+ * Sets a custom message loading indicator view and animation. Will
+ * show the default loading indicator and animation if left unset.
+ *
+ * @param loadingIndicatorView Loading indicator view.
+ * @param animations Block to execute upon displaying loading indicator view.
+ */
+- (void)setLoadingIndicatorView:(UIView *)loadingIndicatorView animations:(void (^)(void))animations;
 
 @end
 

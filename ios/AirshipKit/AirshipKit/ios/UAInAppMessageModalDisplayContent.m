@@ -33,6 +33,30 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
     return self;
 }
 
+- (instancetype)initWithDisplayContent:(UAInAppMessageModalDisplayContent *)content {
+    self = [super init];
+
+    if (self) {
+        self.heading = content.heading;
+        self.body = content.body;
+        self.media = content.media;
+        self.footer = content.footer;
+        self.buttons = content.buttons;
+        self.buttonLayout = content.buttonLayout;
+        self.contentLayout = content.contentLayout;
+        self.backgroundColor = content.backgroundColor;
+        self.dismissButtonColor = content.dismissButtonColor;
+        self.borderRadius = content.borderRadius;
+        self.allowFullScreenDisplay = content.allowFullScreenDisplay;
+    }
+
+    return self;
+}
+
++ (instancetype)builderWithDisplayContent:(UAInAppMessageModalDisplayContent *)content {
+    return [[self alloc] initWithDisplayContent:content];
+}
+
 - (BOOL)isValid {
     if (!self.heading && !self.body) {
         UA_LERR(@"Modal display must have either its body or heading defined.");
@@ -250,7 +274,7 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
 
     id allowFullScreenDisplay = json[UAInAppMessageModalAllowsFullScreenKey];
     if (allowFullScreenDisplay) {
-        if (![borderRadius isKindOfClass:[NSNumber class]]) {
+        if (![allowFullScreenDisplay isKindOfClass:[NSNumber class]]) {
             if (error) {
                 NSString *msg = [NSString stringWithFormat:@"Allows full screen flag must be a boolean stored as an NSNumber. Invalid value: %@", allowFullScreenDisplay];
                 *error =  [NSError errorWithDomain:UAInAppMessageModalDisplayContentDomain
@@ -287,7 +311,7 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
     self = [super init];
 
     if (![builder isValid]) {
-        UA_LDEBUG(@"UAInAppMessageModalDisplayContent could not be initialized, builder has missing or invalid parameters.");
+        UA_LERR(@"UAInAppMessageModalDisplayContent could not be initialized, builder has missing or invalid parameters.");
         return nil;
     }
 
@@ -354,6 +378,17 @@ NSUInteger const UAInAppMessageModalMaxButtons = 2;
     }
 
     return [json copy];
+}
+
+- (UAInAppMessageModalDisplayContent *)extend:(void(^)(UAInAppMessageModalDisplayContentBuilder *builder))builderBlock {
+    if (builderBlock) {
+        UAInAppMessageModalDisplayContentBuilder *builder = [UAInAppMessageModalDisplayContentBuilder builderWithDisplayContent:self];
+        builderBlock(builder);
+        return [[UAInAppMessageModalDisplayContent alloc] initWithBuilder:builder];
+    }
+
+    UA_LDEBUG(@"Extended %@ with nil builderBlock. Returning self.", self);
+    return self;
 }
 
 #pragma mark - NSObject

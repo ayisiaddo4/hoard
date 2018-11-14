@@ -28,6 +28,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy, nullable) NSString *url;
 
 /**
+ * The HTML message's border radius. Defaults to 0.
+ */
+@property(nonatomic, assign) NSUInteger borderRadius;
+
+/**
+ * Flag indicating the HTML view should display as full screen on compact devices.
+ * Defaults to NO.
+ */
+@property(nonatomic, assign) BOOL allowFullScreenDisplay;
+
+/**
  * Checks if the builder is valid and will produce an display content instance.
  * @return YES if the builder is valid, otherwise NO.
  */
@@ -56,13 +67,31 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, readonly) UIColor *dismissButtonColor;
 
 /**
- * Factory method for building HTML display content with builder block.
+ * The HTML message's border radius. Defaults to 0.
+ */
+@property(nonatomic, assign, readonly) NSUInteger borderRadius;
+
+/**
+ * Flag indicating the HTML view should display as full screen on compact devices.
+ * Defaults to NO.
+ */
+@property(nonatomic, assign, readonly) BOOL allowFullScreenDisplay;
+
+/**
+ * Factory method for building HTML display content with a builder block.
  *
  * @param builderBlock The builder block.
- *
- * @returns the display content if the builder block successfully built it, otherwise nil.
+ * @return the display content if the builder block successfully built it, otherwise nil.
  */
 + (nullable instancetype)displayContentWithBuilderBlock:(void(^)(UAInAppMessageHTMLDisplayContentBuilder *builder))builderBlock;
+
+/**
+ * Extends an HTML display content with a builder block.
+ *
+ * @param builderBlock The builder block.
+ * @return An extended instance of UAInAppMessageHTMLDisplayContent.
+ */
+- (UAInAppMessageHTMLDisplayContent *)extend:(void(^)(UAInAppMessageHTMLDisplayContentBuilder *builder))builderBlock;
 
 @end
 

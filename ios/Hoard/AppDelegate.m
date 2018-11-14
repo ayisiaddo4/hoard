@@ -38,8 +38,8 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   [SplashScreen show];
-  [Fabric with:@[[Crashlytics class]]];
   [UAirship takeOff];
+  [Fabric with:@[[Crashlytics class]]];
   return YES;
 }
 

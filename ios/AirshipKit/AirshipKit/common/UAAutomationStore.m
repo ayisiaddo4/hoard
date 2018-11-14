@@ -1,6 +1,6 @@
 /* Copyright 2018 Urban Airship and Contributors */
 
-#import "NSManagedObjectContext+UAAdditions.h"
+#import "NSManagedObjectContext+UAAdditions+Internal.h"
 #import "UAAutomationStore+Internal.h"
 #import "UAScheduleData+Internal.h"
 #import "UAScheduleTriggerData+Internal.h"
@@ -14,41 +14,58 @@
 #import "UAJSONPredicate.h"
 #import "UAConfig.h"
 #import "UAUtils+Internal.h"
+#import "UAJSONSerialization+Internal.h"
 
 @interface UAAutomationStore ()
 @property (nonatomic, strong) NSManagedObjectContext *managedContext;
 @property (nonatomic, copy) NSString *storeName;
+@property (nonatomic, assign) NSUInteger scheduleLimit;
+@property (nonatomic, assign) BOOL inMemory;
+@property (nonatomic, assign) BOOL finished;
 @end
 
 @implementation UAAutomationStore
 
-- (instancetype)initWithStoreName:(NSString *)storeName {
+- (instancetype)initWithStoreName:(NSString *)storeName scheduleLimit:(NSUInteger)scheduleLimit inMemory:(BOOL)inMemory {
     self = [super init];
 
     if (self) {
         self.storeName = storeName;
+        self.scheduleLimit = scheduleLimit;
+        self.inMemory = inMemory;
+        self.finished = NO;
+
         NSURL *modelURL = [[UAirship resources] URLForResource:@"UAAutomation" withExtension:@"momd"];
         self.managedContext = [NSManagedObjectContext managedObjectContextForModelURL:modelURL
                                                                       concurrencyType:NSPrivateQueueConcurrencyType];
 
-        [self.managedContext addPersistentSqlStore:self.storeName completionHandler:^(BOOL success, NSError *error) {
+        void (^completion)(BOOL, NSError*) = ^void(BOOL success, NSError *error) {
             if (!success) {
                 UA_LERR(@"Failed to create automation persistent store: %@", error);
             }
-        }];
+        };
+
+        if (inMemory) {
+            [self.managedContext addPersistentInMemoryStore:self.storeName completionHandler:completion];
+        } else {
+            [self.managedContext addPersistentSqlStore:self.storeName completionHandler:completion];
+        }
 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(protectedDataAvailable)
                                                      name:UIApplicationProtectedDataDidBecomeAvailable
                                                    object:nil];
-
     }
 
     return self;
 }
 
-+ (instancetype)automationStoreWithStoreName:(NSString *)storeName {
-    return [[UAAutomationStore alloc] initWithStoreName:storeName];
++ (instancetype)automationStoreWithStoreName:(NSString *)storeName scheduleLimit:(NSUInteger)scheduleLimit inMemory:(BOOL)inMemory {
+    return [[UAAutomationStore alloc] initWithStoreName:storeName scheduleLimit:scheduleLimit inMemory:inMemory];
+}
+
++ (instancetype)automationStoreWithStoreName:(NSString *)storeName scheduleLimit:(NSUInteger)scheduleLimit {
+    return [[UAAutomationStore alloc] initWithStoreName:storeName scheduleLimit:scheduleLimit inMemory:NO];
 }
 
 - (void)protectedDataAvailable {
@@ -61,12 +78,19 @@
     }
 }
 
+- (void)safePerformBlock:(void (^)(BOOL))block {
+    @synchronized(self) {
+        if (!self.finished) {
+            [self.managedContext safePerformBlock:block];
+        }
+    }
+}
 
 #pragma mark -
 #pragma mark Data Access
 
-- (void)saveSchedule:(UASchedule *)schedule limit:(NSUInteger)limit completionHandler:(void (^)(BOOL))completionHandler {
-    [self.managedContext safePerformBlock:^(BOOL isSafe) {
+- (void)saveSchedule:(UASchedule *)schedule completionHandler:(void (^)(BOOL))completionHandler {
+    [self safePerformBlock:^(BOOL isSafe) {
         if (!isSafe) {
             completionHandler(NO);
             return;
@@ -74,7 +98,7 @@
 
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"UAScheduleData"];
         NSUInteger count = [self.managedContext countForFetchRequest:request error:nil];
-        if (count >= limit) {
+        if (count >= self.scheduleLimit) {
             UA_LERR(@"Max schedule limit reached. Unable to save new schedule.");
             completionHandler(NO);
             return;
@@ -86,16 +110,16 @@
     }];
 }
 
-- (void)saveSchedules:(NSArray<UASchedule *> *)schedules limit:(NSUInteger)limit completionHandler:(void (^)(BOOL))completionHandler {
-    [self.managedContext safePerformBlock:^(BOOL isSafe) {
+- (void)saveSchedules:(NSArray<UASchedule *> *)schedules completionHandler:(void (^)(BOOL))completionHandler {
+    [self safePerformBlock:^(BOOL isSafe) {
         if (!isSafe) {
             completionHandler(NO);
             return;
         }
-        
+
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"UAScheduleData"];
         NSUInteger count = [self.managedContext countForFetchRequest:request error:nil];
-        if (count + schedules.count > limit) {
+        if (count + schedules.count > self.scheduleLimit) {
             UA_LERR(@"Max schedule limit reached. Unable to save new schedules.");
             completionHandler(NO);
             return;
@@ -110,8 +134,75 @@
     }];
 }
 
+- (void)deleteSchedule:(NSString *)scheduleID {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@", scheduleID];
+    [self deleteSchedulesWithPredicate:predicate];
+}
+
+- (void)deleteSchedules:(NSString *)groupID {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"group == %@", groupID];
+    [self deleteSchedulesWithPredicate:predicate];
+}
+
+- (void)deleteAllSchedules {
+    [self deleteSchedulesWithPredicate:nil];
+}
+
+- (void)getSchedules:(NSString *)groupID completionHandler:(void (^)(NSArray<UAScheduleData *> *))completionHandler {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"group == %@ && end >= %@", groupID, [NSDate date]];
+    [self fetchSchedulesWithPredicate:predicate limit:self.scheduleLimit completionHandler:completionHandler];
+}
+
+- (void)getSchedules:(void (^)(NSArray<UAScheduleData *> *))completionHandler {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"end >= %@", [NSDate date]];
+    [self fetchSchedulesWithPredicate:predicate limit:self.scheduleLimit completionHandler:completionHandler];
+}
+
+- (void)getSchedulesWithStates:(NSArray *)state completionHandler:(void (^)(NSArray<UAScheduleData *> * _Nonnull))completionHandler {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"executionState IN %@", state];
+    [self fetchSchedulesWithPredicate:predicate limit:self.scheduleLimit completionHandler:completionHandler];
+}
+
+- (void)getSchedule:(NSString *)scheduleID completionHandler:(void (^)(UAScheduleData *))completionHandler {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@ && end >= %@", scheduleID, [NSDate date]];
+    [self fetchSchedulesWithPredicate:predicate limit:1 completionHandler:^(NSArray<UAScheduleData *> *result) {
+        completionHandler(result.count == 1 ? result.firstObject : nil);
+    }];
+}
+
+- (void)getActiveExpiredSchedules:(void (^)(NSArray<UAScheduleData *> *))completionHandler {
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"end <= %@ && executionState != %d", [NSDate date], UAScheduleStateFinished];
+    [self fetchSchedulesWithPredicate:predicate limit:self.scheduleLimit completionHandler:completionHandler];
+}
+
+- (void)getActiveTriggers:(NSString *)scheduleID
+                     type:(UAScheduleTriggerType)type
+        completionHandler:(void (^)(NSArray<UAScheduleTriggerData *> *triggers))completionHandler {
+
+    scheduleID = scheduleID ? : @"*";
+
+    NSString *format = @"(schedule.identifier LIKE %@ AND type = %ld AND start <= %@) AND ((delay != nil AND schedule.executionState in %@) OR (delay == nil AND schedule.executionState == %d))";
+
+    NSArray *cancelTriggerState = @[@(UAScheduleStateTimeDelayed), @(UAScheduleStateWaitingScheduleConditions), @(UAScheduleStatePreparingSchedule)];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:format, scheduleID, type, [NSDate date], cancelTriggerState, UAScheduleStateIdle];
+
+    [self fetchTriggersWithPredicate:predicate completionHandler:completionHandler];
+}
+
+- (void)getScheduleCount:(void (^)(NSNumber *))completionHandler {
+    [self safePerformBlock:^(BOOL isSafe) {
+        if (!isSafe) {
+            completionHandler(nil);
+            return;
+        }
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"UAScheduleData"];
+        NSUInteger count = [self.managedContext countForFetchRequest:request error:nil];
+        completionHandler(@(count));
+    }];
+}
+
 - (void)deleteSchedulesWithPredicate:(NSPredicate *)predicate {
-    [self.managedContext safePerformBlock:^(BOOL isSafe) {
+    [self safePerformBlock:^(BOOL isSafe) {
         if (!isSafe) {
             return;
         }
@@ -121,15 +212,15 @@
 
         NSError *error;
 
-        if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){9, 0, 0}]) {
+        if (self.inMemory) {
+            request.includesPropertyValues = NO;
+            NSArray *events = [self.managedContext executeFetchRequest:request error:&error];
+            for (NSManagedObject *event in events) {
+                [self.managedContext deleteObject:event];
+            }
+        } else {
             NSBatchDeleteRequest *deleteRequest = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
             [self.managedContext executeRequest:deleteRequest error:&error];
-        } else {
-            request.includesPropertyValues = NO;
-            NSArray *schedules = [self.managedContext executeFetchRequest:request error:&error];
-            for (NSManagedObject *schedule in schedules) {
-                [self.managedContext deleteObject:schedule];
-            }
         }
 
         if (error) {
@@ -141,10 +232,8 @@
     }];
 }
 
-
-
 - (void)fetchSchedulesWithPredicate:(NSPredicate *)predicate limit:(NSUInteger)limit completionHandler:(void (^)(NSArray<UAScheduleData *> *))completionHandler {
-    [self.managedContext safePerformBlock:^(BOOL isSafe) {
+    [self safePerformBlock:^(BOOL isSafe) {
         if (!isSafe) {
             completionHandler(@[]);
             return;
@@ -164,15 +253,11 @@
             completionHandler(result);
             [self.managedContext safeSave];
         }
-
     }];
 }
 
-
-
-
 - (void)fetchTriggersWithPredicate:(NSPredicate *)predicate completionHandler:(void (^)(NSArray<UAScheduleTriggerData *> *))completionHandler {
-    [self.managedContext safePerformBlock:^(BOOL isSafe) {
+    [self safePerformBlock:^(BOOL isSafe) {
         if (!isSafe) {
             completionHandler(@[]);
             return;
@@ -226,7 +311,7 @@
     delayData.appState = @(delay.appState);
     delayData.regionID = delay.regionID;
     if (delay.screens != nil) {
-        NSData *screensData = [NSJSONSerialization dataWithJSONObject:delay.screens options:0 error:nil];
+        NSData *screensData = [UAJSONSerialization dataWithJSONObject:delay.screens options:0 error:nil];
         if (screensData != nil) {
             delayData.screens = [[NSString alloc] initWithData:screensData encoding:NSUTF8StringEncoding];
         }
@@ -249,7 +334,7 @@
         triggerData.start = scheduleStart;
 
         if (trigger.predicate) {
-            triggerData.predicateData = [NSJSONSerialization dataWithJSONObject:trigger.predicate.payload options:0 error:nil];
+            triggerData.predicateData = [UAJSONSerialization dataWithJSONObject:trigger.predicate.payload options:0 error:nil];
         }
 
         triggerData.schedule = schedule;
@@ -263,6 +348,12 @@
 
 - (void)waitForIdle {
     [self.managedContext performBlockAndWait:^{}];
+}
+
+- (void)shutDown {
+    @synchronized(self) {
+        self.finished = YES;
+    }
 }
 
 

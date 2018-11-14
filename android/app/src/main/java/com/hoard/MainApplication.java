@@ -4,24 +4,25 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
-import com.reactcommunity.rnlanguages.RNLanguagesPackage;
 import com.urbanairship.reactnative.ReactAirshipPackage;
-import org.reactnative.camera.RNCameraPackage;
-import io.fabric.sdk.android.Fabric;
-import com.BV.LinearGradient.LinearGradientPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.rnfingerprint.FingerprintAuthPackage;
+import com.horcrux.svg.SvgPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.peel.react.rnos.RNOSModule;
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.horcrux.svg.SvgPackage;
-import com.rnfingerprint.FingerprintAuthPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.reactcommunity.rnlanguages.RNLanguagesPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+import org.reactnative.camera.RNCameraPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import io.fabric.sdk.android.Fabric;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,18 +39,19 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNLanguagesPackage(),
             new ReactAirshipPackage(),
-            new RNCameraPackage(),
-            new LinearGradientPackage(),
+            new VectorIconsPackage(),
+            new FingerprintAuthPackage(),
+            new SvgPackage(),
+            new SplashScreenReactPackage(),
             new RandomBytesPackage(),
             new RNOSModule(),
-            new SplashScreenReactPackage(),
-            new VectorIconsPackage(),
-            new SvgPackage(),
-            new FingerprintAuthPackage(),
+            new LinearGradientPackage(),
+            new RNLanguagesPackage(),
+            new RNI18nPackage(),
             new ReactNativeContacts(),
             new ReactNativeConfigPackage(),
+            new RNCameraPackage(),
             new LottiePackage()
       );
     }
