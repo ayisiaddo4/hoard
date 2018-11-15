@@ -4,7 +4,7 @@ import { Image, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Layout, Body } from 'components/Base';
 import { Try } from 'components/Conditional';
 import T from 'components/Typography';
-
+import { t } from 'translations/i18n';
 import memoize from 'lodash/fp/memoize';
 
 export default class DisplayCurrency extends Component {
@@ -27,9 +27,11 @@ export default class DisplayCurrency extends Component {
     return (
       <Layout preload={false}>
         <Body scrollable>
-          <T.Heading style={styles.heading}>Display Currency</T.Heading>
+          <T.Heading style={styles.heading}>
+            {t('settings.display_currency')}
+          </T.Heading>
           <T.Light style={styles.description}>
-            Select your default currency display
+            {t('settings.select_display_currency')}
           </T.Light>
           <View style={styles.list}>
             {tradingPairs.map(tradingPair => (

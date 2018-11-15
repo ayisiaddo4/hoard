@@ -11,6 +11,7 @@ import InputList from "../components/InputList";
 import PrivateKey from "./PrivateKey";
 import Confirm from "./Confirm";
 import NavigatorService from "lib/navigator";
+import { t } from 'translations/i18n';
 
 export default class Import extends Component {
   static propTypes = {
@@ -170,8 +171,8 @@ export default class Import extends Component {
       return (
         <SuccessFailureScreen
           type={TYPE_SUCCESS}
-          title="Success"
-          mainButtonText="Set Up Pin"
+          title={t('wallet.import_title_success')}
+          mainButtonText={t('wallet.pin_button_text')}
           onPressMain={this.handleRedirect}
         />
       );

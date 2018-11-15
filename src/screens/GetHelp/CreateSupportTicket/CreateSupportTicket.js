@@ -4,6 +4,7 @@ import Config from 'react-native-config';
 import { Alert, Keyboard, StyleSheet, View } from 'react-native';
 import { Layout, Header, Body } from 'components/Base';
 import { Try } from 'components/Conditional';
+import { t } from 'translations/i18n';
 import Input from 'components/Input';
 import Button from 'components/Button';
 import NavigatorService from 'lib/navigator';
@@ -59,11 +60,11 @@ export default class CreateSupportTicket extends Component {
 
   validate = ({ email_address, description, name }) => ({
     email_address:
-      (!email_address && 'An email is required') ||
+      (!email_address && t('get_help.submit_request.email_required')) ||
       (!email_address.match(/^[a-zA-Z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+$/) &&
-        'Must be a valid email'),
-    description: !description && 'A description is required',
-    name: !name && 'A name is required',
+        t('get_help.email_valid')),
+    description: !description && t('get_help.submit_request.description_required'),
+    name: !name && t('get_help.submit_request.name_required'),
   });
 
   submit = () => {
@@ -84,8 +85,8 @@ export default class CreateSupportTicket extends Component {
         );
         if (response.success) {
           Alert.alert(
-            'Your ticket has been submitted successfully!',
-            'A confirmation email should be sent soon',
+            t('get_help.submit_request.submit_success_title'),
+            t('get_help.submit_request.submit_success_message'),
             [
               {
                 text: 'OK',
@@ -98,8 +99,8 @@ export default class CreateSupportTicket extends Component {
         }
       } catch (e) {
         Alert.alert(
-          'An error occurred while submitting your ticket.',
-          'Please try again, or email us directly at support@hoardinvest.com',
+          t('get_help.submit_request.submit_error_title'),
+          t('get_help.submit_request.submit_error_message'),
           [
             {
               text: 'OK',
@@ -118,7 +119,7 @@ export default class CreateSupportTicket extends Component {
           <DismissableView style={styles.container}>
             <Try condition={!this.props.isSignedIn}>
               <Input
-                placeholder="Enter Email *"
+                placeholder={t('get_help.submit_request.input_email')}
                 keyboardType="email-address"
                 returnKeyType="next"
                 error={this.state.showErrors && this.state.errors.email_address}
@@ -128,7 +129,7 @@ export default class CreateSupportTicket extends Component {
               />
             </Try>
             <Input
-              placeholder="Name"
+              placeholder={t('get_help.submit_request.input_name')}
               returnKeyType="next"
               error={this.state.showErrors && this.state.errors.name}
               onChangeText={this.handleChange('name')}
@@ -136,7 +137,7 @@ export default class CreateSupportTicket extends Component {
               type="underline"
             />
             <Input
-              placeholder="Subject"
+              placeholder={t('get_help.submit_request.input_subject')}
               returnKeyType="next"
               error={this.state.showErrors && this.state.errors.subject}
               onChangeText={this.handleChange('subject')}
@@ -145,7 +146,7 @@ export default class CreateSupportTicket extends Component {
             />
             <View onLayout={this.measureLargeInput} style={styles.largeInputContainer}>
               <Input
-                placeholder="Description *"
+                placeholder={t('get_help.submit_request.input_description')}
                 multiline={true}
                 onChangeText={this.handleChange('description')}
                 value={this.state.answers.description}
@@ -162,7 +163,7 @@ export default class CreateSupportTicket extends Component {
               loading={this.state.loading}
               onPress={this.submit}
             >
-              Submit
+              {t('actions.submit')}
             </Button>
           </DismissableView>
         </Body>

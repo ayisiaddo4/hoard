@@ -11,6 +11,7 @@ import { Try } from 'components/Conditional';
 import { Layout, Header, Body } from 'components/Base';
 import Modal from 'components/Modal';
 import T from 'components/Typography';
+import { t } from 'translations/i18n';
 import UnderlineInput from 'components/UnderlineInput';
 
 import { FORGOT_PASSWORD, FORGOT_USERNAME } from 'screens/Forgot/constants';
@@ -56,8 +57,8 @@ export default class ForgotModal extends Component {
     const valid = await validateEmail({email_address: this.state.email_address});
     if (valid !== true) {
       Alert.alert(
-        'Error',
-        valid.error || 'There was a problem with your email address.',
+        t('forgot.error_title'),
+        valid.error || t('forgot.error_message_email')
       );
       return;
     }
@@ -70,9 +71,7 @@ export default class ForgotModal extends Component {
       });
 
       if (response.success) {
-        Alert.alert(
-          `An email has been sent to your address with instructions to reset.`
-        );
+        Alert.alert(t('forgot.error_message_email_sent'));
         NavigatorService.navigate('Login');
       } else {
         // eslint-disable-next-line no-console
@@ -85,7 +84,7 @@ export default class ForgotModal extends Component {
       if (__DEV__) console.log(e);
 
       Alert.alert(
-        `Oops! ${e.message}: ${e.errors && e.errors[0] && e.errors[0].message}`
+        `${t('forgot.apologetic_interjection_of_mild_dismay')} ${e.message}: ${e.errors && e.errors[0] && e.errors[0].message}`
       );
     }
     this.setState({
@@ -103,18 +102,24 @@ export default class ForgotModal extends Component {
           <Header style={{ alignItems: 'center' }}>
             <Image style={styles.icon} source={icon[this.state.forgotType]} />
             <Try condition={this.state.forgotType === FORGOT_PASSWORD}>
-              <T.Heading style={styles.heading}>Reset Your Password</T.Heading>
+              <T.Heading style={styles.heading}>
+                {t('forgot.reset_password')}
+              </T.Heading>
             </Try>
             <Try condition={this.state.forgotType === FORGOT_USERNAME}>
-              <T.Heading style={styles.heading}>Reset Your Username</T.Heading>
+              <T.Heading style={styles.heading}>
+                {t('forgot.reset_username')}
+              </T.Heading>
             </Try>
-            <T.Heading style={styles.subheading}>{`We're here to help!`}</T.Heading>
+            <T.Heading style={styles.subheading}>
+              {t('forgot.help_text')}
+            </T.Heading>
           </Header>
           <Body style={styles.body}>
             <UnderlineInput
               style={styles.input}
               keyboardType="email-address"
-              label={`Your Email Address`}
+              label={t('forgot.input_email')}
               onChangeText={this.handleChangeEmail}
               value={this.state.email_address}
               autoCorrect={false}

@@ -9,7 +9,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-
+import { t } from 'translations/i18n';
 import InputList from '../components/InputList';
 import ConfirmMnemonic from '../components/ConfirmMnemonic';
 
@@ -43,7 +43,7 @@ export default class Recover extends Component {
   setNavigation = step => {
     this.props.navigation.setParams({
       leftAction: this.goBack,
-      title: 'Recover Wallet',
+      title: t('wallet.recover_wallet'),
       multipage: true,
       currentPage: step,
       totalPages: 3,

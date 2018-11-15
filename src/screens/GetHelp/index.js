@@ -4,7 +4,7 @@ import {
   transitionConfig,
   getNavigationOptions,
 } from 'components/Base/Navigation';
-
+import { t } from 'translations/i18n';
 import GetHelp from './GetHelp';
 import CreateSupportTicket from './CreateSupportTicket';
 
@@ -16,7 +16,7 @@ const RoutingStack = createStackNavigator(
         getNavigationOptions({
           ...navProps,
           leftAction: false,
-          title: 'Get Help',
+          title: t('get_help.get_help.title'),
         }),
     },
     CreateSupportTicket: {
@@ -24,7 +24,7 @@ const RoutingStack = createStackNavigator(
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
-          title: 'Submit A Request',
+          title: t('get_help.submit_request.title'),
         }),
     },
   },

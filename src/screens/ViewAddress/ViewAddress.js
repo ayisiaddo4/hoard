@@ -4,6 +4,7 @@ import { View, Clipboard, StyleSheet, Image } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { dimensions } from 'styles';
 import T from 'components/Typography';
+import { t } from 'translations/i18n';
 import Modal from 'components/Modal';
 import Icon from 'components/Icon';
 import { getCoinMetadata } from 'lib/currency-metadata';
@@ -33,7 +34,7 @@ export default class ViewAddress extends Component {
 
     return (
       <Modal
-        title="Wallet Address"
+        title={t('view_address.wallet_address')}
         footer={
           <Fragment>
             <Link
@@ -43,7 +44,7 @@ export default class ViewAddress extends Component {
                   style={{ size: 20, color: 'white' }}
                 />
               }
-              title="Copy Address"
+              title={t('view_address.copy_address')}
               onPress={this.copyAddress}
               arrowOverride={
                 this.state.addressCopied ? (
@@ -55,7 +56,7 @@ export default class ViewAddress extends Component {
                       />
                     </View>
                     <T.Light style={{ color: 'green', marginLeft: 5 }}>
-                      Copied
+                      {t('view_address.copied')}
                     </T.Light>
                   </View>
                 ) : (

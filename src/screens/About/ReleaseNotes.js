@@ -3,6 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import T from 'components/Typography';
 import { Layout, Body } from 'components/Base';
 import Config from 'react-native-config';
+import { t } from 'translations/i18n';
 
 export default function ReleaseNotes() {
   return (
@@ -10,7 +11,7 @@ export default function ReleaseNotes() {
       <Body scrollable style={styles.body}>
         <Body>
           <T.Heading style={[styles.type, styles.header]}>
-            Release Notes
+            {t('about.release_notes.title')}
           </T.Heading>
           {Config.CURRENCY_NETWORK_TYPE !== 'main' &&
             <Fragment>
@@ -19,40 +20,35 @@ export default function ReleaseNotes() {
                   <Text style={styles.testnetIcon}>!</Text>
                 </View>
                 <View style={styles.testnetBody}>
-                  <T.SubHeading style={styles.testnetHeader}>Do Not Use Real Cryptocurrency</T.SubHeading>
+                  <T.SubHeading style={styles.testnetHeader}>
+                    {t('about.release_notes.testnet_header')}
+                  </T.SubHeading>
                   <T.Light style={styles.testnetContent}>
-                    The Hoard beta app is a testnet beta app.
-                    If you use real cryptocurrency, you will lose it.
+                    {t('about.release_notes.testnet_content')}
                   </T.Light>
                 </View>
               </View>
               <View style={styles.introText}>
                 <T.Light style={styles.type}>
-                  Thank you for participating in the Hoard public beta test!
+                  {t('about.release_notes.intro_thanks')}
                 </T.Light>
                 <T.Light style={styles.type}>
-                  This version of the app is a TESTNET version,
-                  meaning that you MUST NOT USE REAL BITCOIN OR ETHER WITH THE APP.
+                  {t('about.release_notes.testnet_description')}
                 </T.Light>
                 <T.Light style={styles.type}>
-                  To obtain test currencies, use a "Rinkeby Ether faucet" and a
-                  "Bitcoin Testnet faucet". On these sites, you can input the
-                  Bitcoin and Ethereum addresses found within this app in your wallet,
-                  and receive test Bitcoin and Ether to play with and help us by testing the app.
+                  {t('about.release_notes.testnet_faucet')}
                 </T.Light>
                 <T.Light style={styles.type}>
-                  To report bugs, leave us a bug report at github.com/hoardinvest/hoard,
-                  or use the support form in the app found under Get Help > Submit a Request.
+                  {t('about.release_notes.testnet_bugs')}
                 </T.Light>
                 <T.Light style={styles.type}>
-                  For more information, visit us on telegram at t.me/hoardinvest
-                  and thanks again for your support!
+                  {t('about.release_notes.telegram')}
                 </T.Light>
               </View>
             </Fragment>
           }
           <T.SubHeading style={styles.subheading}>
-            Release 1.0
+            {t('about.release_notes.release')} 1.0
           </T.SubHeading>
           <T.Light style={styles.type}>
             &bull;  🎉 🎉 🎉 🎉 🎉

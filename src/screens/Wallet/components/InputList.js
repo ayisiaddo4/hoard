@@ -6,7 +6,7 @@ import Button from "components/Button";
 import Input from "components/Input";
 import T from "components/Typography";
 
-const LANG_NEXT_TEXT = "Next";
+import { t } from 'translations/i18n';
 
 export default class InputList extends Component {
   static propTypes = {
@@ -60,7 +60,9 @@ export default class InputList extends Component {
 
     return (
       <View style={styles.container}>
-        <T.Heading style={styles.headingStyle}>Enter Seed Phrase</T.Heading>
+        <T.Heading style={styles.headingStyle}>
+          {t('wallet.input_seed_phrase_heading')}
+        </T.Heading>
         <ScrollView
           bounces={false}
           style={styles.bodyContainer}
@@ -73,7 +75,7 @@ export default class InputList extends Component {
                 style={styles.input}
                 autoCapitalize="none"
                 returnKeyType="next"
-                placeholder={`Word #${i + offset}`}
+                placeholder={t('wallet.input_seed_phrase_word', {word_number: i + offset})}
                 value={answer}
                 onChangeText={this.updateAnswer(i)}
                 type="underline"
@@ -82,14 +84,14 @@ export default class InputList extends Component {
           })}
           <View style={styles.footerContainer}>
             <T.Light style={{color: 'lightgrey', textAlign: 'center', paddingBottom: 10}}>
-              {offset + answers.length - 1} of 12 words
+              {t('wallet.x_of_12_words',{ word_number: offset + answers.length - 1})}
             </T.Light>
             <Button
               style={styles.nextButton}
               disabled={!completed}
               onPress={this.handleNextButton}
             >
-              {LANG_NEXT_TEXT}
+              {t('actions.next')}
             </Button>
           </View>
         </ScrollView>

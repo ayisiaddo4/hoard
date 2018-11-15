@@ -7,6 +7,7 @@ import NavigatorService from 'lib/navigator';
 
 import { Layout, Header, Footer } from 'components/Base';
 import T from 'components/Typography';
+import { t } from 'translations/i18n';
 import Button from 'components/Button';
 
 export default class Forgot extends Component {
@@ -37,8 +38,10 @@ export default class Forgot extends Component {
 
           <Header style={{ alignItems: 'center', marginBottom: 20}}>
             <Image style={styles.icon} source={imgSrc} />
-            <T.Heading style={styles.heading}>{`Can't Log In?`}</T.Heading>
-            <T.Heading style={styles.subheading}>Forgot your username or password? Retrieve your username or reset your password below.</T.Heading>
+            <T.Heading style={styles.heading}>{t('login.cant_log_in')}</T.Heading>
+            <T.Heading style={styles.subheading}>
+              {t('forgot.instructions')}
+            </T.Heading>
           </Header>
 
         <Footer>
@@ -46,14 +49,14 @@ export default class Forgot extends Component {
             type="base"
             onPress={this.handleForgotUsernameModal}
           >
-            Forgot Username?
+            {t('forgot.forgot_username')}
           </Button>
           <Button
             type="base"
             onPress={this.handleForgotPasswordModal}
             style={styles.button}
             >
-              Forgot Password?
+            {t('forgot.forgot_password')}
             </Button>
 
         </Footer>

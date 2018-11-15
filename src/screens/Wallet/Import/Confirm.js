@@ -5,8 +5,7 @@ import SuccessFailureScreen, {TYPE_FAILURE} from 'components/SuccessFailureScree
 
 import Button from 'components/Button';
 import T from 'components/Typography';
-
-const LANG_PREV_TEXT = 'Go back and review...';
+import { t } from 'translations/i18n';
 
 export default class Confirm extends Component {
   static propTypes = {
@@ -41,8 +40,8 @@ export default class Confirm extends Component {
       return (
         <SuccessFailureScreen
           type={TYPE_FAILURE}
-          title="Error"
-          mainButtonText="Retry"
+          title={t('wallet.import_title_error')}
+          mainButtonText={t('wallet.import_retry')}
           onPressMain={this.props.goBack}
         />
       );
@@ -51,12 +50,12 @@ export default class Confirm extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <T.Heading style={{ color: '#ffffff' }}>Confirm Word List </T.Heading>
+          <T.Heading style={{ color: '#ffffff' }}>
+            {t('wallet.confirm_word_list')}
+          </T.Heading>
         </View>
         <View style={styles.bodyContainer}>
-          <T.Light>
-            Please confirm your recovery phrase.
-          </T.Light>
+          <T.Light>{t('wallet.confirm_word_list_description')}</T.Light>
           {this.props.answers.map((answer, i) => (
             <T.Light style={styles.answer} key={i}>
               <T.SemiBold>
@@ -70,14 +69,14 @@ export default class Confirm extends Component {
             disabled={this.state.error}
             onPress={this.checkWallet}
           >
-            Looks Good!
+            {t('wallet.confirm_looks_good')}
           </Button>
           <Button
             type={this.state.error ? 'primary' : 'text'}
             style={styles.textButton}
             onPress={this.handleGoBack}
           >
-            {LANG_PREV_TEXT}
+            {t('wallet.confirm_back_text')}
           </Button>
         </View>
       </View>

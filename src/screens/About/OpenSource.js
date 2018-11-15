@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import T from 'components/Typography';
 import { Layout, Body } from 'components/Base';
+import { t } from 'translations/i18n';
 
 export default function OpenSource() {
   return (
@@ -9,16 +10,10 @@ export default function OpenSource() {
       <Body scrollable style={styles.body}>
         <Body>
           <T.Heading style={[styles.type, styles.header]}>
-            We would like to thank:
+            {t('about.open_source.thanks')}
           </T.Heading>
           <T.Paragraph style={styles.type}>
-            React, React Native, Ethers, React Navigation, Redux, React Redux,
-            Redux Saga, Reselect, Victory Native, Lottie React Native, Prop
-            Types, React Native Animatable, React Native Config, React Native
-            Contacts, React Native Linear Gradient, React Native Search Filter,
-            React Native Splash Screen, React Native Svg, React Native
-            Swipeable, React Native Touch Id, React Native Vector Icons, and
-            many other Open Source contributors.
+            {t('about.open_source.thanks_projects')}
           </T.Paragraph>
         </Body>
       </Body>

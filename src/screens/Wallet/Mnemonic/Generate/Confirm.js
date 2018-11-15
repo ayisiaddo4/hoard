@@ -8,6 +8,7 @@ import { Layout, Body, Header, Footer } from 'components/Base';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import T from 'components/Typography';
+import { t } from 'translations/i18n';
 import memoize from 'lodash/memoize';
 
 const initialStateQuestion = {
@@ -109,12 +110,13 @@ export default class Confirm extends Component {
       <Layout preload={false}>
         <Body scrollable style={styles.body}>
           <Header>
-            <T.Heading style={styles.headingStyle}>Confirm Word List</T.Heading>
+            <T.Heading style={styles.headingStyle}>
+              {t('wallet.confirm_word_list')}
+            </T.Heading>
           </Header>
           <Body>
             <T.Light style={styles.text}>
-              To make sure everything was written down correctly, please enter
-              the following words from your paper key.
+              {t('wallet.confirm_word_list_check')}
             </T.Light>
             {this.state.questions.map((question, i) => (
               <Input
@@ -123,7 +125,7 @@ export default class Confirm extends Component {
                 type="underline"
                 autoCapitalize="none"
                 autoCorrect={false}
-                placeholder={`What was word #${question.number}`}
+                placeholder={t('wallet.input_confirm_word', {word_number: question.number})}
                 returnKeyType="next"
                 onChangeText={this.updateFormField(i)}
                 onEndEditing={this.checkField(i)}
@@ -132,7 +134,7 @@ export default class Confirm extends Component {
                 error={
                   question.showConfirmationStatus &&
                   !question.confirmed &&
-                    'Incorrect answer, please try again.'
+                  t('wallet.input_confirm_error')
                 }
               />
             ))}
@@ -145,7 +147,7 @@ export default class Confirm extends Component {
               loading={this.state.loading}
               disabled={!this.state.allChecksPassed}
             >
-              Create My Wallet!
+              {t('wallet.create_my_wallet')}
             </Button>
           </Footer>
         </Body>

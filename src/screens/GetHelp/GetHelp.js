@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Link from 'components/Link';
 import Scene from 'components/Scene';
+import { t } from 'translations/i18n';
 
 export default function GetHelp() {
   return (
@@ -10,21 +11,21 @@ export default function GetHelp() {
         <View style={styles.content}>
           <Link
             external
-            title="Browse our FAQs"
+            title={t('get_help.get_help.faq_link')}
             to="https://support.hoardinvest.com/hc/en-us/sections/360000948793-FAQ"
           />
           <Link
             external
-            title="Contact Us"
+            title={t('get_help.get_help.contact_link')}
             to="mailto:support@hoardinvest.com"
           />
           <Link
-            title="Submit a Request"
+            title={t('get_help.get_help.ticket_link')}
             to="CreateSupportTicket"
           />
           <Link
             external
-            title="My Support"
+            title={t('get_help.get_help.support_link')}
             to="https://support.hoardinvest.com"
           />
         </View>

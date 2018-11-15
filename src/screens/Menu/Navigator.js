@@ -14,7 +14,7 @@ import TransactionStatus from 'screens/TransactionStatus';
 import Authenticate from 'components/Authenticate';
 import Store from 'components/Pin/Store';
 import Menu from './Menu';
-
+import { t } from 'translations/i18n';
 import {
   cardStyle,
   transitionConfig,
@@ -31,7 +31,7 @@ const RouteConfigs = {
             getNavigationOptions({
               ...navProps,
               leftAction: false,
-              title: 'My Wallet',
+              title: t('menu.my_wallet'),
             }),
         },
         CoinInformation: {
@@ -47,7 +47,7 @@ const RouteConfigs = {
             getNavigationOptions({
               ...navProps,
               leftAction: 'back',
-              title: 'Transfer Funds',
+              title: t('menu.transfer_funds'),
             }),
         },
         RecipientSelection: {

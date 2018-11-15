@@ -6,6 +6,7 @@ import CurrencyButton from './CurrencyButton';
 import ValueStatement from 'components/ValueStatement';
 import IntervalSelectionChart from 'components/IntervalSelectionChart';
 import Scene from 'components/Scene';
+import { t } from 'translations/i18n';
 
 import { Intervals } from 'components/GetCurrencyHistory';
 import { getColors } from 'styles';
@@ -79,7 +80,7 @@ export default class Dashboard extends React.Component {
         <View style={styles.pricingContainer}>
           {!price.requesting && !history.requesting ? (
             <ValueStatement
-              title={`${this.state.selectedCurrency} price`}
+              title={`${this.state.selectedCurrency} ${t('dashboard.price')}`}
               value={`$${price.price.toFixed(2)}`}
               change={history.change}
               positive={history.positive}
@@ -99,12 +100,12 @@ export default class Dashboard extends React.Component {
         </View>
         <View style={styles.buttonContainer}>
           <Button
-            title="Send"
+            title={t('actions.send')}
             onPress={this.props.showSendModal}
             color={themeColors.interactivePrimary}
           />
           <Button
-            title="Receive"
+            title={t('actions.receive')}
             onPress={this.props.showReceiveModal}
             color={themeColors.interactivePrimary}
           />

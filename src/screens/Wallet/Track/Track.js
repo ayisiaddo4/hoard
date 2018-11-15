@@ -7,6 +7,7 @@ import SelectCoin from "../components/SelectCoin";
 import NavigatorService from "lib/navigator";
 import Modal from "../Modal";
 
+import { t } from 'translations/i18n';
 export default class Track extends Component {
   static propTypes = {
     availableCoins: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -56,7 +57,7 @@ export default class Track extends Component {
         {this.renderContent()}
         <Modal
           show={!!this.state.coin && this.props.track_successful}
-          title={`${this.state.coin} wallet added!`}
+          title={`${this.state.coin} ${t('wallet.track_added')}`}
           onCancel={this.handleRedirect}
           onDone={this.handleRedirect}
         >

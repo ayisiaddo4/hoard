@@ -21,7 +21,7 @@ import Swipeable from 'react-native-swipeable';
 import NavigatorService from 'lib/navigator';
 import Config from 'react-native-config';
 import T from 'components/Typography';
-
+import { t } from 'translations/i18n';
 
 class SwipableItem extends React.Component {
   static propTypes = {
@@ -71,7 +71,7 @@ class SwipableItem extends React.Component {
       >
         <View style={styles.walletActionContainer}>
           <Image style={styles.walletActionImage} source={PAY_ICON} />
-          <Text style={styles.walletActionText}>PAY</Text>
+          <Text style={styles.walletActionText}>{t('actions.pay')}</Text>
         </View>
       </TouchableOpacity>,
 
@@ -83,7 +83,7 @@ class SwipableItem extends React.Component {
         >
           <View style={styles.walletActionContainer}>
             <Image style={styles.walletActionImage} source={REQUEST_ICON} />
-            <Text style={styles.walletActionText}>REQUEST</Text>
+            <Text style={styles.walletActionText}>{t('actions.request')}</Text>
           </View>
         </TouchableOpacity>
       ),
@@ -95,7 +95,7 @@ class SwipableItem extends React.Component {
       >
         <View style={styles.walletActionContainer}>
           <Image style={styles.walletActionImage} source={VIEW_ICON} />
-          <Text style={styles.walletActionText}>VIEW</Text>
+          <Text style={styles.walletActionText}>{t('actions.view')}</Text>
         </View>
       </TouchableOpacity>,
     ].filter(v => v);
@@ -150,13 +150,13 @@ class Wallet extends React.Component {
           setTimeout(() => {
             const { notification } = this.props.notificationRecieved({
               type: 'error',
-              title: 'Do Not Use Real Cryptocurrency',
-              content: 'The Hoard beta app is a testnet beta app. If you use real cryptocurrency, you will lose it.',
+              title: t('testnet.warning_title'),
+              content: t('testnet.warning_description'),
               icon: require('assets/exclamation-circle.png'),
               onDismiss: this.handleDismissTestnetWarning,
               actions: [
                 {
-                  title: 'Dismiss',
+                  title: t('testnet.warning_dismiss'),
                   onPress: this.handleDismissTestnetWarning,
                 }
               ]
@@ -218,7 +218,7 @@ class Wallet extends React.Component {
         buttons.push({
           type: 'base',
           onPress: this.handleWalletTrack,
-          text: 'Track Coin',
+          text: t('wallet.track_coin'),
         });
       }
 
@@ -236,7 +236,7 @@ class Wallet extends React.Component {
       buttons.push({
         type: 'secondary',
         onPress: this.handleMnemonicGenerate,
-        text: 'Make Mnemonic',
+        text: t('wallet.make_mnemonic'),
       });
     }
 
@@ -262,7 +262,7 @@ class Wallet extends React.Component {
       <Layout>
         <Card
           colors={['#00A073', '#007982']}
-          title="My Balance"
+          title={t('wallet.my_balance')}
           subtitle={`$${this.props.totalHoldings.toFixed(2)}`}
           walletsToChart={this.props.wallets}
           style={{

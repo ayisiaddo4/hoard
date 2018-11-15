@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 import Button from 'components/Button';
 import T from 'components/Typography';
+import { t } from 'translations/i18n';
 import { SUPPORTED_COINS_WALLET } from 'containers/App/constants';
 import SelectableImageList from 'components/SelectableImageList';
 import { getCoinMetadata } from 'lib/currency-metadata';
 import NavigatorService from 'lib/navigator';
-
-const LANG_NEXT_TEXT = 'Next';
-const LANG_CANCEL_TEXT = 'Cancel';
 
 export default class Step1 extends Component {
   static propTypes = {
@@ -41,7 +39,9 @@ export default class Step1 extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <T.Heading style={styles.headingStyle}>Select Coin</T.Heading>
+          <T.Heading style={styles.headingStyle}>
+            {t('wallet.select_coin')}
+          </T.Heading>
         </View>
         <View style={styles.bodyContainer}>
           <SelectableImageList
@@ -65,14 +65,14 @@ export default class Step1 extends Component {
             onPress={this.handleDone}
             style={{ overflow: 'hidden' }}
           >
-            {LANG_NEXT_TEXT}
+            {t('actions.next')}
           </Button>
           <Button
             style={styles.cancelButton}
             type="text"
             onPress={this.handleCancel}
           >
-            {LANG_CANCEL_TEXT}
+            {t('actions.cancel')}
           </Button>
         </View>
       </View>

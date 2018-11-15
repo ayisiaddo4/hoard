@@ -23,6 +23,7 @@ import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
 import { SYMBOL_BTC, SYMBOL_ETH, SYMBOL_BOAR } from 'containers/App/constants';
 import Config from 'react-native-config';
 import { NOTIFICATION_FLOW_TYPE_CONTACT_FULFILLMENT } from 'containers/Notifications/constants';
+import { t } from 'translations/i18n';
 
 const commonTransactionProps = {
   type: PropTypes.oneOf([TYPE_SEND, TYPE_REQUEST]).isRequired,
@@ -167,7 +168,9 @@ export default class CoinInformation extends React.Component {
           >
             <View style={styles.actionButtonView}>
               <Image style={styles.image} source={require('assets/send.png')} />
-              <T.Small style={styles.actionButtonText}>SEND</T.Small>
+              <T.Small style={styles.actionButtonText}>
+                {t('actions.send')}
+              </T.Small>
             </View>
           </TouchableOpacity>
           <Try condition={isSignedIn}>
@@ -177,7 +180,9 @@ export default class CoinInformation extends React.Component {
             >
               <View style={styles.actionButtonView}>
                 <Image style={styles.image} source={require('assets/request.png')} />
-                <T.Small style={styles.actionButtonText}>REQUEST</T.Small>
+                <T.Small style={styles.actionButtonText}>
+                  {t('actions.request')}
+                </T.Small>
               </View>
             </TouchableOpacity>
           </Try>
@@ -187,14 +192,16 @@ export default class CoinInformation extends React.Component {
           >
             <View style={styles.actionButtonView}>
               <Image style={styles.image} source={require('assets/scan.png')} />
-              <T.Small style={styles.actionButtonText}>VIEW</T.Small>
+              <T.Small style={styles.actionButtonText}>
+                {t('actions.view')}
+              </T.Small>
             </View>
           </TouchableOpacity>
         </View>
         <Try condition={contactTransactions.length > 0}>
           <Fragment>
             <SectionHeader style={styles.sectionHeader}>
-              Pending Transactions
+              {t('coin_informtion.pending_transactions')}
             </SectionHeader>
             <View style={styles.contactTransactionsContainer}>
               {contactTransactions.map((item) => (
@@ -208,7 +215,9 @@ export default class CoinInformation extends React.Component {
                     >
                       <View style={styles.walletActionContainer}>
                         <Image style={styles.walletActionImage} source={require('assets/cancel.png')} />
-                        <Text style={styles.walletActionText}>CANCEL</Text>
+                        <Text style={styles.walletActionText}>
+                          {t('actions.cancel')}
+                        </Text>
                       </View>
                     </TouchableOpacity>,
                     item.type === TYPE_REQUEST
@@ -220,7 +229,9 @@ export default class CoinInformation extends React.Component {
                         >
                           <View style={styles.walletActionContainer}>
                             <Image style={styles.walletActionImage} source={require('assets/request.png')} />
-                            <Text style={styles.walletActionText}>REQUEST</Text>
+                            <Text style={styles.walletActionText}>
+                              {t('actions.request')}
+                            </Text>
                           </View>
                         </TouchableOpacity>
                       )
@@ -232,7 +243,9 @@ export default class CoinInformation extends React.Component {
                         >
                           <View style={styles.walletActionContainer}>
                             <Image style={styles.walletActionImage} source={require('assets/send.png')} />
-                            <Text style={styles.walletActionText}>SEND</Text>
+                            <Text style={styles.walletActionText}>
+                              {t('actions.send')}
+                            </Text>
                           </View>
                         </TouchableOpacity>
                       )

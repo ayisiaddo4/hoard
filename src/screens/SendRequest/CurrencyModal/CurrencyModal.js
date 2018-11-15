@@ -8,6 +8,7 @@ import { Try } from 'components/Conditional';
 import NavigatorService from 'lib/navigator';
 import { getCoinMetadata } from 'lib/currency-metadata';
 import memoize from 'lodash/memoize';
+import { t } from 'translations/i18n';
 
 const WalletType = PropTypes.shape({
   balance: PropTypes.number.isRequired,
@@ -40,14 +41,14 @@ export default class CurrencyModal extends Component {
     const {wallets, mostUsedWallet} = this.props;
 
     return (
-      <Modal title="Currency">
+      <Modal title={t('send_request.modals.currency_title')}>
         <T.Light style={styles.text}>
-          Select currency to send.
+          {t('send_request.modals.currency_heading')}
         </T.Light>
         <Try condition={!!this.props.mostUsedWallet}>
           <Fragment>
             <T.SubHeading style={styles.subheading}>
-              Most Used
+              {t('send_request.modals.currency_subheading_most_used')}
             </T.SubHeading>
             <SelectableImageRow
               image={mostUsedWallet && getCoinMetadata(mostUsedWallet.symbol).image}
@@ -59,7 +60,7 @@ export default class CurrencyModal extends Component {
           </Fragment>
         </Try>
         <T.SubHeading style={styles.subheading}>
-          All Currencies
+          {t('send_request.modals.currency_subheading_all')}
         </T.SubHeading>
         <ScrollView bounces={false}>
           {wallets.map(wallet => {

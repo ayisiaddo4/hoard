@@ -6,6 +6,7 @@ import createStyles, { dimensions, colors, padding, typography } from 'styles';
 import Button from "components/Button";
 import T from "components/Typography";
 
+import { t } from 'translations/i18n';
 export default class Type extends Component {
   static propTypes = {
     saveAndContinue: PropTypes.func.isRequired,
@@ -22,11 +23,10 @@ export default class Type extends Component {
             source={require('assets/create-wallet-top.png')}
           />
           <T.Heading style={styles.heading}>
-            Create Wallet
+            {t('wallet.create_wallet_title')}
           </T.Heading>
           <T.Light style={styles.content}>
-            Okay, first up in the wallet creation process is creating your seed words.
-            All you have to do is scribble, so let's get started.
+            {t('wallet.create_wallet_description')}
           </T.Light>
         </View>
         <View style={styles.buttonsContainer}>
@@ -34,14 +34,14 @@ export default class Type extends Component {
             style={styles.generateButton}
             onPress={this.props.saveAndContinue(this.props.newMnemonicType)}
           >
-            Get Started
+            {t('wallet.get_started')}
           </Button>
           <Button
             type="text"
             style={styles.recoverButton}
             onPress={this.props.saveAndContinue(this.props.existingMnemonicType)}
           >
-            Actually, I've Done This Before
+            {t('wallet.existing_mnemonic')}
           </Button>
         </View>
       </View>

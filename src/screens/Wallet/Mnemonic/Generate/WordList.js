@@ -5,8 +5,7 @@ import Button from 'components/Button';
 import T from 'components/Typography';
 import Animations, { FADE, SLIDE_Y } from 'hocs/Animations';
 import { Layout, Body, Header, Footer } from 'components/Base';
-
-const LANG_NEXT_TEXT = 'Next';
+import { t } from 'translations/i18n';
 
 export default class WordList extends Component {
   static propTypes = {
@@ -66,10 +65,8 @@ export default class WordList extends Component {
       <Layout preload={false}>
         <Body scrollable style={styles.body}>
           <Header>
-            <T.Heading style={styles.headingStyle}>Your Words</T.Heading>
-            <T.Light style={styles.text}>
-              Write down each word in order and store it in a safe place.
-            </T.Light>
+            <T.Heading style={styles.headingStyle}>{t('wallet.your_words')}</T.Heading>
+            <T.Light style={styles.text}>{t('wallet.your_words_description')}</T.Light>
           </Header>
           <Body>
             <Animations
@@ -118,7 +115,7 @@ export default class WordList extends Component {
               disabled={this.state.animateList || exitAnimation}
               onPress={this.handleNextButton}
             >
-              {LANG_NEXT_TEXT}
+              {t('actions.next')}
             </Button>
           </Footer>
         </Body>

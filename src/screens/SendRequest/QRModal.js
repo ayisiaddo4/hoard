@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import NavigatorService from 'lib/navigator';
 import Scanner from 'components/Camera/Scanner';
 import { Header } from 'components/Base/Navigation';
+import { t } from 'translations/i18n';
 
 import { RECIPIENT_TYPE_ADDRESS } from 'screens/SendRequest/constants';
 import { colors } from 'styles';
@@ -33,7 +34,7 @@ export default class QRModal extends Component {
         <Header
           navigation={this.props.navigation}
           leftAction={'cancel'}
-          title="Scan QR"
+          title={t('send_request.scan_qr')}
           rightAction={null}
         />
         <View style={styles.cameraContainer}>

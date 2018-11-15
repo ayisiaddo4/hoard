@@ -9,6 +9,7 @@ import { colors, calculateHitSlop } from 'styles';
 import Contact from './Contact';
 import Scene from 'components/Scene';
 import T from 'components/Typography';
+import { t } from 'translations/i18n';
 import UnderlineInput from 'components/UnderlineInput';
 import LoadingSpinner from 'components/LoadingSpinner';
 import Button from 'components/Button';
@@ -199,53 +200,76 @@ export default class SendRequest extends Component {
       this.fetchPrice
     );
 
-
-  validate({ amount, selectedId, recipient, recipientType, transactionType}) {
-    let verb;
-    if (transactionType == TYPE_SEND) verb = 'send';
-    if (transactionType == TYPE_REQUEST) verb = 'request';
-
+  validate({ amount, selectedId, recipient, recipientType, transactionType }) {
     const numAmount = Number(amount);
     const selectedWallet = this.props.wallets.find(
       wallet => wallet.id === selectedId
     );
+
+    // Require funds source
     if (!selectedId) {
-      let preposition;
-      let noun;
       if (transactionType == TYPE_SEND) {
-        noun = 'wallet';
-        preposition = 'from';
+        Alert.alert(t('send_request.select_wallet_send'));
       }
       if (transactionType == TYPE_REQUEST) {
-        noun = 'coin';
-        preposition = 'with';
+        Alert.alert(t('send_request.select_coin_request'));
       }
+      return false;
+    }
+    // Require funds amount
+    else if (!numAmount) {
+      if (transactionType == TYPE_SEND) {
+        Alert.alert(t('send_request.input_amount_to_send'));
+      }
+      if (transactionType == TYPE_REQUEST) {
+        Alert.alert(t('send_request.input_amount_to_request'));
+      }
+      return false;
+    }
 
-      Alert.alert(`Please select a ${noun} to ${verb} ${preposition}`);
-      return false;
-    } else if (!numAmount) {
-      Alert.alert(`Please input an amount to ${verb}`);
-      return false;
-    } else if (transactionType === TYPE_SEND && numAmount > selectedWallet.balance) {
-      Alert.alert('You cannot send more than you have in your wallet');
-      return false;
-    } else if (recipientType === RECIPIENT_TYPE_ADDRESS && !recipient) {
-      Alert.alert('Please an address to send to');
-      return false;
-    } else if (
-      recipientType === RECIPIENT_TYPE_ADDRESS &&
-      !Validator.validate(recipient, selectedWallet.symbol === SYMBOL_BOAR ? SYMBOL_ETH : selectedWallet.symbol, Config.CURRENCY_NETWORK_TYPE === 'main' ? 'prod' : 'testnet')
+    // Require sufficient balance
+    else if (
+      transactionType === TYPE_SEND &&
+      numAmount > selectedWallet.balance
     ) {
-      Alert.alert(`This is not a valid ${selectedWallet.symbol} address`);
+      Alert.alert(t('send_request.insufficient_balance'));
       return false;
-    } else if (recipientType === RECIPIENT_TYPE_OTHER && !recipient) {
-      let preposition;
-      if (transactionType == TYPE_SEND) preposition = 'to';
-      if (transactionType == TYPE_REQUEST) preposition = 'from';
+    }
 
-      Alert.alert(`Please enter a contact to ${verb} ${preposition}`);
+    // Require a recipient
+    else if (recipientType === RECIPIENT_TYPE_ADDRESS && !recipient) {
+      Alert.alert(t('send_request.missing_recipient'));
       return false;
-    } else {
+    }
+
+    // Require valid recipient address
+    else if (
+      recipientType === RECIPIENT_TYPE_ADDRESS &&
+      !Validator.validate(
+        recipient,
+        selectedWallet.symbol === SYMBOL_BOAR
+          ? SYMBOL_ETH
+          : selectedWallet.symbol,
+        Config.CURRENCY_NETWORK_TYPE === 'main' ? 'prod' : 'testnet'
+      )
+    ) {
+      Alert.alert(t('send_request.invalid_address', { symbol: selectedWallet.symbol }));
+      return false;
+    }
+
+    // Require other recipient address
+    else if (recipientType === RECIPIENT_TYPE_OTHER && !recipient) {
+      if (transactionType == TYPE_SEND) {
+        Alert.alert(t('send_request.other_no_recipient_send'));
+      }
+      if (transactionType == TYPE_REQUEST) {
+        Alert.alert(t('send_request.other_no_recipient_request'));
+      }
+      return false;
+    }
+
+    // Valid verification;
+    else {
       return true;
     }
   }
@@ -296,9 +320,7 @@ export default class SendRequest extends Component {
           }
         } catch (e) {
           Alert.alert(
-            `Oops! ${e.message}: ${e.errors &&
-              e.errors[0] &&
-              e.errors[0].message}`
+            `${t('requests.apologetic_interjection_of_mild_dismay')} ${e.message}: ${e.errors && e.errors[0] && e.errors[0].message}`
           );
         }
       }
@@ -366,9 +388,7 @@ export default class SendRequest extends Component {
         });
       } catch (e) {
         Alert.alert(
-          `Oops! ${e.message}: ${e.errors &&
-            e.errors[0] &&
-            e.errors[0].message}`
+          `${t('requests.apologetic_interjection_of_mild_dismay')} ${e.message}: ${e.errors && e.errors[0] && e.errors[0].message}`
         );
       }
     }
@@ -409,11 +429,11 @@ export default class SendRequest extends Component {
     let title = '';
     let recipientEmptyText = '';
     if (this.state.transactionType === TYPE_SEND) {
-      title = 'SEND';
-      recipientEmptyText = 'Recipient';
+      title = t('send_request.send');
+      recipientEmptyText = t('send_request.recipient');
     } else if (this.state.transactionType === TYPE_REQUEST) {
-      title = 'Request';
-      recipientEmptyText = 'Requesting From';
+      title = t('send_request.request');
+      recipientEmptyText = t('send_request.requesting_from');
     }
 
     return (
@@ -423,13 +443,13 @@ export default class SendRequest extends Component {
             <Try condition={isLoadingPrice}>
               <View style={styles.flex1}>
                 <View style={styles.loading}>
-                  <T.GrayedOut>Loading Prices...</T.GrayedOut>
+                  <T.GrayedOut>{t('send_request.loading_prices')}</T.GrayedOut>
                 </View>
                 <LoadingSpinner />
               </View>
             </Try>
             <Try condition={!wallets.length}>
-              <T.GrayedOut>You have not yet created any wallets</T.GrayedOut>
+              <T.GrayedOut>{t('send_request.no_wallets')}</T.GrayedOut>
             </Try>
             <Otherwise>
               <View style={[styles.flex1, styles.contentContainer]}>
@@ -440,7 +460,7 @@ export default class SendRequest extends Component {
                       <Conditional>
                         <Try condition={!!this.state.recipient}>
                           <T.Light style={styles.recipientHeader}>
-                            Recipient
+                            {t('send_request.recipient')}
                           </T.Light>
                         </Try>
                         <Otherwise>
@@ -477,8 +497,8 @@ export default class SendRequest extends Component {
                   </TouchableOpacity>
                 </View>
                 <SelectableImageHeader
-                  title="Currency"
-                  emptyText="Select Currency"
+                  title={t('send_request.currency_title')}
+                  emptyText={t('send_request.currency_empty')}
                   selection={currencyDisplay}
                   onPress={this.handleOnPressCurrency}
                 />
@@ -489,8 +509,8 @@ export default class SendRequest extends Component {
                       keyboardType="numeric"
                       label={
                         selectedWallet
-                          ? `Enter ${selectedWallet.symbol}`
-                          : 'Enter Amount'
+                          ? `${t('send_request.enter')} ${selectedWallet.symbol}`
+                          : t('send_request.enter_amount')
                       }
                       onChangeText={this.handleChangeAmount}
                       value={amount.toString()}
@@ -500,7 +520,7 @@ export default class SendRequest extends Component {
                     <UnderlineInput
                       style={styles.input}
                       keyboardType="numeric"
-                      label={`Enter ${this.props.tradingPair}`}
+                      label={`${t('send_request.enter')} ${this.props.tradingPair}`}
                       onChangeText={this.handleChangeFiat}
                       value={fiat}
                     />

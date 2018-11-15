@@ -5,7 +5,7 @@ import {Layout, Body, Header, Footer} from 'components/Base';
 import Button from 'components/Button';
 import { Try } from 'components/Conditional';
 import T from 'components/Typography';
-
+import { t } from 'translations/i18n';
 export default class SeedWordsSplash extends Component {
   static propTypes = {
     onDisplay: PropTypes.func.isRequired,
@@ -20,7 +20,9 @@ export default class SeedWordsSplash extends Component {
     return (
       <Layout preload={false}>
         <Header style={styles.container}>
-          <T.Heading style={styles.title}>Your seed words</T.Heading>
+          <T.Heading style={styles.title}>
+            {t('settings.your_seed_words')}
+          </T.Heading>
         </Header>
         <Body style={[styles.container, styles.body]}>
           <Image
@@ -29,22 +31,26 @@ export default class SeedWordsSplash extends Component {
             resizeMode="contain"
           />
           <View style={styles.textContainer}>
-            <T.Heading style={styles.subtitle}>Your keys</T.Heading>
+            <T.Heading style={styles.subtitle}>
+              {t('settings.your_keys')}
+            </T.Heading>
             <T.Light style={styles.bodyText}>
-              Your seed words are the only way to restore your wallet if your phone is lost stolen, broken or upgraded
+              {t('settings.your_keys_description')}
             </T.Light>
             <T.Light style={styles.bodyText}>
-              We will show you a list of words to write down and keep safe.
+              {t('settings.your_keys_description_2')}
             </T.Light>
           </View>
         </Body>
         <Footer style={styles.container}>
           <Button onPress={this.props.onDisplay} style={styles.button}>
-            Display Again
+            {t('settings.display_keys_again')}
           </Button>
           <Try condition={!!this.props.lastDisplayTime}>
             <Fragment>
-              <T.Light style={styles.seedWordTop}>Your last seed word display was</T.Light>
+              <T.Light style={styles.seedWordTop}>
+                {t('settings.last_display_time')}
+              </T.Light>
               <T.SemiBold style={styles.seedWordBottom}>
                 {date && date.toLocaleString(undefined, {
                    month: 'long',

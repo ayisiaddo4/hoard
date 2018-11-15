@@ -12,8 +12,7 @@ import { colors } from 'styles';
 import Input from 'components/Input';
 import Button from 'components/Button';
 import T from 'components/Typography';
-
-const LANG_SIGN_UP_TEXT = 'Next';
+import { t } from 'translations/i18n';
 
 export default class Signup extends Component {
   static propTypes = {
@@ -90,28 +89,26 @@ export default class Signup extends Component {
   validate = answers => {
     return {
       username:
-        (!answers.username && 'Username is required') ||
-        (answers.username.match(/[^\w]/) &&
-          'Username may only include numbers, letters, and _') ||
+        (!answers.username && t('signup.username_required')) ||
+        (answers.username.match(/[^\w]/) && t('signup.username_valid')) ||
         ((answers.username.length > 18 || answers.username.length < 3) &&
-          'Username must be between 3 and 18 characters') ||
+          t('signup.username_length')) ||
         '',
       email_address:
-        (!answers.email_address && 'Email is required') ||
+        (!answers.email_address && t('signup.email_required')) ||
         (!answers.email_address.match(
           /^[a-zA-Z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]+$/
         ) &&
-          'Must be a valid email') ||
+          t('signup.email_valid')) ||
         '',
       password:
-        (!answers.password && 'Password is required') ||
+        (!answers.password && t('signup.password_required')) ||
         answers.password !== answers.passwordConfirmation ||
         '',
       passwordConfirmation:
-        (!answers.passwordConfirmation &&
-          'Password confirmation is required') ||
+        (!answers.passwordConfirmation && t('signup.password_confirm')) ||
         (answers.password !== answers.passwordConfirmation &&
-          'Your passwords do not match') ||
+          t('signup.password_match')) ||
         '',
     };
   };
@@ -137,9 +134,11 @@ export default class Signup extends Component {
       <Layout preload={false} keyboard>
         <Body scrollable style={styles.body}>
           <Header>
-            <T.Heading style={styles.headingText}>Create Account</T.Heading>
+            <T.Heading style={styles.headingText}>
+              {t('signup.create_account')}
+            </T.Heading>
             <T.SubHeading style={styles.subHeadingText}>
-              Enter your personal information
+              {t('signup.create_account_description')}
             </T.SubHeading>
           </Header>
           <Body>
@@ -155,7 +154,7 @@ export default class Signup extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
-              placeholder="First Name"
+              placeholder={t('signup.input_first_name')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
               onSubmitEditing={this.safeFocus(this.signupLastNameInput)}
@@ -170,7 +169,7 @@ export default class Signup extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
-              placeholder="Last Name"
+              placeholder={t('signup.input_last_name')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
               onSubmitEditing={this.safeFocus(this.signupEmailAddressInput)}
@@ -185,7 +184,7 @@ export default class Signup extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
-              placeholder="Email"
+              placeholder={t('signup.input_email')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
               keyboardType="email-address"
@@ -201,7 +200,7 @@ export default class Signup extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
-              placeholder="Phone Number"
+              placeholder={t('signup.input_phone_number')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
               keyboardType="phone-pad"
@@ -217,7 +216,7 @@ export default class Signup extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
-              placeholder="Username"
+              placeholder={t('signup.input_username')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
               onSubmitEditing={this.safeFocus(this.signupPasswordInput)}
@@ -232,7 +231,7 @@ export default class Signup extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
-              placeholder="Password"
+              placeholder={t('signup.input_password')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="go"
               secureTextEntry
@@ -256,7 +255,7 @@ export default class Signup extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
-              placeholder="Re-enter Password"
+              placeholder={t('signup.input_password_confirm')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="go"
               secureTextEntry
@@ -278,7 +277,7 @@ export default class Signup extends Component {
               loading={this.state.loading}
               disabled={!nextEnabled}
             >
-              {LANG_SIGN_UP_TEXT}
+              {t('actions.next')}
             </Button>
           </Footer>
         </Body>

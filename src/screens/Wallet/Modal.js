@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-
+import { t } from 'translations/i18n';
 export default function Modal({
   children,
   height,
@@ -21,10 +21,10 @@ export default function Modal({
       {children}
       <View style={styles.actionButtons}>
         <TouchableOpacity style={styles.done} onPress={onDone}>
-          <Text>Done</Text>
+          <Text>{t('actions.done')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.cancel} onPress={onCancel}>
-          <Text>Cancel</Text>
+          <Text>{t('actions.cancel')}</Text>
         </TouchableOpacity>
       </View>
     </View>

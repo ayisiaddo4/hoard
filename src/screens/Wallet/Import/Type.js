@@ -7,7 +7,7 @@ import T from "components/Typography";
 
 import NavigatorService from "lib/navigator";
 
-const LANG_CANCEL_TEXT = "Cancel";
+import { t } from 'translations/i18n';
 
 export default class Step1 extends Component {
   static propTypes = {
@@ -24,7 +24,7 @@ export default class Step1 extends Component {
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <T.Heading style={styles.headingStyle}>
-            Select Recovery Option
+            {t('wallet.recovery_title')}
           </T.Heading>
         </View>
         <View style={styles.bodyContainer}>
@@ -33,14 +33,14 @@ export default class Step1 extends Component {
             style={styles.button}
             onPress={this.props.onPressPrivateKey}
           >
-            Private Key
+            {t('wallet.private_key')}
           </Button>
           <Button
             type="primary"
             style={styles.button}
             onPress={this.props.onPressMnemonicPhrase}
           >
-            Mnemonic Phrase
+            {t('wallet.mnemonic_phrase')}
           </Button>
         </View>
         <View style={styles.footerContainer}>
@@ -49,7 +49,7 @@ export default class Step1 extends Component {
             type="text"
             onPress={this.handleCancel}
           >
-            {LANG_CANCEL_TEXT}
+            {t('actions.cancel')}
           </Button>
         </View>
       </View>

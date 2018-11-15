@@ -22,6 +22,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Conditional, { Try, Otherwise } from 'components/Conditional';
 import Config from 'react-native-config';
 import { SafeAreaView } from 'react-navigation';
+import { t } from 'translations/i18n';
 
 const menuHitSlop = calculateHitSlop(40, 20);
 const linkHitSlop = calculateHitSlop(15, Infinity);
@@ -90,50 +91,50 @@ class Menu extends Component {
                 </Text>
 
                 <View style={[styles.subHeadingContainer, styles.divider]}>
-                  <Text style={styles.subHeading}>Your Hoard</Text>
+                  <Text style={styles.subHeading}>{t('menu.title')}</Text>
                 </View>
                 <TouchableOpacity
                   hitSlop={linkHitSlop}
                   style={styles.linkWrapper}
                   onPress={() => this.navigateTo('Wallet')}
                 >
-                  <Text style={styles.linkContent}>Wallet</Text>
+                  <Text style={styles.linkContent}>{t('menu.wallet')}</Text>
                 </TouchableOpacity>
 
                 <View style={[styles.subHeadingContainer, styles.divider]}>
-                  <Text style={styles.subHeading}>Manage</Text>
+                  <Text style={styles.subHeading}>{t('menu.manage')}</Text>
                 </View>
                 <TouchableOpacity
                   hitSlop={linkHitSlop}
                   style={[styles.linkWrapper, styles.divider]}
                   onPress={() => this.navigateTo('GetHelp')}
                 >
-                  <Text style={styles.linkContent}>Help</Text>
+                  <Text style={styles.linkContent}>{t('menu.help')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   hitSlop={linkHitSlop}
                   style={styles.linkWrapper}
                   onPress={() => this.navigateTo('Settings')}
                 >
-                  <Text style={styles.linkContent}>Settings</Text>
+                  <Text style={styles.linkContent}>{t('menu.settings')}</Text>
                 </TouchableOpacity>
 
                 <View style={[styles.subHeadingContainer, styles.divider]}>
-                  <Text style={styles.subHeading}>About</Text>
+                  <Text style={styles.subHeading}>{t('menu.about')}</Text>
                 </View>
                 <TouchableOpacity
                   style={[styles.linkWrapper, styles.divider]}
                   onPress={() => this.navigateTo('About')}
                   hitSlop={linkHitSlop}
                 >
-                  <Text style={styles.linkContent}>About</Text>
+                  <Text style={styles.linkContent}>{t('menu.about')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   hitSlop={linkHitSlop}
                   style={styles.linkWrapper}
                   onPress={() => this.navigateTo('Legal')}
                 >
-                  <Text style={styles.linkContent}>Legal</Text>
+                  <Text style={styles.linkContent}>{t('menu.legal')}</Text>
                 </TouchableOpacity>
               </View>
             </ScrollView>
@@ -141,12 +142,12 @@ class Menu extends Component {
               <Conditional>
                 <Try condition={this.props.isSignedIn}>
                   <Button type="base" onPress={() => this.props.signOut()}>
-                    LOG OUT
+                    {t('actions.log_out')}
                   </Button>
                 </Try>
                 <Otherwise>
                   <Button type="base" onPress={() => this.navigateTo('Login')}>
-                    Sign Up or Log In
+                    {t('menu.signup_login')}
                   </Button>
                 </Otherwise>
               </Conditional>

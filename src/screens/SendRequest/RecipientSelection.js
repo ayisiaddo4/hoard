@@ -8,6 +8,7 @@ import { Try } from 'components/Conditional';
 import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
 import Link from 'components/Link';
 import memoize from 'lodash/memoize';
+import { t } from 'translations/i18n';
 
 export default class RecipientSelection extends Component {
   static propTypes = {
@@ -31,16 +32,18 @@ export default class RecipientSelection extends Component {
     return (
       <Layout preload={false}>
         <Header style={styles.container}>
-          <T.Heading style={{color: 'white', marginBottom: 20}}>Recipient</T.Heading>
-          <T.Light style={{color: 'white'}}>
-            Select a contact, manually enter an address, or scan a QR code.
+          <T.Heading style={{ color: 'white', marginBottom: 20 }}>
+            {t('send_request.recipient')}
+          </T.Heading>
+          <T.Light style={{ color: 'white' }}>
+            {t('send_request.instructions')}
           </T.Light>
         </Header>
         <Body style={styles.container}>
           <Try condition={isSignedIn}>
             <Link
               onPress={this.makeSelection('ContactModal')}
-              title="Select or enter contact"
+              title={t('send_request.select_contact')}
               arrowOverride={<View />}
             />
           </Try>
@@ -48,12 +51,12 @@ export default class RecipientSelection extends Component {
             <Fragment>
               <Link
                 onPress={this.makeSelection('AddressModal')}
-                title="Enter wallet address"
+                title={t('send_request.enter_wallet_address')}
                 arrowOverride={<View />}
               />
               <Link
                 onPress={this.makeSelection('QRModal')}
-                title="Scan QR"
+                title={t('send_request.scan_qr')}
                 arrowOverride={<View />}
               />
             </Fragment>

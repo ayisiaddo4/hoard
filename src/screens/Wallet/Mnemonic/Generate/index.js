@@ -5,7 +5,7 @@ import ethers from 'ethers';
 import Entropy from './Entropy';
 import WordList from './WordList';
 import Confirm from './Confirm';
-
+import { t } from 'translations/i18n';
 function getXItemsFromList(number, list) {
   let availableItems = list;
   const selectedItems = [];
@@ -42,7 +42,7 @@ export default class Generate extends Component {
 
   setNavigation = () => {
     this.props.navigation.setParams({
-      title: 'Create Wallet',
+      title: t('wallet.create_wallet_title'),
     });
   };
 

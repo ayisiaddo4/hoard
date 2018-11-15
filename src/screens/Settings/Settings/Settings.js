@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Switch } from 'react-native';
 
 import { Layout, Body } from 'components/Base';
+import { t } from 'translations/i18n';
+
 import Link from 'components/Link';
 import { UrbanAirship } from 'urbanairship-react-native';
 
@@ -11,7 +13,7 @@ export default function Settings(props) {
   return (
     <Layout preload={false}>
       <Body scrollable style={styles.content}>
-        <Link title="Seed Words" to="SeedWords" />
+        <Link title={t('settings.seed_words')} to="SeedWords" />
         <Link
           title="Push Notifications"
           onPress={() =>
@@ -41,5 +43,5 @@ Settings.propTypes = {
 const styles = StyleSheet.create({
   content: {
     padding: 20,
-  }
+  },
 });

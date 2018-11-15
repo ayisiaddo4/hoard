@@ -9,6 +9,7 @@ import Icon from 'components/Icon';
 import Input from 'components/Input';
 import NavigatorService from 'lib/navigator';
 import { RECIPIENT_TYPE_ADDRESS } from 'screens/SendRequest/constants';
+import { t } from 'translations/i18n';
 
 export default class AddressModal extends Component {
   static propTypes = {
@@ -55,16 +56,16 @@ export default class AddressModal extends Component {
             style={styles.nextButton}
             onPress={this.handleSubmit}
             >
-            NEXT
+            {t('actions.next')}
           </Button>
         }
       >
         <T.Light style={styles.subtitle}>
-          Enter wallet address in the field below.
+          {t('send_request.modals.address_wallet_instructions')}
         </T.Light>
         <Input
           type="underline"
-          placeholder="Enter address"
+          placeholder={t('send_request.modals.address_input_address')}
           onChangeText={this.changeText}
           value={this.state.value}
           actions={clearButton}

@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import SuccessFailureScreen, {TYPE_SUCCESS} from 'components/SuccessFailureScreen';
 import Scene from 'components/Scene';
 import { Layout } from 'components/Base';
-
+import { t } from 'translations/i18n';
 import Type from './Type';
 import Recover from './Recover';
 import Generate from './Generate';
@@ -40,9 +40,9 @@ export default class Mnemonic extends Component {
       return (
         <SuccessFailureScreen
           type={TYPE_SUCCESS}
-          title="Seed Words Input"
-          subtitle="Next up, add an additional layer of security by setting up your PIN"
-          mainButtonText="Set Up Pin"
+          title={t('wallet.seed_title')}
+          subtitle={t('wallet.seed_description')}
+          mainButtonText={t('wallet.pin_button_text')}
           onPressMain={this.handleRedirect}
           navigation={this.props.navigation}
         />

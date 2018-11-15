@@ -12,13 +12,13 @@ import {
 import SVG, { Path, Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 
 import {CircularProgress} from 'react-native-svg-circular-progress';
+import { t } from 'translations/i18n';
 
 import Conditional, { Try, Otherwise } from 'components/Conditional';
 import Button from 'components/Button';
 import T from 'components/Typography';
 import { Layout, Body, Header, Footer } from 'components/Base';
 
-const LANG_NEXT_TEXT = 'next';
 const LANG_BACK_TEXT = 'back';
 
 const MAX_DATA_POINTS = 150;
@@ -131,13 +131,13 @@ export default class Entropy extends Component {
     const percentageComplete = (movement.length / MAX_DATA_POINTS) * 100;
     const finished = percentageComplete === 100;
 
-    let progressText = 'Scribble around for a bit...';
+    let progressText = t('wallet.entropy_start');
     if (finished) {
-      progressText = 'Finished!';
+      progressText = t('wallet.entropy_finished');
     } else if (percentageComplete >= 75) {
-      progressText = 'Almost there...';
+      progressText = t('wallet.entropy_almost');
     } else if (movement.length) {
-      progressText = 'Please keep going...';
+      progressText = t('wallet.entropy_keep_going');
     }
 
 
@@ -151,7 +151,9 @@ export default class Entropy extends Component {
     return (
       <Layout preload={false} style={styles.layout}>
         <Header style={styles.header}>
-          <T.Heading style={styles.heading}>Generate Your Words</T.Heading>
+          <T.Heading style={styles.heading}>
+            {t('wallet.entropy_heading')}
+          </T.Heading>
         </Header>
         <Body style={styles.body}>
           <View ref={this.setViewRef} onLayout={this.handleLayout} style={styles.drawBox} {...responders}>
@@ -194,7 +196,7 @@ export default class Entropy extends Component {
               style={[styles.nextButton, styles.snapToBottom]}
               onPress={this.handleNextButton}
               loading={this.state.loading}>
-              {LANG_NEXT_TEXT}
+              {t('actions.next')}
             </Button>
           </Try>
         </Footer>

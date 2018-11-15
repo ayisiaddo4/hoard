@@ -6,34 +6,266 @@
     "other": "{{count}} Tokens",
     "zero": "0 Tokens"
   },
-  "input_username" : "Username or Email",
-  "input_password" : "Password",
-  "login" : {
-    "log_in" : "Log In",
-    "log_in_button" : "NEXT",
-    "cant_log_in" : "Can't Log In?",
+  "input_username": "Username or Email",
+  "input_password": "Password",
+  "actions": {
+    "send": "SEND",
+    "next": "NEXT",
+    "request": "REQUEST",
+    "pay": "PAY",
+    "receive": "RECEIVE",
+    "view": "VIEW",
+    "cancel": "CANCEL",
+    "submit": "SUBMIT",
+    "log_out": "LOG OUT",
+    "done": "DONE"
+  },
+  "requests": {
+    "apologetic_interjection_of_mild_dismay": "Oops!"
+  },
+  "device": {
+    "permission_denied_title": "Permission Previously Denied",
+    "permission_denied_message": "In order to re-enable this feature you will need to allow access from you device settings first."
+  },
+  "menu": {
+    "title": "Your Hoard",
+    "my_wallet": "My Wallet",
+    "wallet": "Wallet",
+    "manage": "Manage",
+    "help": "Help",
+    "settings": "Settings",
+    "about": "About",
+    "legal": "Legal",
+    "transfer_funds": "Transfer Funds",
+    "signup_login": "Sign Up or Log In"
+  },
+  "about": {
+    "release_notes": {
+      "title": "Release Notes",
+      "testnet_header": "Do Not Use Real Cryptocurrency",
+      "testnet_content": "The Hoard beta app is a testnet beta app. If you use real cryptocurrency, you will lose it.",
+      "testnet_description": "This version of the app is a TESTNET version, meaning that you MUST NOT USE REAL BITCOIN OR ETHER WITH THE APP.",
+      "testnet_faucet": "To obtain test currencies, use a \"Rinkeby Ether faucet\" and a \"Bitcoin Testnet faucet\". On these sites, you can input the Bitcoin and Ethereum addresses found within this app in your wallet, and receive test Bitcoin and Ether to play with and help us by testing the app.",
+      "testnet_bugs": "To report bugs, leave us a bug report at github.com/hoardinvest/hoard, or use the support form in the app found under Get Help > Submit a Request.",
+      "telegram": "For more information, visit us on telegram at t.me/hoardinvest and thanks again for your support!",
+      "release": "Releases",
+      "intro_thanks": "Thank you for participating in the Hoard public beta test!"
+    },
+    "open_source": {
+      "thanks": " We would like to thank:",
+      "thanks_projects": "React, React Native, Ethers, React Navigation, Redux, React Redux, Redux Saga, Reselect, Victory Native, Lottie React Native, Prop Types, React Native Animatable, React Native Config, React Native Contacts, React Native Linear Gradient, React Native Search Filter, React Native Splash Screen, React Native Svg, React Native Swipeable, React Native Touch Id, React Native Vector Icons, and many other Open Source contributors."
+    },
+    "social": {
+      "telegram": "Telegram",
+      "blog": "Blog",
+      "twitter": "Twitter",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "reddit": "Reddit",
+      "open_source_thanks": "Open Source Thanks",
+      "release_notes": "Release Notes"
+    }
+  },
+  "coin_informtion": {
+    "pending_transactions": "Pending Transactions",
+    "recent_activity": "Recent Activity"
+  },
+  "dashboard": {
+    "price": "price"
+  },
+  "forgot": {
+    "apologetic_interjection_of_mild_dismay": "Oops!",
+    "error_title": "Error",
+    "error_message_email": "There was a problem with your email address.",
+    "error_message_email_sent": "An email has been sent to your address with instructions to reset.",
+    "reset_password": "Reset Your Password",
+    "reset_username": "Reset Your Username",
+    "help_text": "We're here to help!",
+    "input_email": "Your Email Address",
+    "instructions": "Forgot your username or password? Retrieve your username or reset your password below.",
+    "forgot_username": "Forgot Username?",
+    "forgot_password": "Forgot Password?"
+  },
+  "get_help": {
+    "get_help": {
+      "title": "Get Help",
+      "faq_link": "Browse our FAQs",
+      "contact_link": "Contact Us",
+      "ticket_link": "Submit a Request",
+      "support_link": "My Support"
+    },
+    "submit_request": {
+      "title": "Submit A Request",
+      "email_required": "An email is required",
+      "email_valid": "Must be a valid email",
+      "description_required": "A description is required",
+      "name_required": "A name is required",
+      "submit_success_title": "Your ticket has been submitted successfully!",
+      "submit_success_message": "A confirmation email should be sent soon",
+      "submit_error_title": "An error occurred while submitting your ticket.",
+      "submit_error_message": "Please try again, or email us directly at support@hoardinvest.com",
+      "input_email": "Enter Email *",
+      "input_name": "Name",
+      "input_subject": "Subject",
+      "input_description": "Description *"
+    }
+  },
+  "loading": {
+    "app_initialization": "Initializing App",
+    "transaction_hydration": "Fetching Transactions",
+    "price_initialization": "Structuring Prices",
+    "wallet_hydration": "Setting Up Wallets",
+    "loading_finished": "Reticulating Splines"
+  },
+  "login": {
+    "log_in": "Log In",
+    "log_in_button": "NEXT",
+    "cant_log_in": "Can't Log In?",
     "new_sign_up": "New to Hoard? Sign Up!",
     "skip_sign_up": "No thanks, I just want to use the wallet"
   },
-  "transaction_status" : {
-    "contact_transaction" : {
-      "heading" : "Pending",
-      "request_subheading" : "This user has been notified that you have requested funds from them!",
-      "send_subheading" : "This user does not use Hoard, but has been notified that you have attempted to send them some funds!"
-    },
-    "blockchain_transaction" : {
-      "pending_heading" : "Sending...",
-      "success_heading" : "Success!",
-      "failure_heading" : "Error",
-      "success_subheading" : "Your transaction is pending.",
-      "failure_subheading" : "Oops! Something went wrong. Please try again soon."
+  "send_request": {
+    "recipient": "Recipient",
+    "send": "SEND",
+    "request": "Request",
+    "instructions": "Select a contact, manually enter an address, or scan a QR code.",
+    "scan_qr": "Scan QR",
+    "enter_wallet_address": "Enter wallet address",
+    "select_contact": "Select or enter contact",
+    "enter": "Enter",
+    "enter_amount": "Enter Amount",
+    "currency_title": "Currency",
+    "currency_empty": "Select Currency",
+    "no_wallets": "You have not yet created any wallets",
+    "loading_prices": "Loading Prices...",
+    "requesting_from": "Requesting From",
+    "select_coin_request": "Please select a coin to request with",
+    "select_wallet_send": "Please select a wallet to send from",
+    "input_amount_to_send": "Please input an amount to send",
+    "input_amount_to_request": "Please input an amount to request",
+    "insufficient_balance": "You cannot send more than you have in your wallet",
+    "missing_recipient": "Please provide an address to send to",
+    "invalid_address": "This is not a valid {{symbol}} address",
+    "other_no_recipient_send": "Please enter a contact to send to",
+    "other_no_recipient_request": "Please enter a contact to request from",
+
+    "modals": {
+      "address_wallet_instructions": "Enter wallet address in the field below.",
+      "address_input_address": "Enter address",
+      "currency_title": "Currency",
+      "currency_heading": "Select currency to send.",
+      "currency_subheading_most_used": "Most Used",
+      "currency_subheading_all": "All Currencies",
+      "input_contact": "Contact",
+      "input_send_to": "Send to",
+      "input_request_from": "Request from",
+      "contacts_title": "Contacts",
+      "contacts_message": "Hoard would like to access your contact list to send funds to your friends.",
+      "contacts_subtitle": "Type a username, email address, or phone number in the field below.",
+      "contacts_message_none": "No contacts found.",
+      "contacts_not_synced": "Your device contacts are not sync’d. Click click the link below to sync.",
+      "contacts_connect": "Connect contacts?"
     }
   },
-  "loading" : {
-    "app_initialization" : "Initializing App",
-    "transaction_hydration" : "Fetching Transactions",
-    "price_initialization" : "Structuring Prices",
-    "wallet_hydration" : "Setting Up Wallets",
-    "loading_finished" : "Reticulating Splines"
+  "settings": {
+    "title": "Settings",
+    "seed_words": "Seed Words",
+    "your_seed_words": "Your seed words",
+    "your_keys": "Your keys",
+    "your_keys_description": "Your seed words are the only way to restore your wallet if your phone is lost stolen, broken or upgraded",
+    "your_keys_description_2": "We will show you a list of words to write down and keep safe.",
+    "display_keys_again": "Display Again",
+    "last_display_time": "Your last seed word display was",
+    "push_notifications": "Push Notifications",
+    "input_title": "Input Pin",
+    "input_subtitle": "Your PIN will be used to unlock and view your keys",
+    "display_currency": "Display Currency",
+    "select_display_currency": "Select your default currency display"
+  },
+  "signup": {
+    "username_required": "Username is required",
+    "username_valid": "Username may only include numbers, letters, and _",
+    "username_length": "Username must be between 3 and 18 characters",
+    "email_required": "Email is required",
+    "email_valid": "Must be a valid email",
+    "password_required": "Password is required",
+    "password_confirm": "Password confirmation is required",
+    "password_match": "Your passwords do not match",
+    "create_account": "Create Account",
+    "create_account_description": "Enter your personal information",
+    "input_first_name": "First Name",
+    "input_last_name": "Last Name",
+    "input_email": "Email",
+    "input_phone_number": "Phone Number",
+    "input_username": "Username",
+    "input_password": "Password",
+    "input_password_confirm": "Re-enter Password"
+  },
+  "transaction_status": {
+    "contact_transaction": {
+      "heading": "Pending",
+      "request_subheading": "This user has been notified that you have requested funds from them!",
+      "send_subheading": "This user does not use Hoard, but has been notified that you have attempted to send them some funds!"
+    },
+    "blockchain_transaction": {
+      "pending_heading": "Sending...",
+      "success_heading": "Success!",
+      "failure_heading": "Error",
+      "success_subheading": "Your transaction is pending.",
+      "failure_subheading": "Oops! Something went wrong. Please try again soon."
+    }
+  },
+  "view_address": {
+    "wallet_address": "Wallet Address",
+    "copy_address": "Copy Address",
+    "copied": "Copied"
+  },
+  "wallet": {
+    "error_title": "Error",
+    "confirm_word_list": "Confirm Word List",
+    "confirm_word_list_description": "Please confirm your recovery phrase.",
+    "confirm_looks_good": "Looks Good!",
+    "confirm_word_list_check": "To make sure everything was written down correctly, please enter the following words from your paper key.",
+    "input_confirm_word": "What was word #{{word_number}}?",
+    "input_confirm_error": "Incorrect answer, please try again.",
+    "create_my_wallet": "Create My Wallet!",
+    "track_coin": "Track Coin",
+    "make_mnemonic": "Make Mnemonic",
+    "my_balance": "My Balance",
+    "track_added": "wallet added!",
+    "create_wallet_title": "Create Wallet",
+    "create_wallet_description": "Okay, first up in the wallet creation process is creating your seed words. All you have to do is scribble, so let's get started.",
+    "get_started": "Get Started",
+    "existing_mnemonic": "Actually, I've Done This Before",
+    "recover_wallet": "Recover Wallet",
+    "seed_title": "Seed Words Input",
+    "seed_description": "Next up, add an additional layer of security by setting up your PIN",
+    "pin_button_text": "Set Up Pin",
+    "your_words": "Your Words",
+    "your_words_description": "Write down each word in order and store it in a safe place.",
+    "entropy_finished": "Finished!",
+    "entropy_almost": "Almost there...",
+    "entropy_keep_going": "Please keep going...",
+    "entropy_start": "Scribble around for a bit...",
+    "entropy_heading": "Generate Your Words",
+    "private_key": "Private Key",
+    "private_key_heading": "Input your private key",
+    "private_key_recover": "Recover",
+    "private_key_cancel": "Cancel",
+    "mnemonic_phrase": "Mnemonic Phrase",
+    "recovery_title": "Select Recovery Option",
+    "import_title_success": "Success",
+    "import_title_error": "Error",
+    "import_retry": "Retry",
+    "confirm_back_text": "Go back and review...",
+    "select_coin": "Select Coin",
+    "input_seed_phrase_heading": "Enter Seed Phrase",
+    "input_seed_phrase_word": "Word #{{word_number}}",
+    "x_of_12_words": "{{word_number}} of 12 words"
+  },
+  "testnet": {
+    "warning_dismiss": "Dismiss",
+    "warning_title": "Do Not Use Real Cryptocurrency",
+    "warning_description": "The Hoard beta app is a testnet beta app. If you use real cryptocurrency, you will lose it."
   }
 }

@@ -22,6 +22,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import LoadingSpinner from 'components/LoadingSpinner';
 import Modal from 'components/Modal';
 import T from 'components/Typography';
+import { t } from 'translations/i18n';
 
 import NavigatorService from 'lib/navigator';
 import memoize from 'lodash/memoize';
@@ -88,9 +89,8 @@ export default class ContactModal extends Component {
   requestPermission = async () => {
     if (Platform.OS == 'android') {
       const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-        title: 'Contacts',
-        message:
-          'Hoard would like to access your contact list to send funds to your friends.',
+        title: t('send_request.modal.contacts_title'),
+        message: t('send_request.modal.contacts_message'),
       });
 
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -155,8 +155,8 @@ export default class ContactModal extends Component {
       });
     } else {
       Alert.alert(
-        'Permission Previously Denied',
-        'In order to re-enable this feature you will need to allow access from you device settings first.',
+        t('device.permission_denied_title'),
+        t('device.permission_denied_message'),
         [
           {text: 'Cancel', style: 'cancel'},
           {text: 'Go To Settings', onPress: () => {
@@ -193,12 +193,12 @@ export default class ContactModal extends Component {
       shownContacts,
     } = this.state;
 
-    let inputPlaceholder = "Contact";
+    let inputPlaceholder = t('send_request.modals.input_contact');
     if (this.props.navigation.state.params.transactionType === TYPE_SEND) {
-      inputPlaceholder = "Send to";
+      inputPlaceholder = t('send_request.modals.input_send_to');
     }
     if (this.props.navigation.state.params.transactionType === TYPE_REQUEST) {
-      inputPlaceholder = "Request from";
+      inputPlaceholder = t('send_request.modals.input_request_from');
     }
 
     const clearButton = (
@@ -218,12 +218,12 @@ export default class ContactModal extends Component {
             style={styles.nextButton}
             onPress={this.handleSubmit}
           >
-            NEXT
+            {t('actions.next')}
           </Button>
         }
       >
         <T.Light style={styles.subtitle}>
-          Type a username, email address, or phone number in the field below.
+          {t('send_request.modals.contacts_subtitle')}
         </T.Light>
         <Input
           type="underline"
@@ -238,13 +238,13 @@ export default class ContactModal extends Component {
           </Try>
           <Try condition={permission === Contacts.PERMISSION_AUTHORIZED && !!shownContacts && !shownContacts.length}>
             <T.Light style={styles.content}>
-              No contacts found.
+              {t('send_request.modals.contacts_message_none')}
             </T.Light>
           </Try>
           <Try condition={permission === Contacts.PERMISSION_AUTHORIZED && !!shownContacts && !!shownContacts.length}>
             <Fragment>
               <T.SubHeading style={styles.contactsHeader}>
-                Contacts
+                {t('send_request.modals.contacts_title')}
               </T.SubHeading>
               <FlatList
                 data={shownContacts}
@@ -271,11 +271,11 @@ export default class ContactModal extends Component {
               <Image style={styles.infoIcon} source={require('assets/information-icon.png')} />
               <View>
                 <T.Light style={styles.content}>
-                  Your device contacts are not sync’d. Click click the link below to sync.
+                  {t('send_request.modals.contacts_not_synced')}
                 </T.Light>
                 <TouchableOpacity onPress={this.handleConnectContacts}>
                   <T.Light style={styles.cta}>
-                    Connect contacts?
+                    {t('send_request.modals.contacts_connect')}
                   </T.Light>
                 </TouchableOpacity>
               </View>

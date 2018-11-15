@@ -6,8 +6,7 @@ import Button from "components/Button";
 import Input from "components/Input";
 import T from "components/Typography";
 
-const LANG_RECOVER_TEXT = "Recover";
-const LANG_CANCEL_TEXT = "Cancel";
+import { t } from 'translations/i18n';
 
 export default class PrivateKey extends Component {
   static propTypes = {
@@ -33,7 +32,7 @@ export default class PrivateKey extends Component {
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <T.Heading style={styles.headingStyle}>
-            Input your private key
+            {t('wallet.private_key_heading')}
           </T.Heading>
         </View>
         <Input
@@ -51,10 +50,10 @@ export default class PrivateKey extends Component {
             disabled={!privateKey}
             onPress={this.handleNextButton}
           >
-            {LANG_RECOVER_TEXT}
+            {t('wallet.private_key_recover')}
           </Button>
           <Button type="text" onPress={onCancel}>
-            {LANG_CANCEL_TEXT}
+            {t('wallet.private_key_cancel')}
           </Button>
         </View>
       </View>

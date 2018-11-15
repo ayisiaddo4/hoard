@@ -5,6 +5,7 @@ import SeedWordsSplash from './SeedWordsSplash';
 import Pin from 'components/Pin';
 import { getKey } from 'components/Pin/utils';
 import NavigatorService from 'lib/navigator';
+import { t } from 'translations/i18n';
 
 const SEED_WORDS_ACCESS_TIME_KEY = 'SEED_WORDS_ACCESS_TIME';
 
@@ -46,8 +47,8 @@ export default class SeedWords extends Component {
     if (pin && !pinSuccess) {
       return (
         <Pin
-          title="Input Pin"
-          subtitle="Your PIN will be used to unlock and view your keys"
+          title={t('settings.input_title')}
+          subtitle={t('settings.input_subtitle')}
           handleSuccess={this.onPinSuccess}
         />
       );

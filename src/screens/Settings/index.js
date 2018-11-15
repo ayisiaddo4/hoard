@@ -9,6 +9,7 @@ import {
 import DisplayCurrency from './DisplayCurrency';
 import SeedWords from './SeedWords';
 import Settings from './Settings';
+import { t } from 'translations/i18n';
 
 const RoutingStack = createStackNavigator(
   {
@@ -18,7 +19,7 @@ const RoutingStack = createStackNavigator(
         getNavigationOptions({
           ...navProps,
           leftAction: false,
-          title: 'Settings',
+          title: t('settings.title'),
         }),
     },
     DisplayCurrency: {
