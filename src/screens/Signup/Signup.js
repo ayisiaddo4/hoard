@@ -128,7 +128,7 @@ export default class Signup extends Component {
       answers.username &&
       answers.password &&
       answers.password === answers.passwordConfirmation;
-    const placeholderTextColor = 'rgba(255,255,255,0.75)';
+    const placeholderTextColor = '#808388';
 
     return (
       <Layout preload={false} keyboard>

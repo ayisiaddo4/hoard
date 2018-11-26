@@ -267,5 +267,13 @@
     "warning_dismiss": "Dismiss",
     "warning_title": "Do Not Use Real Cryptocurrency",
     "warning_description": "The Hoard beta app is a testnet beta app. If you use real cryptocurrency, you will lose it."
+  },
+  "profile" : {
+    "title": "Profile",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "username": "Username",
+    "email_address": "Email",
+    "phone_number": "Phone Number"
   }
 }

@@ -30,6 +30,12 @@ export default function Settings(props) {
             />
           }
         />
+        {props.isSignedIn && (
+          <Link
+            title={t('profile.title')}
+            to="Profile"
+          />
+        )}
       </Body>
     </Layout>
   );
@@ -38,6 +44,7 @@ export default function Settings(props) {
 Settings.propTypes = {
   updateEnablePushNotifications: PropTypes.func.isRequired,
   enablePushNotifications: PropTypes.bool.isRequired,
+  isSignedIn: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

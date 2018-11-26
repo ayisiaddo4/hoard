@@ -7,6 +7,7 @@ import {
 } from 'components/Base/Navigation';
 
 import DisplayCurrency from './DisplayCurrency';
+import Profile from './Profile';
 import SeedWords from './SeedWords';
 import Settings from './Settings';
 import { t } from 'translations/i18n';
@@ -36,6 +37,16 @@ const RoutingStack = createStackNavigator(
         getNavigationOptions({
           ...navProps,
           leftAction: 'back',
+          rightAction: null
+        }),
+    },
+    Profile: {
+      screen: Profile,
+      navigationOptions: navProps =>
+        getNavigationOptions({
+          ...navProps,
+          leftAction: 'back',
+          title: t('profile.title'),
           rightAction: null
         }),
     },

@@ -17,7 +17,7 @@ export const AUTH_SIGNOUT = 'AUTH_SIGNOUT';
 export const AUTH_USER_STORAGE_KEY = 'auth/user';
 
 import { UPDATE_USER } from 'containers/User/constants';
-import { initUser, updateUser } from 'containers/User/actions';
+import { initUser, clearUser } from 'containers/User/actions';
 import { store } from '../App.js';
 import { getKey } from 'components/Pin/utils';
 import {
@@ -69,7 +69,7 @@ export async function getUser() {
       await checkSessionApi(user);
     } catch (error) {
       await setUser('');
-      store.dispatch(updateUser(null));
+      store.dispatch(clearUser());
       NavigatorService.navigate('Login');
       return;
     }
@@ -113,7 +113,7 @@ export function* logoutFlow() {
   // First, let's log the user out of the backend
   yield call(logoutApi);
   // Then, let's clear the user from our local storage and state
-  yield put(updateUser(null));
+  yield put(clearUser());
   yield call(setUser, '');
 }
 

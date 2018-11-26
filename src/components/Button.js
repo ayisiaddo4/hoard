@@ -247,3 +247,4 @@ const stylesForType = {
   }),
   unstyled: {},
 };
+stylesForType.textDisabled = stylesForType.text;
