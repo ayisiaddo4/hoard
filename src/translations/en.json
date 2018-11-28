@@ -9,16 +9,17 @@
   "input_username": "Username or Email",
   "input_password": "Password",
   "actions": {
-    "send": "SEND",
+    "cancel": "CANCEL",
+    "done": "DONE",
+    "log_out": "LOG OUT",
     "next": "NEXT",
-    "request": "REQUEST",
     "pay": "PAY",
     "receive": "RECEIVE",
-    "view": "VIEW",
-    "cancel": "CANCEL",
+    "request": "REQUEST",
+    "send": "SEND",
     "submit": "SUBMIT",
-    "log_out": "LOG OUT",
-    "done": "DONE"
+    "update": "UPDATE",
+    "view": "VIEW"
   },
   "requests": {
     "apologetic_interjection_of_mild_dismay": "Oops!"
@@ -170,6 +171,7 @@
   "settings": {
     "title": "Settings",
     "seed_words": "Seed Words",
+    "security": "Security",
     "your_seed_words": "Your seed words",
     "your_keys": "Your keys",
     "your_keys_description": "Your seed words are the only way to restore your wallet if your phone is lost stolen, broken or upgraded",
@@ -268,12 +270,25 @@
     "warning_title": "Do Not Use Real Cryptocurrency",
     "warning_description": "The Hoard beta app is a testnet beta app. If you use real cryptocurrency, you will lose it."
   },
-  "profile" : {
+  "profile": {
     "title": "Profile",
     "first_name": "First Name",
     "last_name": "Last Name",
     "username": "Username",
     "email_address": "Email",
     "phone_number": "Phone Number"
+  },
+  "change_password": {
+    "title": "Change Password",
+    "subtitle": "Never share your password with anyone.",
+    "current_password": "Current Password",
+    "new_password": "New Password",
+    "confirm_password": "Confirm New Password",
+    "success_message": "Successfully changed password",
+    "errors": {
+      "current_password_required": "Current password required",
+      "empty_password": "Please input a new password",
+      "password_match": "Your passwords do not match"
+    }
   }
 }

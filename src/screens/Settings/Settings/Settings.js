@@ -13,7 +13,6 @@ export default function Settings(props) {
   return (
     <Layout preload={false}>
       <Body scrollable style={styles.content}>
-        <Link title={t('settings.seed_words')} to="SeedWords" />
         <Link
           title="Push Notifications"
           onPress={() =>
@@ -30,12 +29,9 @@ export default function Settings(props) {
             />
           }
         />
-        {props.isSignedIn && (
-          <Link
-            title={t('profile.title')}
-            to="Profile"
-          />
-        )}
+
+        <Link title={t('settings.security')} to="Security" />
+        {props.isSignedIn && <Link title={t('profile.title')} to="Profile" />}
       </Body>
     </Layout>
   );
@@ -44,7 +40,7 @@ export default function Settings(props) {
 Settings.propTypes = {
   updateEnablePushNotifications: PropTypes.func.isRequired,
   enablePushNotifications: PropTypes.bool.isRequired,
-  isSignedIn: PropTypes.bool
+  isSignedIn: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({

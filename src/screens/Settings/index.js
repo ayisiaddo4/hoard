@@ -8,7 +8,9 @@ import {
 
 import DisplayCurrency from './DisplayCurrency';
 import Profile from './Profile';
+import Security from './Security';
 import SeedWords from './SeedWords';
+import ChangePassword from './ChangePassword';
 import Settings from './Settings';
 import { t } from 'translations/i18n';
 
@@ -37,7 +39,26 @@ const RoutingStack = createStackNavigator(
         getNavigationOptions({
           ...navProps,
           leftAction: 'back',
-          rightAction: null
+          rightAction: null,
+        }),
+    },
+    Security: {
+      screen: Security,
+      navigationOptions: navProps =>
+        getNavigationOptions({
+          ...navProps,
+          leftAction: 'back',
+          title: t('settings.security'),
+          rightAction: null,
+        }),
+    },
+    ChangePassword: {
+      screen: ChangePassword,
+      navigationOptions: navProps =>
+        getNavigationOptions({
+          ...navProps,
+          leftAction: 'back',
+          rightAction: null,
         }),
     },
     Profile: {
@@ -47,7 +68,7 @@ const RoutingStack = createStackNavigator(
           ...navProps,
           leftAction: 'back',
           title: t('profile.title'),
-          rightAction: null
+          rightAction: null,
         }),
     },
   },
