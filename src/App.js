@@ -28,6 +28,10 @@ import { INIT_REQUESTING } from './containers/App/constants';
 import { gradients } from 'styles';
 import LinearGradient from 'react-native-linear-gradient';
 
+if (__DEV__) {
+  var Reactotron = require('./ReactotronConfig').default;
+}
+
 import {
   cardStyle,
   transitionConfig,
@@ -318,7 +322,9 @@ const mapStateToProps = state => {
   };
 };
 
-const ConnectedApp = connect(mapStateToProps)(App);
+const ReactotronApp = __DEV__ ? Reactotron.overlay(App) : App;
+
+const ConnectedApp = connect(mapStateToProps)(ReactotronApp);
 
 const ProviderApp = () => (
   <Provider store={store}>

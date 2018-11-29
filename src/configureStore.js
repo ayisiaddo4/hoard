@@ -1,9 +1,14 @@
-import { compose, createStore, applyMiddleware } from "redux";
-import createSagaMiddleware from "redux-saga";
-import rootReducer from "./rootReducer";
-import rootSaga from "./rootSagas";
+import { compose, createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import rootReducer from './rootReducer';
+import rootSaga from './rootSagas';
 
-const sagaMiddleware = createSagaMiddleware();
+if (__DEV__) {
+  var Reactotron = require('./ReactotronConfig').default;
+}
+
+const sagaMonitor = __DEV__ ? Reactotron.createSagaMonitor() : null;
+const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
 
 /* eslint-disable no-underscore-dangle, no-undef */
 const composeEnhancers =
@@ -11,7 +16,8 @@ const composeEnhancers =
 /* eslint-enable no-underscore-dangle, no-undef */
 
 export default function configureStore() {
-  const store = createStore(
+  const createStoreFunc = __DEV__ ? Reactotron.createStore : createStore;
+  const store = createStoreFunc(
     rootReducer,
     composeEnhancers(applyMiddleware(sagaMiddleware))
   );
