@@ -7,21 +7,17 @@ import Link from 'components/Link';
 
 import { t } from 'translations/i18n';
 
-export default function Security(props) {
+export default function ManagePin(props) {
   return (
     <Layout preload={false}>
       <Body scrollable style={styles.content}>
-        <Link title={t('settings.manage_pin')} to="ManagePin" />
-        <Link title={t('settings.seed_words')} to="SeedWords" />
-        {props.isSignedIn && (
-          <Link title={t('change_password.title')} to="ChangePassword" />
-        )}
+        <Link title={t('manage_pin.update_pin')} to="UpdatePin" />
       </Body>
     </Layout>
   );
 }
 
-Security.propTypes = {
+ManagePin.propTypes = {
   isSignedIn: PropTypes.bool,
 };
 

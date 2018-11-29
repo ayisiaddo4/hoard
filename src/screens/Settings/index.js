@@ -12,6 +12,8 @@ import Security from './Security';
 import SeedWords from './SeedWords';
 import ChangePassword from './ChangePassword';
 import Settings from './Settings';
+import ManagePin from './ManagePin';
+import UpdatePin from './UpdatePin';
 import { t } from 'translations/i18n';
 
 const RoutingStack = createStackNavigator(
@@ -68,6 +70,26 @@ const RoutingStack = createStackNavigator(
           ...navProps,
           leftAction: 'back',
           title: t('profile.title'),
+          rightAction: null,
+        }),
+    },
+    ManagePin: {
+      screen: ManagePin,
+      navigationOptions: navProps =>
+        getNavigationOptions({
+          ...navProps,
+          leftAction: 'back',
+          title: t('manage_pin.title'),
+          rightAction: null,
+        }),
+    },
+    UpdatePin: {
+      screen: UpdatePin,
+      navigationOptions: navProps =>
+        getNavigationOptions({
+          ...navProps,
+          leftAction: 'back',
+          title: t('manage_pin.title'),
           rightAction: null,
         }),
     },

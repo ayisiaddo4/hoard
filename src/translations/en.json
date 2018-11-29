@@ -172,6 +172,7 @@
     "title": "Settings",
     "seed_words": "Seed Words",
     "security": "Security",
+    "manage_pin": "Manage PIN",
     "your_seed_words": "Your seed words",
     "your_keys": "Your keys",
     "your_keys_description": "Your seed words are the only way to restore your wallet if your phone is lost stolen, broken or upgraded",
@@ -290,5 +291,19 @@
       "empty_password": "Please input a new password",
       "password_match": "Your passwords do not match"
     }
+  },
+  "manage_pin": {
+    "title": "PIN Settings",
+    "update_pin": "Update PIN"
+  },
+  "update_pin": {
+    "current_pin_title": "Current Pin",
+    "current_pin_subtitle": "Please enter your current pin",
+    "new_pin_title": "New PIN",
+    "new_pin_subtitle": "Please enter a new pin",
+    "confirm_pin_title": "Confirm New Pin",
+    "confirm_pin_subtitle": "Please re-enter new pin",
+    "success_title": "Success",
+    "success_subtitle": "Your PIN has been changed!"
   }
 }
