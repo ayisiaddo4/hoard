@@ -18,7 +18,7 @@ export const AUTH_USER_STORAGE_KEY = 'auth/user';
 
 import { UPDATE_USER } from 'containers/User/constants';
 import { initUser, clearUser } from 'containers/User/actions';
-import { store } from '../App.js';
+import StoreRegistry from 'lib/store-registry';
 import { getKey } from 'components/Pin/utils';
 import {
   isMnemonicInitializedSelector,
@@ -69,7 +69,7 @@ export async function getUser() {
       await checkSessionApi(user);
     } catch (error) {
       await setUser('');
-      store.dispatch(clearUser());
+      StoreRegistry.getStore().dispatch(clearUser());
       NavigatorService.navigate('Login');
       return;
     }

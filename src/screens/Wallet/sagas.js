@@ -2,7 +2,7 @@ import { AsyncStorage } from "react-native";
 import { select, all, takeLatest, takeEvery, call, put, fork } from "redux-saga/effects";
 import { initializeWallet } from "./WalletInstances";
 import { INIT_REQUESTING, SUPPORTED_COINS_WALLET, SYMBOL_BOAR } from "containers/App/constants";
-import {store} from '../../App';
+import StoreRegistry from 'lib/store-registry';
 import {
   WALLET_INITIALIZE_PASSPHRASE,
   WALLET_HYDRATED,
@@ -137,7 +137,7 @@ async function commonWalletInitializationActions(wallet) {
 
   if (symbol === 'ETH') {
     wallet.listenForBalanceChange((balance) => {
-      store.dispatch({
+      StoreRegistry.getStore().dispatch({
         type: WALLET_UPDATE_BALANCE_SUCCESS,
         payload: {
           id,
@@ -147,7 +147,7 @@ async function commonWalletInitializationActions(wallet) {
     });
   } else if (symbol === SYMBOL_BOAR) {
     setTimeout(
-      () => store.dispatch({
+      () => StoreRegistry.getStore().dispatch({
         type: SEARCH_FOR_TRANSACTIONS,
         id,
         wallet
@@ -157,7 +157,7 @@ async function commonWalletInitializationActions(wallet) {
   }
 
   setTimeout(
-    () => store.dispatch(updateBalance(id)),
+    () => StoreRegistry.getStore().dispatch(updateBalance(id)),
     0
   );
 

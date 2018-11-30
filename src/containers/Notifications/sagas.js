@@ -42,7 +42,7 @@ import { walletsForSymbolSelector } from 'screens/Wallet/selectors';
 import NavigatorService from 'lib/navigator';
 
 
-import {store} from '../../App.js';
+import StoreRegistry from 'lib/store-registry';
 
 const KICKOFF_PROMPT_CONTACT_SAGA = 'saga/notifications/prompt_contact';
 const KICKOFF_CANCEL_CONTACT_SAGA = 'saga/notifications/cancel_contact';
@@ -57,7 +57,7 @@ function* errorContact({notification, error}) {
     icon: require('assets/exclamation-circle.png'),
     loading: false,
     actions: [
-      {title: 'Dismiss', onPress: () => store.dispatch(notificationDismissed(notification))}
+      {title: 'Dismiss', onPress: () => StoreRegistry.getStore().dispatch(notificationDismissed(notification))}
     ]
   }));
 }
@@ -77,7 +77,7 @@ function* cancelContact({notification, transaction}) {
           icon: require('assets/success-circle-white.png'),
           loading: false,
           actions: [
-            {title: 'Dismiss', onPress: () => store.dispatch(notificationDismissed(notification))}
+            {title: 'Dismiss', onPress: () => StoreRegistry.getStore().dispatch(notificationDismissed(notification))}
           ]
         }));
       } else {
@@ -114,7 +114,7 @@ function* promptContact({notification, transaction}) {
           icon: require('assets/new_user.png'),
           loading: false,
           actions: [
-            {title: 'Dismiss', onPress: () => store.dispatch(notificationDismissed(notification))}
+            {title: 'Dismiss', onPress: () => StoreRegistry.getStore().dispatch(notificationDismissed(notification))}
           ]
         }));
       }
@@ -153,7 +153,7 @@ function* fulfillTransaction(arg) {
         amount: transaction.amount,
         transaction_uid: transaction.details.uid
       });
-      store.dispatch(notificationDismissed(notification));
+      StoreRegistry.getStore().dispatch(notificationDismissed(notification));
     } else {
       yield put(notificationUpdated({
         ...notification,
@@ -162,8 +162,8 @@ function* fulfillTransaction(arg) {
         icon: require('assets/new_user.png'),
         loading: false,
         actions: [
-          {title: 'Dismiss', onPress: () => store.dispatch(notificationDismissed(notification))},
-          {title: 'Prompt', onPress: () => store.dispatch({
+          {title: 'Dismiss', onPress: () => StoreRegistry.getStore().dispatch(notificationDismissed(notification))},
+          {title: 'Prompt', onPress: () => StoreRegistry.getStore().dispatch({
             type: KICKOFF_PROMPT_CONTACT_SAGA,
             notification,
             transaction
@@ -180,12 +180,12 @@ function* fulfillTransaction(arg) {
         icon: require('assets/new_user.png'),
         loading: false,
         actions: [
-          {title: 'Cancel Transaction', onPress: () => store.dispatch({
+          {title: 'Cancel Transaction', onPress: () => StoreRegistry.getStore().dispatch({
             type: KICKOFF_CANCEL_CONTACT_SAGA,
             notification,
             transaction
           })},
-          {title: 'Prompt', onPress: () => store.dispatch({
+          {title: 'Prompt', onPress: () => StoreRegistry.getStore().dispatch({
             type: KICKOFF_PROMPT_CONTACT_SAGA,
             notification,
             transaction

@@ -4,19 +4,13 @@ import { View, ViewPropTypes } from 'react-native';
 import { VictoryArea } from 'victory-native';
 import { getCurrencyHistory, Intervals } from 'components/GetCurrencyHistory';
 import { Try } from 'components/Conditional';
+import get from 'lodash/get';
 
-import {
-  mergeTimeValueLists
-} from './helpers';
-
+import { mergeTimeValueLists } from './helpers';
 
 function hexToRgb(hex) {
   const bigint = parseInt(hex.match(/[\d\w]+/), 16);
-  return [
-    (bigint >> 16) & 255,
-    (bigint >> 8) & 255,
-    bigint & 255
-  ].join();
+  return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255].join();
 }
 
 /**
@@ -36,7 +30,7 @@ const TransactionPropType = PropTypes.shape({
   date: PropTypes.number.isRequired,
   from: PropTypes.string,
   to: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 });
 
 export default class PortfolioChart extends Component {
@@ -44,18 +38,20 @@ export default class PortfolioChart extends Component {
     colors: PropTypes.arrayOf(PropTypes.string),
     bottomPadding: PropTypes.number,
     fiatTrades: PropTypes.arrayOf(TransactionPropType).isRequired,
-    transactionsToCoalesce: PropTypes.arrayOf(PropTypes.shape({
-      symbol: PropTypes.string.isRequired,
-      address: PropTypes.string,
-      transactions: PropTypes.arrayOf(TransactionPropType).isRequired,
-    })),
-    style: ViewPropTypes.style
+    transactionsToCoalesce: PropTypes.arrayOf(
+      PropTypes.shape({
+        symbol: PropTypes.string.isRequired,
+        address: PropTypes.string,
+        transactions: PropTypes.arrayOf(TransactionPropType).isRequired,
+      })
+    ),
+    style: ViewPropTypes.style,
   };
 
   static defaultProps = {
     bottomPadding: 20,
-    colors: ['#00A073', '#007982']
-  }
+    colors: ['#00A073', '#007982'],
+  };
 
   state = {
     initiallyHeldFiat: 0,
@@ -66,64 +62,61 @@ export default class PortfolioChart extends Component {
     // [{x, y}]
     renderablePoints: [],
     height: 0,
-    width: 0
+    width: 0,
   };
 
   componentDidMount = async () => {
-
-    const {transactionsToCoalesce, fiatTrades} = this.props;
-
+    const { transactionsToCoalesce, fiatTrades } = this.props;
 
     await Promise.all([
-      ...transactionsToCoalesce.map(({symbol, address, transactions}) =>
+      ...transactionsToCoalesce.map(({ symbol, address, transactions }) =>
         this.compileHoldingsOverTimeBySymbol(symbol, address, transactions)
       ),
       this.compileHeldFiatOverTime(
         transactionsToCoalesce.reduce(
           (addressesToCheck, txList) => ({
             ...addressesToCheck,
-            [txList.address]: true
+            [txList.address]: true,
           }),
           {}
         ),
         fiatTrades
-      )
+      ),
     ]);
 
     // do these after
     await Promise.all(
-      transactionsToCoalesce.map(({symbol}) =>
+      transactionsToCoalesce.map(({ symbol }) =>
         this.compileHistoricalPricesBySymbol(
           symbol,
           this.state.holdingsOverTimeBySymbol[symbol] &&
-          this.state.holdingsOverTimeBySymbol[symbol][0] &&
-          this.state.holdingsOverTimeBySymbol[symbol][0].time
+            this.state.holdingsOverTimeBySymbol[symbol][0] &&
+            this.state.holdingsOverTimeBySymbol[symbol][0].time
         )
       )
     );
 
-
     // after everything
     this.compileRenderablePoints();
-  }
+  };
 
-  getInitiallyHeldFiat = (runningTotal) => runningTotal.reduce(
-    ({initialHoldings, prevValue}, newValue) => {
-      const difference = newValue - prevValue;
-      return {
-        initialHoldings: difference < 0
-                       ? initialHoldings - difference
-                       : initialHoldings,
-        prevValue: newValue
-      };
-    },
-    {initialHoldings: 0, prevValue: 0}
-  ).initialHoldings;
+  getInitiallyHeldFiat = runningTotal =>
+    runningTotal.reduce(
+      ({ initialHoldings, prevValue }, newValue) => {
+        const difference = newValue - prevValue;
+        return {
+          initialHoldings:
+            difference < 0 ? initialHoldings - difference : initialHoldings,
+          prevValue: newValue,
+        };
+      },
+      { initialHoldings: 0, prevValue: 0 }
+    ).initialHoldings;
 
   async compileHoldingsOverTimeBySymbol(symbol, address, transactions) {
     const holdingsOverTime = transactions.reduce(
       (holdingsOverTime, transaction, index) => {
-        const previous = holdingsOverTime[index-1] || { value: 0 };
+        const previous = holdingsOverTime[index - 1] || { value: 0 };
 
         // change each transaction to a positive or negative impact to holdings
         const isSend = address === transaction.from;
@@ -132,7 +125,7 @@ export default class PortfolioChart extends Component {
         const numberValue = Number(transaction.amount);
 
         // if send, reduce running total of holdings by the send amount
-        const adjustedValue =  isSend ? -numberValue : numberValue;
+        const adjustedValue = isSend ? -numberValue : numberValue;
 
         const runningTotalValue = adjustedValue + previous.value;
 
@@ -140,51 +133,50 @@ export default class PortfolioChart extends Component {
           ...holdingsOverTime,
           {
             time: transaction.date,
-            value: runningTotalValue
-          }
+            value: runningTotalValue,
+          },
         ];
       },
       []
     );
 
-
-    this.setState(
-      state => ({
-        holdingsOverTimeBySymbol: {
-          ...state.holdingsOverTimeBySymbol,
-          [symbol]: holdingsOverTime
-        }
-      })
-    );
+    this.setState(state => ({
+      holdingsOverTimeBySymbol: {
+        ...state.holdingsOverTimeBySymbol,
+        [symbol]: holdingsOverTime,
+      },
+    }));
   }
 
   async compileHistoricalPricesBySymbol(symbol, earliestTime) {
-
     // i want 100 points;
     // now - initialTime / ms in day / 100
     // this will get us the aggregate number for the history request
-    const aggregate = Math.round(((Date.now() - earliestTime) / 86400000) / 100);
+    const aggregate = Math.round((Date.now() - earliestTime) / 86400000 / 100);
     const historicalPrices = await getCurrencyHistory(
       symbol,
       'USD',
       100,
       Intervals.day,
       aggregate,
-      (json) => json.Data.map(v => ({time: v.time * 1000, value: v.close}))
+      json =>
+        json.Response === 'Success' && json.Data.map
+          ? json.Data.map(v => ({ time: v.time * 1000, value: v.close }))
+          : []
     );
 
     this.setState(state => ({
       historicalPricesBySymbol: {
         ...state.historicalPricesBySymbol,
-        [symbol]: historicalPrices
-      }
+        [symbol]: historicalPrices,
+      },
     }));
   }
 
   async compileHeldFiatOverTime(addressesToCheck, transactions) {
     const runningTotal = transactions.reduce(
       (runningTotal, transaction, index) => {
-        const previous = runningTotal[index-1] || { value: 0 };
+        const previous = runningTotal[index - 1] || { value: 0 };
 
         // change each transaction to a positive or negative impact to holdings
         const isSend = !!addressesToCheck[transaction.from];
@@ -193,7 +185,7 @@ export default class PortfolioChart extends Component {
         const numberValue = Number(transaction.tradePrice || transaction.price);
 
         // if send, increase running total of holdings by the send amount
-        const adjustedValue =  isSend ? numberValue : -numberValue;
+        const adjustedValue = isSend ? numberValue : -numberValue;
 
         const runningTotalValue = adjustedValue + previous.value;
 
@@ -201,8 +193,8 @@ export default class PortfolioChart extends Component {
           ...runningTotal,
           {
             time: transaction.date,
-            value: runningTotalValue
-          }
+            value: runningTotalValue,
+          },
         ];
       },
       []
@@ -213,7 +205,7 @@ export default class PortfolioChart extends Component {
 
     const heldFiatOverTime = runningTotal.map(item => ({
       ...item,
-      value: item.value + initiallyHeldFiat
+      value: item.value + initiallyHeldFiat,
     }));
 
     this.setState({
@@ -238,7 +230,9 @@ export default class PortfolioChart extends Component {
 
       // removeAllPrices before holdings history
       const sliceIndex = holdingsOverTime[0]
-        ? historicalPrices.findIndex(value => value.time >= holdingsOverTime[0].time)
+        ? historicalPrices.findIndex(
+            value => value.time >= holdingsOverTime[0].time
+          )
         : 0;
 
       // multiply the holdings by the final prices over time => usd/time
@@ -248,22 +242,22 @@ export default class PortfolioChart extends Component {
           list: holdingsOverTime.sort((a, b) => a.time - b.time),
           // if we run into the same time within "holdingsOverTime",
           // use the later item
-          sameTimeValueResolver: (a, b) => b
+          sameTimeValueResolver: (a, b) => b,
         },
         {
           list: historicalPrices.slice(sliceIndex),
-          sameTimeValueResolver: (a, b) => a > b ? a : b,
+          sameTimeValueResolver: (a, b) => (a > b ? a : b),
           aOnBResolver: (a, b) => a * b,
-          defaultItem: {time: 0, value: 1}
+          defaultItem: { time: 0, value: 1 },
         } // multiply
       );
 
       amountOfCryptoHoldingsBySymbol[symbol] = amountOfCryptoHoldingsForSymbol;
     }
 
-
-
-    const holdingsPerSymbolLists = Object.values(amountOfCryptoHoldingsBySymbol);
+    const holdingsPerSymbolLists = Object.values(
+      amountOfCryptoHoldingsBySymbol
+    );
 
     const minimumTime = Math.min(
       ...holdingsPerSymbolLists
@@ -271,29 +265,25 @@ export default class PortfolioChart extends Component {
         .filter(v => v !== undefined) // ensure all items have defined values
     );
 
-
-
     const totalValuesOverTime = mergeTimeValueLists(
       // add together the symbol lists of usd/time
-      ...holdingsPerSymbolLists
-        .map(list => ({
-          list,
-          sameTimeValueResolver: (a, b) => b
-        })),
+      ...holdingsPerSymbolLists.map(list => ({
+        list,
+        sameTimeValueResolver: (a, b) => b,
+      })),
       // layer on held fiat over time
       {
         list: [
           // add item with initial fiat holdings to beginning of fiat history
           {
             time: minimumTime,
-            value: initiallyHeldFiat
+            value: initiallyHeldFiat,
           },
-          ...heldFiatOverTime
+          ...heldFiatOverTime,
         ],
-        sameTimeValueResolver: (a, b) => b
+        sameTimeValueResolver: (a, b) => b,
       }
     );
-
 
     // transform into xy coordinates
     const renderablePoints = totalValuesOverTime
@@ -303,7 +293,7 @@ export default class PortfolioChart extends Component {
       }))
       .filter(v => v.y && v.x && v.y < Infinity);
 
-    this.setState({renderablePoints});
+    this.setState({ renderablePoints });
   }
 
   isRenderable = () => {
@@ -319,23 +309,18 @@ export default class PortfolioChart extends Component {
     }
 
     return false;
-  }
+  };
 
-  onLayout = ({nativeEvent: { layout: { width, height } }}) =>
-    this.setState({width, height: height - this.props.bottomPadding});
+  onLayout = ({
+    nativeEvent: {
+      layout: { width, height },
+    },
+  }) => this.setState({ width, height: height - this.props.bottomPadding });
 
   render() {
-    const {
-      bottomPadding,
-      colors,
-      style
-    } = this.props;
+    const { bottomPadding, colors, style } = this.props;
 
-    const {
-      renderablePoints,
-      width,
-      height
-    } = this.state;
+    const { renderablePoints, width, height } = this.state;
 
     if (!this.isRenderable() || !renderablePoints.length) {
       return null;
@@ -353,25 +338,22 @@ export default class PortfolioChart extends Component {
     const fill = 'rgba(255,255,255, 0.1083)';
 
     return (
-      <View
-        style={[{flex: 1}, style]}
-        onLayout={this.onLayout}
-      >
+      <View style={[{ flex: 1 }, style]} onLayout={this.onLayout}>
         <Try condition={!!renderablePoints.length && !!width && !!height}>
           <Fragment>
             <VictoryArea
-              padding={{bottom: 0, right: 0, top: 0, left: 0}}
+              padding={{ bottom: 0, right: 0, top: 0, left: 0 }}
               height={height}
               width={width}
               style={{
                 axis: {
-                  stroke: 'red'
+                  stroke: 'red',
                 },
                 data: {
                   stroke: `rgba(${stroke}, 0.7)`,
                   strokeWidth: 2,
-                  fill
-                }
+                  fill,
+                },
               }}
               data={renderablePoints}
             />
@@ -379,7 +361,7 @@ export default class PortfolioChart extends Component {
               style={{
                 width: '100%',
                 height: bottomPadding,
-                backgroundColor: fill
+                backgroundColor: fill,
               }}
             />
           </Fragment>

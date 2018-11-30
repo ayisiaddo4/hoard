@@ -2,6 +2,7 @@ import React from 'react';
 import Config from 'react-native-config';
 import PropTypes from 'prop-types';
 import Fetch, { makeRequest } from 'components/Fetch';
+import get from 'lodash/get';
 
 export const Intervals = {
   hour: '1H',
@@ -32,7 +33,13 @@ const getAggregateValue = interval => {
   }
 };
 
-const constructQueries = (currency, tradingPair, limit, interval, aggregate) => [
+const constructQueries = (
+  currency,
+  tradingPair,
+  limit,
+  interval,
+  aggregate
+) => [
   { name: 'fsym', value: currency },
   { name: 'tsym', value: tradingPair },
   { name: 'limit', value: limit },
@@ -54,7 +61,7 @@ const getUrl = interval => {
   }
 };
 
-const defaultFormatter = json => json.Data.map(day => day.close);
+const defaultFormatter = json => get(json, 'Data', []).map(day => day.close);
 
 export async function getCurrencyHistory(
   currency,

@@ -7,6 +7,7 @@ import { Alert, StyleSheet, Text, YellowBox, View } from 'react-native';
 
 import NavigatorService from 'lib/navigator';
 import configureStore from './configureStore';
+import StoreRegistry from 'lib/store-registry';
 
 import Login from 'screens/Login';
 import Mnemonic from 'screens/Wallet/Mnemonic';
@@ -39,6 +40,7 @@ import {
 } from 'components/Base/Navigation';
 
 export const store = configureStore();
+StoreRegistry.setStore(store);
 export let navigatorRef;
 
 const RoutingStack = createStackNavigator(
