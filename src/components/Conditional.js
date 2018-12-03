@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 
 export class Try extends Component {
   static propTypes = {
-    children: PropTypes.element,
-    condition: PropTypes.bool,
+    children: PropTypes.oneOfType(
+       PropTypes.element,
+       PropTypes.arrayOf(PropTypes.element)
+    ),
+    condition: PropTypes.any
   };
 
   render() {
@@ -18,7 +21,10 @@ export class Try extends Component {
 
 export class Otherwise extends Component {
   static propTypes = {
-    children: PropTypes.element,
+    children: PropTypes.oneOfType(
+       PropTypes.element,
+       PropTypes.arrayOf(PropTypes.element)
+    )
   };
 }
 

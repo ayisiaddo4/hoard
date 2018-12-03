@@ -61,7 +61,7 @@ export const cardHeight = slideWidth * 1.618 * 0.4;
 
 export default class Card extends Component {
   static propTypes = {
-    icon: PropTypes.string,
+    icon: Image.propTypes.source,
     colors: PropTypes.arrayOf(
       PropTypes.string
     ).isRequired,

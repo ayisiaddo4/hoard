@@ -101,8 +101,8 @@ const EntryStatusProp = PropTypes.oneOf([
   ENTRY_STATUS.ERROR,
 ]);
 WalletListEntry.propTypes = {
-  balance: PropTypes.number.isRequired,
-  price: PropTypes.number.isRequired,
+  balance: PropTypes.number,
+  price: PropTypes.number,
   balanceStatus: EntryStatusProp.isRequired,
   priceStatus: EntryStatusProp.isRequired,
   change: PropTypes.string.isRequired,
