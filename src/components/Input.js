@@ -21,7 +21,7 @@ export default class Input extends Component {
       'words',
       'characters',
     ]),
-    keyboardType: PropTypes.oneOf(['numeric', 'email-address', 'default']),
+    keyboardType: PropTypes.oneOf(['numeric', 'email-address', 'default', 'phone-pad']),
     returnKeyType: PropTypes.oneOf(['done', 'go', 'next', 'search', 'send']),
     light: PropTypes.bool,
     placeholder: PropTypes.string.isRequired,
