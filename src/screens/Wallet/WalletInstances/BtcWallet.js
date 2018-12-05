@@ -73,23 +73,23 @@ export default class BtcWallet {
   };
 
   send = async (amount, toAddress) => {
-    const amountSatoshis = amount * 1e8;
+    const amountSatoshis = Math.round(amount * 1e8);
     const tx = new Bitcoin.TransactionBuilder(config.network);
 
     const balance = await this.getBalance();
-    const balanceSatoshis = balance * 1e8;
+    const balanceSatoshis = Math.round(balance * 1e8);
 
     const feePerKilobyte = await this._estimateFee();
-    const feeSatoshisPerKilobyte = feePerKilobyte * 1e8;
+    const feeSatoshisPerKilobyte = Math.round(feePerKilobyte * 1e8);
 
     const address = await this.getPublicAddress();
 
     const utxos = await this._getUtxos();
 
     const transactionSize = this._calculateTransactionSize(utxos.length, 2);
-    const fee = feeSatoshisPerKilobyte * Math.ceil(transactionSize / 1024);
+    const fee = Math.ceil(feeSatoshisPerKilobyte * Math.ceil(transactionSize / 1024));
 
-    const change = parseInt(balanceSatoshis) - parseInt(fee) - parseInt(amountSatoshis);
+    const change = balanceSatoshis - fee - amountSatoshis;
 
     utxos.map(utxo => tx.addInput(utxo.txid, utxo.vout));
 
