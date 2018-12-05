@@ -13,21 +13,21 @@ const onError = function(error) {
   //   return response.text();
   // }
 
-  console.error('Request Failed:', error.config);
+  console.warn('Request Failed:', error.config);
 
   if (error.response) {
     // Request was made but server responded with something
     // other than 2xx
-    console.error('Status:', error.response.status);
-    console.error('Data:', error.response.data);
-    console.error('Headers:', error.response.headers);
+    console.warn('Status:', error.response.status);
+    console.warn('Data:', error.response.data);
+    console.warn('Headers:', error.response.headers);
   } else {
     // Something else happened while setting up the request
     // triggered the error
-    console.error('Error Message:', error.message);
+    console.warn('Error Message:', error.message);
   }
 
-  return Promise.reject(error.response || error.message);
+  return Promise.reject(error.response.data || error.response || error.message);
 };
 
 const api = {

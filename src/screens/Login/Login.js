@@ -33,7 +33,12 @@ export default class Login extends Component {
   };
 
   static getDerivedStateFromProps(props, state) {
-    if (state.loading && !props.login.requesting && !props.login.successful) {
+    if (
+      state.loading &&
+      props.login.error &&
+      !props.login.requesting &&
+      !props.login.successful
+    ) {
       return {
         loading: false,
         error: true,
