@@ -153,6 +153,31 @@ export const dimensions = {
   width: Dimensions.get('window').width,
 };
 
+export const breakpoints = {
+  height: {
+    XS: 500,
+    S: 600,
+    M: 700,
+    L: 800,
+    XL: 900,
+    TABLET_S: 1000,
+    TABLET_M: 1200,
+    TABLET_L: 1300,
+    TABLET_XL: 1500,
+  },
+  width: {
+    XS: 320,
+    S: 360,
+    M: 375,
+    L: 400,
+    XL: 500,
+    TABLET_S: 720,
+    TABLET_M: 768,
+    TABLET_L: 800,
+    TABLET_XL: 1024,
+  }
+};
+
 export const padding = {
   sm: 10,
   md: 20,

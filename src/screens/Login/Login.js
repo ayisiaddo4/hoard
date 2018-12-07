@@ -5,6 +5,7 @@ import { getNetworkForCoin } from 'lib/currency-metadata';
 import T from 'components/Typography';
 import { t } from 'translations/i18n';
 import { Try } from 'components/Conditional';
+import { dimensions, breakpoints } from 'styles';
 
 import { Layout, Body, Header, Footer } from 'components/Base';
 import _ from 'lodash';
@@ -106,7 +107,12 @@ export default class Login extends Component {
               </View>
             </Try>
           </Header>
-          <Body>
+          <Body
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+            }}
+          >
             <Try condition={!!this.state.errorMessage}>
               <View style={styles.errorMessageContainer}>
                 <T.Light style={styles.errorMessage}>
@@ -170,14 +176,15 @@ export default class Login extends Component {
     );
   }
 }
-
+const IS_SMALL = dimensions.height <= breakpoints.height.S;
+const LOGO_SIZE = IS_SMALL ? dimensions.height * 0.15 : dimensions.height * 0.2;
 const styles = StyleSheet.create({
   body: {
-    paddingHorizontal: 20,
+    paddingHorizontal: IS_SMALL ? 10 : 20,
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: LOGO_SIZE,
+    height: LOGO_SIZE,
     resizeMode: 'contain',
     marginRight: 10,
   },
@@ -187,7 +194,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderRadius: 5,
-    margin: 20,
+    margin: IS_SMALL ? 10 : 20,
   },
   errorMessage: {
     color: '#fff',
@@ -196,8 +203,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#fff',
-    marginTop: 10,
-    fontSize: 40,
+    marginTop: IS_SMALL ? 8 : 10,
+    fontSize: IS_SMALL ? 26 : 40,
     fontWeight: '100',
     textAlign: 'center',
   },
@@ -206,6 +213,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   buttonContainerAlt: {
-    marginVertical: 20,
+    marginVertical: IS_SMALL ? 10 : 20,
   },
 });
