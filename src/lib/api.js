@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 const onSuccess = function(response) {
-  console.debug('Request Successful!', response);
+  if (__DEV__) {
+    // eslint-disable-next-line no-console
+    console.debug('Request Successful!', response);
+  }
+
   return response.data;
 };
 
@@ -13,18 +17,30 @@ const onError = function(error) {
   //   return response.text();
   // }
 
-  console.warn('Request Failed:', error.config);
+  if (__DEV__) {
+    // eslint-disable-next-line no-console
+    console.warn('Request Failed:', error.config);
+  }
 
   if (error.response) {
     // Request was made but server responded with something
     // other than 2xx
-    console.warn('Status:', error.response.status);
-    console.warn('Data:', error.response.data);
-    console.warn('Headers:', error.response.headers);
+
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.warn({
+        'Status:': error.response.status,
+        'Data:': error.response.data,
+        'Headers:': error.response.headers,
+      });
+    }
   } else {
     // Something else happened while setting up the request
     // triggered the error
-    console.warn('Error Message:', error.message);
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.warn('Error Message:', error.message);
+    }
   }
 
   return Promise.reject(error.response.data || error.response || error.message);
