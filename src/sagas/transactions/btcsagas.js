@@ -1,23 +1,23 @@
-import {TRANSACTION_FOUND} from './constants';
-import { WALLET_TRACK_SYMBOL_SUCCESS } from "screens/Wallet/constants";
-import { SYMBOL_BTC } from "containers/App/constants";
-import { fork, all, takeEvery, call, put } from "redux-saga/effects";
+import { TRANSACTION_FOUND } from './constants';
+import { WALLET_TRACK_SYMBOL_SUCCESS } from 'screens/Wallet/constants';
+import { SYMBOL_BTC } from 'containers/App/constants';
+import { fork, all, takeEvery, call, put } from 'redux-saga/effects';
 import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
 
-import {timestampPriceApi} from './ethsagas';
+import { timestampPriceApi } from './ethsagas';
 import Config from 'react-native-config';
 
 import api from 'lib/api';
 
 export default function* btcTransactionsSagaWatcher() {
-  yield all([
-    takeEvery(WALLET_TRACK_SYMBOL_SUCCESS, fetchTransactions),
-  ]);
+  yield all([takeEvery(WALLET_TRACK_SYMBOL_SUCCESS, fetchTransactions)]);
 }
 
 export function* fetchPage(action, pageNum) {
   try {
-    const endpoint = `${Config.BTC_NODE_ENDPOINT}/txs?address=${action.payload.publicAddress}&pageNum=${pageNum}`;
+    const endpoint = `${Config.BTC_NODE_ENDPOINT}/txs?address=${
+      action.payload.publicAddress
+    }&pageNum=${pageNum}`;
     const response = yield api.get(endpoint);
 
     const nextPage = pageNum + 1;
@@ -35,27 +35,38 @@ export function* fetchPage(action, pageNum) {
 
       if (wasSend) {
         from = action.payload.publicAddress;
-        const firstOtherVout = transaction
-          .vout
-          .find(vout => vout.scriptPubKey.addresses[0] !== action.payload.publicAddress);
+        const firstOtherVout = transaction.vout.find(
+          vout =>
+            vout.scriptPubKey.addresses[0] !== action.payload.publicAddress
+        );
 
         if (firstOtherVout) {
           to = firstOtherVout.scriptPubKey.addresses[0];
           amount = Number(firstOtherVout.value);
-        } else { // for some reason this was a send to yourself, but we should still show it
+        } else {
+          // for some reason this was a send to yourself, but we should still show it
           to = action.payload.publicAddress;
-          amount = transaction.vout.reduce((total, vout) => total + Number(vout.value), 0);
+          amount = transaction.vout.reduce(
+            (total, vout) => total + Number(vout.value),
+            0
+          );
         }
       } else {
         from = inAddresses[0];
         to = action.payload.publicAddress;
-        const firstMyVout = transaction
-              .vout
-              .find(vout => vout.scriptPubKey.addresses[0] === action.payload.publicAddress);
+        const firstMyVout = transaction.vout.find(
+          vout =>
+            vout.scriptPubKey.addresses[0] === action.payload.publicAddress
+        );
         amount = Number(firstMyVout.value);
       }
 
-      const price = yield call(timestampPriceApi, `?fsym=BTC&tsyms=USD&ts=${transaction.time}`);
+      const price = yield call(
+        timestampPriceApi,
+        SYMBOL_BTC,
+        'USD',
+        transaction.time
+      );
 
       yield put({
         type: TRANSACTION_FOUND,
@@ -66,16 +77,16 @@ export function* fetchPage(action, pageNum) {
           from,
           to,
           amount,
-          price: amount * price.BTC.USD,
+          price: amount * price,
           fiatTrade: false,
           details: {
             ...transaction,
-            hash: transaction.txid
-          }
-        }
+            hash: transaction.txid,
+          },
+        },
       });
     }
-  } catch(e) {
+  } catch (e) {
     if (__DEV__) {
       // eslint-disable-next-line no-console
       console.log('An error occurred while fetching BTC transacions: ', e);
