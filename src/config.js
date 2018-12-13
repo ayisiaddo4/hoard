@@ -1,5 +1,6 @@
 const CONFIG = {
   PROMPT_BIOMETRICS_ON_STARTUP: true,
+  PROMPT_PUSH_NOTIFICATIONS_ON_STARTUP: true,
 };
 
 export default CONFIG;

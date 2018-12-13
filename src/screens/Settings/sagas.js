@@ -7,6 +7,7 @@ import {
   UPDATE_ENABLE_BIOMETRICS,
   PROMPTED_ENABLE_BIOMETRICS,
   UPDATE_ENABLE_PUSH_NOTIFICATIONS,
+  PROMPTED_ENABLE_PUSH_NOTIFICATIONS,
   SETTINGS_STORAGE_KEY,
 } from './constants';
 
@@ -34,16 +35,33 @@ function* promptUserForSettings() {
     const settings = yield select(state => state.settings);
     yield Storage.set(SETTINGS_STORAGE_KEY, settings);
   }
+
+  // Only prompt the user if we haven't prompted them yet
+  // and we want to.
+  if (state && !state.promptedEnablePushNotifications) {
+    // TODO:
+    // const result = yield call(enablePushNotifications, true);
+
+    yield put({
+      type: PROMPTED_ENABLE_PUSH_NOTIFICATIONS,
+      promptedEnablePushNotifications: true,
+      enablePushNotifications: false,
+    });
+
+    const settings = yield select(state => state.settings);
+    yield Storage.set(SETTINGS_STORAGE_KEY, settings);
+  }
 }
 
 export default function* settingsSagas() {
   yield take(INIT_REQUESTING);
+  yield Storage.set(SETTINGS_STORAGE_KEY, null);
 
   // Add user's settings to redux or ask user for settings
   const state = yield Storage.get(SETTINGS_STORAGE_KEY);
   if (state) {
     yield put(initializeSettings(state));
-  } else if (CONFIG.PROMPT_BIOMETRICS_ON_STARTUP) {
+  } else if (CONFIG.PROMPT_PUSH_NOTIFICATIONS_ON_STARTUP) {
     yield call(promptUserForSettings);
   }
 

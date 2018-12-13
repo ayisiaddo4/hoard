@@ -1,4 +1,5 @@
 import TouchID from 'react-native-touch-id';
+import { UrbanAirship } from 'urbanairship-react-native';
 
 const androidConfigObject = {
   title: 'Authentication Required',
@@ -65,4 +66,54 @@ export async function enableBiometrics(bool) {
   }
 
   return authenticated;
+}
+
+export async function isPushNotificationsSupported() {
+  let result = false;
+
+  try {
+    result = await UrbanAirship.isUserNotificationsOptedIn();
+    // result = await UrbanAirship.isUserNotificationsEnabled();
+
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.log('Checking for push notification support: ', result);
+    }
+  } catch (e) {
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.log('Biometrics Supported Error: ', e);
+    }
+  }
+  return result;
+}
+
+export async function enablePushNotifications(bool) {
+  if (!bool) {
+    return false;
+  }
+
+  let result = false;
+
+  const supported = await isPushNotificationsSupported();
+
+  if (!supported) {
+    return false;
+  }
+
+  try {
+    result = UrbanAirship.setUserNotificationsEnabled(bool);
+
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.log('Setting push notifications, response: ', result);
+    }
+  } catch (e) {
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.log('Setting push notifications Error: ', e);
+    }
+  }
+
+  return result;
 }
