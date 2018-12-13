@@ -96,7 +96,7 @@ export default class Login extends Component {
           <Header style={{ alignItems: 'center', marginTop: -40 }}>
             <Image
               style={styles.logo}
-              source={require('assets/hoard_circle_logo.png')}
+              source={require('assets/hoard_outline_logo.png')}
             />
             <Text style={styles.title}>{t('login.log_in')}</Text>
             <Try condition={__DEV__}>
@@ -177,7 +177,9 @@ export default class Login extends Component {
   }
 }
 const IS_SMALL = dimensions.height <= breakpoints.height.S;
-const LOGO_SIZE = IS_SMALL ? dimensions.height * 0.15 : dimensions.height * 0.2;
+const LOGO_SIZE = IS_SMALL
+  ? dimensions.height * 0.15
+  : dimensions.height * 0.18;
 const styles = StyleSheet.create({
   body: {
     paddingHorizontal: IS_SMALL ? 10 : 20,
@@ -186,7 +188,6 @@ const styles = StyleSheet.create({
     width: LOGO_SIZE,
     height: LOGO_SIZE,
     resizeMode: 'contain',
-    marginRight: 10,
   },
   errorMessageContainer: {
     backgroundColor: '#ff6161',
