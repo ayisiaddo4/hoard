@@ -6640,10 +6640,10 @@ react-native-tab-view@^1.0.0:
   dependencies:
     prop-types "^15.6.1"
 
-react-native-touch-id@^4.0.1:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/react-native-touch-id/-/react-native-touch-id-4.3.0.tgz#c25abd1d03d1ce5075f73ca87b18b47e7d60fa71"
-  integrity sha512-c9VB8Q5+d1H/bXz3gKmlPeWgEIcIeSiLK6jIhx0gUHPD9Geaquhq7NwOFGVt3WkGyvyqfKQTjZTWmuWY1g7hLg==
+react-native-touch-id@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-touch-id/-/react-native-touch-id-4.1.1.tgz#980e95cec1aff9a45a4ebb82783cebddca836dc2"
+  integrity sha512-65+rjIkeOzgCo89nMWfvd567rrHQ9112z7ojNb2xRXrRzi8PK+nmkvYp3H6xkA32b9tDSBOsBaTYMeorjZ7+PA==
 
 react-native-vector-icons@^4.6.0:
   version "4.6.0"
