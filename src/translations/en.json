@@ -183,7 +183,11 @@
     "input_title": "Input Pin",
     "input_subtitle": "Your PIN will be used to unlock and view your keys",
     "display_currency": "Display Currency",
-    "select_display_currency": "Select your default currency display"
+    "select_display_currency": "Select your default currency display",
+    "default_biometrics_title": "Authentication",
+    "enable_biometrics_title": "Enable {{type}}",
+    "enable_feature_in_settings": "Make sure you've enabled this option in your System Settings.",
+    "go_to_system_settings": "Open Settings"
   },
   "signup": {
     "username_required": "Username is required",

@@ -16,6 +16,15 @@ export function camelToTitle(s) {
     .trim();
 }
 
+// https://gist.github.com/SonyaMoisset/aa79f51d78b39639430661c03d9b1058#file-title-case-a-sentence-for-loop-wc-js
+export function toTitleCase(str) {
+  str = str.toLowerCase().split(' ');
+  for (var i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+  }
+  return str.join(' ');
+}
+
 export function stringToColor(str) {
   let hash = 0;
   let color = '#';
