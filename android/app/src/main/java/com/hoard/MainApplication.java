@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.urbanairship.reactnative.ReactAirshipPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.rnfingerprint.FingerprintAuthPackage;
@@ -39,6 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNDeviceInfo(),
             new ReactAirshipPackage(),
             new VectorIconsPackage(),
             new FingerprintAuthPackage(),

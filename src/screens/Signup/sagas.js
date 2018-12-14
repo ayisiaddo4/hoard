@@ -9,10 +9,11 @@
 *
 */
 
-import { call, put } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 import { SIGNUP_SUCCESS, SIGNUP_ERROR } from './constants';
 import api from 'lib/api';
 import { getErrorMessage } from 'lib/api-errors';
+import { deviceInfoSelector } from 'screens/Settings/selectors';
 import Config from 'react-native-config';
 
 // TODO: abstract these into dev/prod files
@@ -24,26 +25,24 @@ async function signupApi(
   phone_number,
   email_address,
   username,
-  password
+  password,
+  device_info = null
 ) {
+  const signupOptions = {
+    first_name,
+    last_name,
+    phone_number,
+    email_address,
+    username,
+    password,
+  };
+
+  if (device_info && device_info.device_type && device_info.channel) {
+    signupOptions.device_info = device_info;
+  }
+
   try {
-    console.log(
-      'doing',
-      `first_name: ${first_name}
-      last_name: ${last_name}
-      phone_number: ${phone_number}
-      email_address: ${email_address}
-      username: ${username}
-      password: ${password}`
-    );
-    return api.post(signupUrl, {
-      first_name,
-      last_name,
-      phone_number,
-      email_address,
-      username,
-      password,
-    });
+    return api.post(signupUrl, signupOptions);
   } catch (error) {
     console.log(error);
     throw error;
@@ -63,6 +62,8 @@ export default function* signupFlow(action) {
       password,
     } = action;
 
+    const deviceInfo = yield select(deviceInfoSelector);
+
     // pulls "calls" to our signupApi with our email and password
     // from our dispatched signup action, and will PAUSE
     // here until the API async function, is complete!
@@ -73,7 +74,8 @@ export default function* signupFlow(action) {
       phone_number,
       email_address,
       username,
-      password
+      password,
+      deviceInfo
     );
 
     // when the above api call has completed it will "put",
@@ -85,7 +87,7 @@ export default function* signupFlow(action) {
     // TODO: return nice-looking errors to the user
     yield put({
       type: SIGNUP_ERROR,
-      error: getErrorMessage(error)
+      error: getErrorMessage(error),
     });
   }
 

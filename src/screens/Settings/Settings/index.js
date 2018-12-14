@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import Settings from './Settings';
 import { updateEnablePushNotifications } from '../actions';
 import {isSignedInSelector} from 'containers/User/selectors';
+import {enablePushNotificationsSelector} from 'screens/Settings/selectors';
 
 const mapStateToProps = state => {
   return {
-    enablePushNotifications: state.settings.enablePushNotifications,
+    enablePushNotifications: enablePushNotificationsSelector(state),
     isSignedIn: isSignedInSelector(state)
   };
 };

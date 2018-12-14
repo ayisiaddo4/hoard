@@ -3,6 +3,7 @@ import {
   TRADING_PAIR_USD,
   UPDATE_TRADING_PAIR,
   UPDATE_ENABLE_PUSH_NOTIFICATIONS,
+  UPDATE_DEVICE_INFO,
   UPDATE_ENABLE_BIOMETRICS,
   PROMPTED_ENABLE_BIOMETRICS,
 } from './constants';
@@ -10,6 +11,7 @@ import {
 const initialState = {
   tradingPair: TRADING_PAIR_USD,
   enablePushNotifications: false,
+  deviceInfo: null,
   enableBiometrics: false,
   promptedEnableBiometrics: false,
 };
@@ -30,6 +32,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         enablePushNotifications: action.enablePushNotifications,
+      };
+    case UPDATE_DEVICE_INFO:
+      return {
+        ...state,
+        deviceInfo: action.deviceInfo,
       };
     case UPDATE_ENABLE_BIOMETRICS:
       return {

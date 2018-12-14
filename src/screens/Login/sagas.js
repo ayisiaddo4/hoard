@@ -9,21 +9,26 @@
 *
 */
 
-import { call, put } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 import { LOGIN_SUCCESS, LOGIN_ERROR } from './constants';
 import Config from 'react-native-config';
 import api from 'lib/api';
 import { getErrorMessage } from 'lib/api-errors';
+import { deviceInfoSelector } from 'screens/Settings/selectors';
 
 // TODO: abstract these into dev/prod files
 const loginUrl = `${Config.EREBOR_ENDPOINT}/login/`;
 const userInfoUrl = `${Config.EREBOR_ENDPOINT}/users/`;
 
 // Handle logging in via the API
-export async function loginApi(username_or_email, password, device_info = null) {
+export async function loginApi(
+  username_or_email,
+  password,
+  device_info = null
+) {
   const loginOptions = {
     username_or_email,
-    password
+    password,
   };
 
   if (device_info && device_info.device_type && device_info.channel) {
@@ -31,12 +36,12 @@ export async function loginApi(username_or_email, password, device_info = null) 
   }
 
   try {
-    const {user_uid} = await api.post(loginUrl, loginOptions );
+    const { user_uid } = await api.post(loginUrl, loginOptions);
     const fullUrl = `${userInfoUrl}${user_uid}`;
     const res = await api.get(fullUrl);
     return {
       ...res,
-      user_uid
+      user_uid,
     };
   } catch (error) {
     throw error;
@@ -47,10 +52,11 @@ export default function* loginFlow({ username_or_email, password }) {
   let currentUser;
 
   try {
+    const deviceInfo = yield select(deviceInfoSelector);
     // try to call to our loginApi() function.  Redux Saga
     // will pause here until we either are successful or
     // receive an error
-    currentUser = yield call(loginApi, username_or_email, password);
+    currentUser = yield call(loginApi, username_or_email, password, deviceInfo);
 
     // .. we can also tell redux that our login was successful
     yield put({ type: LOGIN_SUCCESS });
@@ -58,7 +64,7 @@ export default function* loginFlow({ username_or_email, password }) {
     currentUser = null;
     yield put({
       type: LOGIN_ERROR,
-      error: getErrorMessage(e)
+      error: getErrorMessage(e),
     });
   }
 
