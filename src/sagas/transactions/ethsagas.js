@@ -21,7 +21,7 @@ import { transactionsForWalletSelector } from './selectors';
 import { asyncMemoize, Queue } from './helpers';
 import { SEARCH_FOR_INTERESTING_BLOCKS } from './constants';
 import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
-
+var Reactotron = require('src/ReactotronConfig').default;
 import { transactionFound, triggerSearchForInterestingBlocks } from './actions';
 
 import { getNetworkForCoin } from 'lib/currency-metadata';
@@ -57,6 +57,9 @@ const asyncDelay = number =>
 
 const HISTORICAL_PRICE_CACHE_KEY = 'HISTORICAL_PRICE_CACHE';
 export async function timestampPriceApi(symbol, fiat, timestamp) {
+  const bench = Reactotron.benchmark('Timestamp Price API');
+  bench.step('Start');
+
   const request = `?fsym=${symbol}&tsyms=${fiat}&ts=${timestamp}`;
   const storedValue = await AsyncStorage.getItem(
     `${HISTORICAL_PRICE_CACHE_KEY}:${request}`
@@ -83,11 +86,15 @@ export async function timestampPriceApi(symbol, fiat, timestamp) {
   let attempts = 0;
 
   do {
+    bench.step('Getting eth price history...');
+
     const response = await api.get(
       `${Config.EREBOR_ENDPOINT}/pricing_data/pricehistorical${request}`
     );
 
     if (hasPrice(response)) {
+      bench.step('Getting cached eth response...');
+
       await cacheResponse(request, response);
       return response[symbol][fiat];
     }
@@ -102,6 +109,7 @@ export async function timestampPriceApi(symbol, fiat, timestamp) {
       throw new Error('Too Many Attempts To Retry Request');
     }
   } while (retry);
+  bench.stop('Stop');
 }
 
 export default function* ethTransactionsSagaWatcher() {
@@ -136,19 +144,28 @@ export function* listenForWalletEvents(action) {
 
 // BLOCK SEARCH FUNCTIONS
 export function* fetchHistoryEth(action) {
+  const bench = Reactotron.benchmark('Fetching ETH history');
+  bench.step('Start');
+
   const { publicAddress } = action;
 
   try {
+    bench.step('Starting the tx calls...');
+
     const response = yield call(
       api.get,
       `${Config.BOMBADIL_ENDPOINT}/transactions/${publicAddress}`
     );
+    bench.step('Cached eth transactions...');
+
     const cachedTransactions = yield select(state =>
       transactionsForWalletSelector(state, SYMBOL_ETH, publicAddress)
     );
     for (const transaction of response.result.slice(
       cachedTransactions.length
     )) {
+      bench.step('Looping over eth tx responses...');
+
       const isFrom =
         transaction.from.toLowerCase() === publicAddress.toLowerCase();
       const isTo = transaction.to.toLowerCase() === publicAddress.toLowerCase();
@@ -171,6 +188,7 @@ export function* fetchHistoryEth(action) {
         fiatTrade: false,
         details: transaction,
       };
+      bench.step('Found a transaction');
 
       yield put(transactionFound(action));
     }
@@ -180,4 +198,5 @@ export function* fetchHistoryEth(action) {
       console.log('error encountered while fetching ETH transactions', e);
     }
   }
+  bench.stop('Stop');
 }

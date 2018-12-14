@@ -4,7 +4,7 @@ import rootReducer from './rootReducer';
 import rootSaga from './rootSagas';
 
 if (__DEV__) {
-  var Reactotron = require('./ReactotronConfig').default;
+  var Reactotron = require('src/ReactotronConfig').default;
 }
 
 const sagaMonitor = __DEV__ ? Reactotron.createSagaMonitor() : null;
@@ -16,11 +16,16 @@ const composeEnhancers =
 /* eslint-enable no-underscore-dangle, no-undef */
 
 export default function configureStore() {
+  const bench = Reactotron.benchmark('Configuring store');
+  bench.step('Init');
+
   const createStoreFunc = __DEV__ ? Reactotron.createStore : createStore;
   const store = createStoreFunc(
     rootReducer,
     composeEnhancers(applyMiddleware(sagaMiddleware))
   );
   sagaMiddleware.run(rootSaga);
+  bench.stop('Done');
+
   return store;
 }

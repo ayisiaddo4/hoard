@@ -1,7 +1,19 @@
-import { AsyncStorage } from "react-native";
-import { select, all, takeLatest, takeEvery, call, put, fork } from "redux-saga/effects";
-import { initializeWallet } from "./WalletInstances";
-import { INIT_REQUESTING, SUPPORTED_COINS_WALLET, SYMBOL_BOAR } from "containers/App/constants";
+import { AsyncStorage } from 'react-native';
+import {
+  select,
+  all,
+  takeLatest,
+  takeEvery,
+  call,
+  put,
+  fork,
+} from 'redux-saga/effects';
+import { initializeWallet } from './WalletInstances';
+import {
+  INIT_REQUESTING,
+  SUPPORTED_COINS_WALLET,
+  SYMBOL_BOAR,
+} from 'containers/App/constants';
 import StoreRegistry from 'lib/store-registry';
 import {
   WALLET_INITIALIZE_PASSPHRASE,
@@ -9,14 +21,13 @@ import {
   WALLET_TRACK_SYMBOL,
   WALLET_TRACK_SYMBOL_SUCCESS,
   WALLET_IMPORT,
-
   WALLET_UPDATE_BALANCE_ERROR,
   WALLET_UPDATE_BALANCE_REQUESTING,
   WALLET_UPDATE_BALANCE_SUCCESS,
   WALLET_SEND_FUNDS_REQUESTING,
   WALLET_SEND_FUNDS_SUCCESS,
-  WALLET_SEND_FUNDS_ERROR
-} from "./constants";
+  WALLET_SEND_FUNDS_ERROR,
+} from './constants';
 import { SEARCH_FOR_TRANSACTIONS } from 'sagas/transactions/constants';
 import { INIT_USER } from 'containers/User/constants';
 import {
@@ -28,18 +39,16 @@ import {
   trackSymbol,
   trackSymbolSuccess,
   trackSymbolFailure,
-} from "./actions";
+} from './actions';
+var Reactotron = require('src/ReactotronConfig').default;
 
-import {userUidSelector} from "containers/User/selectors";
-import {
-  allWalletsSelector,
-  mnemonicPhraseSelector
-} from "./selectors";
+import { userUidSelector } from 'containers/User/selectors';
+import { allWalletsSelector, mnemonicPhraseSelector } from './selectors';
 
 import api from 'lib/api';
 
-const WALLET_STORAGE_KEY = "wallets/storage/wallets";
-const MNEMONIC_STORAGE_KEY = "wallets/storage/mnemonic";
+const WALLET_STORAGE_KEY = 'wallets/storage/wallets';
+const MNEMONIC_STORAGE_KEY = 'wallets/storage/mnemonic';
 
 const previouslyDefinedKeys = {};
 const makeId = () => {
@@ -66,7 +75,7 @@ export async function getStoredMnemonic() {
   try {
     const mnemonic = await AsyncStorage.getItem(MNEMONIC_STORAGE_KEY);
     return mnemonic;
-  } catch(e) {
+  } catch (e) {
     return '';
   }
 }
@@ -80,29 +89,37 @@ export async function getStoredWallets() {
       throw new Error('No stored wallets');
     }
 
-    if(!Array.isArray(wallets)) {
+    if (!Array.isArray(wallets)) {
       throw new Error('Improperly stored wallets');
     }
 
     return wallets;
-  } catch(e) {
+  } catch (e) {
     return [];
   }
 }
 
 export function* hydrate() {
+  const bench = Reactotron.benchmark('Hydrating wallet');
+  bench.step('Init');
+
   const mnemonic = yield call(getStoredMnemonic);
   const storedWallets = yield call(getStoredWallets);
 
   yield put(initializeMnemonic(mnemonic));
 
-  yield all(storedWallets.map(wallet => {
-    if (wallet.imported) {
-      return put(importWallet(wallet.symbol, 'privateKey', wallet.privateKey));
-    }
-  }));
+  yield all(
+    storedWallets.map(wallet => {
+      if (wallet.imported) {
+        return put(
+          importWallet(wallet.symbol, 'privateKey', wallet.privateKey)
+        );
+      }
+    })
+  );
 
-  yield put({type: WALLET_HYDRATED});
+  yield put({ type: WALLET_HYDRATED });
+  bench.stop('Done');
 }
 
 export async function storeMnemonic(action) {
@@ -110,13 +127,20 @@ export async function storeMnemonic(action) {
 }
 
 export function* storeWallets() {
+  const bench = Reactotron.benchmark('Store wallets');
+  bench.step('Init ... getting all wallets');
+
   const allWallets = yield select(allWalletsSelector);
   const storableWallets = [];
 
   for (const wallet of allWallets) {
+    bench.step('looping wallets...');
+
     if (wallet.imported) {
+      bench.step('getting wallet private key...');
+
       const privateKey = yield call(wallets[wallet.id].getPrivateKey);
-      storableWallets.push({...wallet, privateKey});
+      storableWallets.push({ ...wallet, privateKey });
     } else {
       storableWallets.push(wallet);
     }
@@ -127,71 +151,83 @@ export function* storeWallets() {
     WALLET_STORAGE_KEY,
     JSON.stringify(storableWallets)
   );
+  bench.stop('Done');
 }
 
 async function commonWalletInitializationActions(wallet) {
+  const bench = Reactotron.benchmark('Common Wallet Actions');
+  bench.step('making an id');
+
   const id = makeId();
   const symbol = wallet.symbol;
+  bench.step('Getting the public address');
   const publicAddress = await wallet.getPublicAddress();
   wallets[id] = wallet;
 
   if (symbol === 'ETH') {
-    wallet.listenForBalanceChange((balance) => {
+    bench.step('Common wallet actions for eth...');
+
+    wallet.listenForBalanceChange(balance => {
       StoreRegistry.getStore().dispatch({
         type: WALLET_UPDATE_BALANCE_SUCCESS,
         payload: {
           id,
-          balance: Number(balance.toString())
-        }
+          balance: Number(balance.toString()),
+        },
       });
     });
   } else if (symbol === SYMBOL_BOAR) {
+    bench.step('Common wallet actions for boar...');
+
     setTimeout(
-      () => StoreRegistry.getStore().dispatch({
-        type: SEARCH_FOR_TRANSACTIONS,
-        id,
-        wallet
-      }),
+      () =>
+        StoreRegistry.getStore().dispatch({
+          type: SEARCH_FOR_TRANSACTIONS,
+          id,
+          wallet,
+        }),
       0
     );
   }
 
-  setTimeout(
-    () => StoreRegistry.getStore().dispatch(updateBalance(id)),
-    0
-  );
+  setTimeout(() => StoreRegistry.getStore().dispatch(updateBalance(id)), 0);
+  bench.stop('Done');
 
   return {
     id,
     symbol,
     balance: null,
-    publicAddress
+    publicAddress,
   };
 }
 
 async function createWallet(symbol, mnemonicString) {
-  return commonWalletInitializationActions(initializeWallet(symbol, true, mnemonicString));
+  return commonWalletInitializationActions(
+    initializeWallet(symbol, true, mnemonicString)
+  );
 }
 
 async function recoverWallet(symbol, privateKey) {
-  return commonWalletInitializationActions(initializeWallet(symbol, false, privateKey));
-
+  return commonWalletInitializationActions(
+    initializeWallet(symbol, false, privateKey)
+  );
 }
 
 async function sendFunds(fromId, toPublicAddress, amount) {
-  const response = await wallets[fromId].send(
-    amount,
-    toPublicAddress
-  );
+  const response = await wallets[fromId].send(amount, toPublicAddress);
   return response;
 }
 
 async function getBalance(id) {
+  const bench = Reactotron.benchmark('Getting balance');
+  bench.step(' Start');
+
   const balance = await wallets[id].getBalance();
+  bench.stop('Done');
 
   return {
     id,
-    balance: Number(balance.toString())
+    balance: Number(balance.toString()),
   };
 }
 
@@ -205,7 +241,7 @@ function* sendFundsFlow(action) {
       type: WALLET_SEND_FUNDS_SUCCESS,
       id,
       hash,
-      transaction_uid
+      transaction_uid,
     });
 
     // refetch balance or keep an eye on the status of the request.
@@ -213,7 +249,7 @@ function* sendFundsFlow(action) {
     yield put({
       type: WALLET_SEND_FUNDS_ERROR,
       id: action.id,
-      error
+      error,
     });
   }
 }
@@ -221,25 +257,29 @@ function* sendFundsFlow(action) {
 function* updateBalanceFlow(action) {
   const { id } = action;
   try {
-
     const payload = yield call(getBalance, id);
 
     yield put({
       type: WALLET_UPDATE_BALANCE_SUCCESS,
-      payload
+      payload,
     });
   } catch (error) {
     yield put({
       type: WALLET_UPDATE_BALANCE_ERROR,
       id,
-      error
+      error,
     });
   }
 }
 
 function* importWalletFlow(action) {
+  const bench = Reactotron.benchmark(
+    `Importing wallet: ${action.importType || 'Unknown'}`
+  );
+  bench.step('Start');
+
   try {
-    const {importType, symbol, seed} = action;
+    const { importType, symbol, seed } = action;
 
     let payload;
     if (importType === 'mnemonic') {
@@ -252,12 +292,16 @@ function* importWalletFlow(action) {
 
     yield put(importWalletSuccess(payload));
     yield call(storeWallets);
-  } catch(e) {
+  } catch (e) {
     yield put(importWalletFailure(e));
   }
+  bench.stop('Stop');
 }
 
 function* trackSymbolFlow(action) {
+  const bench = Reactotron.benchmark(`Tracking Symbol`);
+  bench.step('Start');
+
   try {
     const mnemonicPhrase = yield select(mnemonicPhraseSelector);
 
@@ -270,7 +314,7 @@ function* trackSymbolFlow(action) {
     const acion = trackSymbolSuccess(payload);
     yield put(acion);
     yield call(storeWallets);
-  } catch(e) {
+  } catch (e) {
     yield put(trackSymbolFailure(e));
   }
 }
@@ -284,14 +328,14 @@ function* setUpWallets(action) {
   }
 }
 
-export async function registerWallet({user_uid, address, currency}) {
+export async function registerWallet({ user_uid, address, currency }) {
   try {
     const response = await api.post(
       `https://erebor-staging.hoardinvest.com/users/${user_uid}/register_address`,
-      {currency, address}
+      { currency, address }
     );
     return true;
-  } catch(e) {
+  } catch (e) {
     if (__DEV__) {
       // eslint-disable-next-line no-console
       console.log('register wallet error', e, e.errors);
@@ -304,10 +348,11 @@ export function* registerWalletFromTrack(action) {
   const user_uid = yield select(userUidSelector);
 
   if (user_uid) {
-    yield call(
-      registerWallet,
-      {user_uid, currency: action.payload.symbol, address: action.payload.publicAddress}
-    );
+    yield call(registerWallet, {
+      user_uid,
+      currency: action.payload.symbol,
+      address: action.payload.publicAddress,
+    });
   }
 }
 
@@ -316,7 +361,11 @@ export function* registerWalletFromUser(action) {
 
   if (wallets.length && action.user && action.user.user_uid) {
     wallets.map(wallet =>
-      registerWallet({user_uid: action.user.user_uid, currency: wallet.symbol, address: wallet.publicAddress})
+      registerWallet({
+        user_uid: action.user.user_uid,
+        currency: wallet.symbol,
+        address: wallet.publicAddress,
+      })
     );
   }
 }
@@ -334,6 +383,6 @@ export default function* walletSagaWatcher() {
     takeEvery(WALLET_IMPORT, importWalletFlow),
 
     takeEvery(WALLET_UPDATE_BALANCE_REQUESTING, updateBalanceFlow),
-    takeLatest(WALLET_SEND_FUNDS_REQUESTING, sendFundsFlow)
+    takeLatest(WALLET_SEND_FUNDS_REQUESTING, sendFundsFlow),
   ]);
 }

@@ -15,6 +15,7 @@ import signupFlow from 'screens/Signup/sagas';
 export const AUTH_USER_SET = 'AUTH_USER_SET';
 export const AUTH_SIGNOUT = 'AUTH_SIGNOUT';
 export const AUTH_USER_STORAGE_KEY = 'auth/user';
+var Reactotron = require('src/ReactotronConfig').default;
 
 import { UPDATE_USER } from 'containers/User/constants';
 import { initUser, clearUser } from 'containers/User/actions';
@@ -42,7 +43,12 @@ const checkUserSessionUrl = `${Config.EREBOR_ENDPOINT}/users/`;
  * @return {async function} Calls the backend to check the status of the user's session.
  */
 export async function checkSessionApi(currentUser) {
+  const bench = Reactotron.benchmark('Getting user');
+  bench.step('Start');
+
   try {
+    bench.step('getting user via api');
+    bench.stop('Done');
     return api.get(`${checkUserSessionUrl}${currentUser.user_uid}`);
   } catch (error) {
     throw error;
@@ -54,7 +60,12 @@ export async function checkSessionApi(currentUser) {
  * @return {object} the user object describing the current user.
  */
 export async function getUser() {
+  const bench = Reactotron.benchmark('Getting user');
+  bench.step('Start');
+
   let user = await AsyncStorage.getItem(AUTH_USER_STORAGE_KEY);
+  bench.step('Parsing user');
+
   user = JSON.parse(user);
 
   // convert old user.uid to more specific user.user_uid
@@ -66,14 +77,19 @@ export async function getUser() {
 
   if (user && user.user_uid) {
     try {
+      bench.step('checking user session');
+
       await checkSessionApi(user);
     } catch (error) {
       await setUser('');
       StoreRegistry.getStore().dispatch(clearUser());
       NavigatorService.navigate('Login');
+      bench.stop('Done - no user');
+
       return;
     }
   }
+  bench.stop('Done');
 
   return user;
 }
@@ -198,9 +214,10 @@ export default function* authenticationWatcher() {
         to = 'Mnemonic';
       }
 
-      const currentRoute = NavigatorService.getCurrentRoute().routes[0].routeName;
+      const currentRoute = NavigatorService.getCurrentRoute().routes[0]
+        .routeName;
       if (currentRoute === 'LoadingScreen') {
-        yield put({type: 'POST_LOAD_REDIRECT', to});
+        yield put({ type: 'POST_LOAD_REDIRECT', to });
       } else {
         if (resetReplace) {
           NavigatorService.resetReplace(currentRoute, to);

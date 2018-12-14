@@ -6,7 +6,7 @@ import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
 
 import { timestampPriceApi } from './ethsagas';
 import Config from 'react-native-config';
-
+var Reactotron = require('src/ReactotronConfig').default;
 import api from 'lib/api';
 
 export default function* btcTransactionsSagaWatcher() {
@@ -14,6 +14,9 @@ export default function* btcTransactionsSagaWatcher() {
 }
 
 export function* fetchPage(action, pageNum) {
+  const bench = Reactotron.benchmark('Fetching Bitcoin page');
+  bench.step('Start');
+
   try {
     const endpoint = `${Config.BTC_NODE_ENDPOINT}/txs?address=${
       action.payload.publicAddress
@@ -24,9 +27,14 @@ export function* fetchPage(action, pageNum) {
     if (nextPage < response.pagesTotal) {
       yield fork(fetchPage, action, nextPage);
     }
+    bench.step('Starting loop of transactions... ');
 
     for (let transaction of response.txs) {
+      bench.step('Loop: transaction found ... ');
+
       const inAddresses = transaction.vin.map(vin => vin.addr);
+      bench.step('Loop: was send? ... ');
+
       const wasSend = inAddresses.includes(action.payload.publicAddress);
 
       let from;
@@ -34,32 +42,43 @@ export function* fetchPage(action, pageNum) {
       let amount;
 
       if (wasSend) {
+        bench.step('Transaction was a send...');
         from = action.payload.publicAddress;
+        bench.step('Loop: firstOtherVout? ');
         const firstOtherVout = transaction.vout.find(
           vout =>
             vout.scriptPubKey.addresses[0] !== action.payload.publicAddress
         );
 
         if (firstOtherVout) {
+          bench.step('Loop: firstOtherVout ');
           to = firstOtherVout.scriptPubKey.addresses[0];
           amount = Number(firstOtherVout.value);
         } else {
+          bench.step('Loop: !firstOtherVout ');
+
           // for some reason this was a send to yourself, but we should still show it
           to = action.payload.publicAddress;
+          bench.step('Loop: !firstOtherVout reduce ');
+
           amount = transaction.vout.reduce(
             (total, vout) => total + Number(vout.value),
             0
           );
         }
       } else {
+        bench.step('Loop: not a send... ');
+
         from = inAddresses[0];
         to = action.payload.publicAddress;
+
         const firstMyVout = transaction.vout.find(
           vout =>
             vout.scriptPubKey.addresses[0] === action.payload.publicAddress
         );
         amount = Number(firstMyVout.value);
       }
+      bench.step('Loop: calling timestampPriceApi... ');
 
       const price = yield call(
         timestampPriceApi,
@@ -67,7 +86,7 @@ export function* fetchPage(action, pageNum) {
         'USD',
         transaction.time
       );
-
+      bench.step('Loop: putting TRANSACTION_FOUND');
       yield put({
         type: TRANSACTION_FOUND,
         transaction: {
@@ -92,6 +111,7 @@ export function* fetchPage(action, pageNum) {
       console.log('An error occurred while fetching BTC transacions: ', e);
     }
   }
+  bench.stop('Stop');
 }
 export function* fetchTransactions(action) {
   if (action.payload.symbol === SYMBOL_BTC) {
