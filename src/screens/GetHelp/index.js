@@ -7,11 +7,12 @@ import {
 import { t } from 'translations/i18n';
 import GetHelp from './GetHelp';
 import CreateSupportTicket from './CreateSupportTicket';
+import withoutOffscreenRendering from 'hocs/withoutOffscreenRendering';
 
 const RoutingStack = createStackNavigator(
   {
     GetHelp: {
-      screen: GetHelp,
+      screen: withoutOffscreenRendering(GetHelp),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -20,7 +21,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     CreateSupportTicket: {
-      screen: CreateSupportTicket,
+      screen: withoutOffscreenRendering(CreateSupportTicket),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,

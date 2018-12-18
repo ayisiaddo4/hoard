@@ -9,11 +9,12 @@ import {
   transitionConfig,
   getNavigationOptions,
 } from 'components/Base/Navigation';
+import withoutOffscreenRendering from 'hocs/withoutOffscreenRendering';
 
 const RoutingStack = createStackNavigator(
   {
     About: {
-      screen: About,
+      screen: withoutOffscreenRendering(About),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -22,7 +23,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     OpenSource: {
-      screen: OpenSource,
+      screen: withoutOffscreenRendering(OpenSource),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -31,7 +32,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     ReleaseNotes: {
-      screen: ReleaseNotes,
+      screen: withoutOffscreenRendering(ReleaseNotes),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,

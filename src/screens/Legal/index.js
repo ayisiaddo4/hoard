@@ -11,10 +11,12 @@ import UserAgreement from './UserAgreement';
 import Privacy from './Privacy';
 import Compliance from './Compliance';
 
+import withoutOffscreenRendering from 'hocs/withoutOffscreenRendering';
+
 const RoutingStack = createStackNavigator(
   {
     Legal: {
-      screen: Legal,
+      screen: withoutOffscreenRendering(Legal),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -23,7 +25,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     UserAgreement: {
-      screen: UserAgreement,
+      screen: withoutOffscreenRendering(UserAgreement),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -31,7 +33,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     Privacy: {
-      screen: Privacy,
+      screen: withoutOffscreenRendering(Privacy),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -39,7 +41,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     Compliance: {
-      screen: Compliance,
+      screen: withoutOffscreenRendering(Compliance),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,

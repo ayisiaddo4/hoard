@@ -20,13 +20,14 @@ import {
   transitionConfig,
   getNavigationOptions,
 } from 'components/Base/Navigation';
+import withoutOffscreenRendering from 'hocs/withoutOffscreenRendering';
 
 const RouteConfigs = {
   Wallet: {
     screen: createStackNavigator(
       {
         Wallet: {
-          screen: Wallet,
+          screen: withoutOffscreenRendering(Wallet),
           navigationOptions: navProps =>
             getNavigationOptions({
               ...navProps,
@@ -35,14 +36,14 @@ const RouteConfigs = {
             }),
         },
         CoinInformation: {
-          screen: CoinInformation,
+          screen: withoutOffscreenRendering(CoinInformation),
           navigationOptions: navProps =>
             getNavigationOptions({
               ...navProps,
             }),
         },
         SendRequest: {
-          screen: SendRequest,
+          screen: withoutOffscreenRendering(SendRequest),
           navigationOptions: navProps =>
             getNavigationOptions({
               ...navProps,
@@ -51,7 +52,7 @@ const RouteConfigs = {
             }),
         },
         RecipientSelection: {
-          screen: RecipientSelection,
+          screen: withoutOffscreenRendering(RecipientSelection),
           navigationOptions: navProps =>
             getNavigationOptions({
               ...navProps,
@@ -60,7 +61,7 @@ const RouteConfigs = {
             }),
         },
         TransactionStatus: {
-          screen: TransactionStatus,
+          screen: withoutOffscreenRendering(TransactionStatus),
           navigationOptions: navProps =>
             getNavigationOptions({
               ...navProps,
@@ -76,28 +77,28 @@ const RouteConfigs = {
     ),
   },
   Settings: {
-    screen: Settings,
+    screen: withoutOffscreenRendering(Settings),
   },
   Confirm: {
-    screen: Confirm,
+    screen: withoutOffscreenRendering(Confirm),
   },
   KYC: {
-    screen: KYC,
+    screen: withoutOffscreenRendering(KYC),
   },
   Authenticate: {
-    screen: Authenticate,
+    screen: withoutOffscreenRendering(Authenticate),
   },
   Store: {
-    screen: Store,
+    screen: withoutOffscreenRendering(Store),
   },
   Legal: {
-    screen: Legal,
+    screen: withoutOffscreenRendering(Legal),
   },
   About: {
-    screen: About,
+    screen: withoutOffscreenRendering(About),
   },
   GetHelp: {
-    screen: GetHelp,
+    screen: withoutOffscreenRendering(GetHelp),
   },
 };
 

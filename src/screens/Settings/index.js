@@ -16,10 +16,12 @@ import ManagePin from './ManagePin';
 import UpdatePin from './UpdatePin';
 import { t } from 'translations/i18n';
 
+import withoutOffscreenRendering from 'hocs/withoutOffscreenRendering';
+
 const RoutingStack = createStackNavigator(
   {
     Settings: {
-      screen: Settings,
+      screen: withoutOffscreenRendering(Settings),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -28,7 +30,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     DisplayCurrency: {
-      screen: DisplayCurrency,
+      screen: withoutOffscreenRendering(DisplayCurrency),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -36,7 +38,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     SeedWords: {
-      screen: SeedWords,
+      screen: withoutOffscreenRendering(SeedWords),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -45,7 +47,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     Security: {
-      screen: Security,
+      screen: withoutOffscreenRendering(Security),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -55,7 +57,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     ChangePassword: {
-      screen: ChangePassword,
+      screen: withoutOffscreenRendering(ChangePassword),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -64,7 +66,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     Profile: {
-      screen: Profile,
+      screen: withoutOffscreenRendering(Profile),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -74,7 +76,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     ManagePin: {
-      screen: ManagePin,
+      screen: withoutOffscreenRendering(ManagePin),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -84,7 +86,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     UpdatePin: {
-      screen: UpdatePin,
+      screen: withoutOffscreenRendering(UpdatePin),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,

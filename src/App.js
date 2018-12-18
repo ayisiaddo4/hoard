@@ -27,6 +27,7 @@ import { createStackNavigator } from 'react-navigation';
 import { INIT_REQUESTING } from './containers/App/constants';
 import { gradients } from 'styles';
 import LinearGradient from 'react-native-linear-gradient';
+import withoutOffscreenRendering from 'hocs/withoutOffscreenRendering';
 
 if (__DEV__) {
   var Reactotron = require('./ReactotronConfig').default;
@@ -45,11 +46,11 @@ export let navigatorRef;
 const RoutingStack = createStackNavigator(
   {
     LoadingScreen: {
-      screen: LoadingScreen,
+      screen: withoutOffscreenRendering(LoadingScreen),
       navigationOptions: { header: null },
     },
     Login: {
-      screen: Login,
+      screen: withoutOffscreenRendering(Login),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -58,7 +59,7 @@ const RoutingStack = createStackNavigator(
         }),
     },
     Signup: {
-      screen: Signup,
+      screen: withoutOffscreenRendering(Signup),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -67,16 +68,19 @@ const RoutingStack = createStackNavigator(
         }),
     },
     Forgot: {
-      screen: Forgot,
+      screen: withoutOffscreenRendering(Forgot),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
           rightAction: null,
         }),
     },
-    Menu: { screen: Menu, navigationOptions: { header: null } },
+    Menu: {
+      screen: withoutOffscreenRendering(Menu),
+      navigationOptions: { header: null },
+    },
     Mnemonic: {
-      screen: Mnemonic,
+      screen: withoutOffscreenRendering(Mnemonic),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -85,14 +89,14 @@ const RoutingStack = createStackNavigator(
         }),
     },
     Track: {
-      screen: Track,
+      screen: withoutOffscreenRendering(Track),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
         }),
     },
     Import: {
-      screen: Import,
+      screen: withoutOffscreenRendering(Import),
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
@@ -114,24 +118,24 @@ const RoutingStack = createStackNavigator(
 
 const ModalStack = createStackNavigator(
   {
-    Main: { screen: RoutingStack },
+    Main: { screen: withoutOffscreenRendering(RoutingStack) },
     ForgotModal: {
-      screen: ForgotModal,
+      screen: withoutOffscreenRendering(ForgotModal),
     },
     AddressModal: {
-      screen: AddressModal,
+      screen: withoutOffscreenRendering(AddressModal),
     },
     ContactModal: {
-      screen: ContactModal,
+      screen: withoutOffscreenRendering(ContactModal),
     },
     CurrencyModal: {
-      screen: CurrencyModal,
+      screen: withoutOffscreenRendering(CurrencyModal),
     },
     QRModal: {
-      screen: QRModal,
+      screen: withoutOffscreenRendering(QRModal),
     },
     ViewAddress: {
-      screen: ViewAddress,
+      screen: withoutOffscreenRendering(ViewAddress),
     },
   },
   {
