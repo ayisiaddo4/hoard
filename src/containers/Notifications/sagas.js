@@ -234,7 +234,7 @@ function* fulfillTransaction(arg) {
       );
     }
   } catch (e) {
-    if (e.errors.length && e.errors[0].code === 117) {
+    if (e.errors && e.errors.length && e.errors[0].code === 117) {
       yield put(
         notificationUpdated({
           ...notification,

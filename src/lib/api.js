@@ -28,7 +28,7 @@ const onError = function(error) {
 
     if (__DEV__) {
       // eslint-disable-next-line no-console
-      console.warn({
+      console.warn('Request Failed -- Additional Info: ', {
         'Status:': error.response.status,
         'Data:': error.response.data,
         'Headers:': error.response.headers,

@@ -50,6 +50,7 @@ export default class SendRequest extends Component {
         params: PropTypes.shape({
           type: PropTypes.oneOf([TYPE_SEND, TYPE_REQUEST]),
           wallet: PropTypes.string,
+          transaction_uid: PropTypes.string,
         }),
       }),
     }),
@@ -97,9 +98,9 @@ export default class SendRequest extends Component {
       recipient,
       recipientAddress,
       selectedId,
-      recipientType: recipientType || transactionType === TYPE_SEND
+      recipientType: recipientType || (transactionType === TYPE_SEND
         ? RECIPIENT_TYPE_ADDRESS
-        : RECIPIENT_TYPE_OTHER,
+        : RECIPIENT_TYPE_OTHER),
     };
   }
 
@@ -276,43 +277,57 @@ export default class SendRequest extends Component {
 
   send = async () => {
     if (this.validate(this.state)) {
-      let { recipientAddress } = this.state;
+      let { recipientAddress, recipient } = this.state;
       const selectedWallet = this.props.wallets.find(
         wallet => wallet.id === this.state.selectedId
       );
-      if (this.state.recipientType === RECIPIENT_TYPE_OTHER && !recipientAddress) {
+
+      let transaction_uid;
+      const params = this.props.navigation.state.params || {};
+      if (recipient === params.recipient && params.transaction_uid) {
+        transaction_uid = params.transaction_uid;
+      }
+
+      if (this.state.recipientType === RECIPIENT_TYPE_OTHER) {
         try {
           const { symbol, publicAddress } = selectedWallet;
           const recipientValue = this.getValueFromRecipient(this.state.recipient);
           const contact = this.state.recipient;
           const amount = Number(this.state.amount);
 
-          const response = await api.post(`${Config.EREBOR_ENDPOINT}/contacts/transaction`, {
+          const postData = {
             sender: publicAddress,
             amount,
             recipient: recipientValue,
             currency: symbol,
+          };
+
+          if (transaction_uid) {
+            postData.transaction_uid = transaction_uid;
+          }
+
+          const response = await api.post(`${Config.EREBOR_ENDPOINT}/contacts/transaction`, postData);
+          transaction_uid = response.transaction_uid;
+
+          this.props.recordContactTransaction({
+            type: TYPE_SEND,
+            date: Date.now(),
+            symbol: symbol,
+            to: recipientValue,
+            from: publicAddress,
+            amount,
+            price: Number(this.state.fiat),
+            contact,
+            details: {
+              ...response,
+              uid: transaction_uid,
+            }
           });
 
           if (response.success) {
-            this.props.recordContactTransaction({
-              type: TYPE_SEND,
-              date: Date.now(),
-              symbol: symbol,
-              to: recipientValue,
-              from: publicAddress,
-              amount,
-              price: Number(this.state.fiat),
-              contact,
-              details: {
-                ...response,
-                uid: response.transaction_uid,
-              }
-            });
-
             NavigatorService.navigate('TransactionStatus', {
               isContactTransaction: true,
-              id: response.transaction_uid,
+              id: transaction_uid,
               type: TYPE_SEND,
             });
           } else {
@@ -326,12 +341,6 @@ export default class SendRequest extends Component {
       }
 
       if (recipientAddress) {
-        let transaction_uid;
-        const params = this.props.navigation.state.params || {};
-        if (recipientAddress === params.recipientAddress && params.transaction_uid) {
-          transaction_uid = params.transaction_uid;
-        }
-
         const action = this.props.sendFunds(
           this.state.selectedId,
           recipientAddress,
