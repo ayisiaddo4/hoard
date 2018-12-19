@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {
   ActivityIndicator,
@@ -13,7 +13,7 @@ import { GradientText } from 'components/GradientText';
 import { gradients, colors, calculateHitSlop } from 'styles';
 const textHitSlop = calculateHitSlop(15, Infinity);
 
-export default class Button extends Component {
+export default class Button extends PureComponent {
   static propTypes = {
     type: PropTypes.oneOf(['base', 'primary', 'secondary', 'text']),
     testID: PropTypes.string,

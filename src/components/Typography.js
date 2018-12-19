@@ -1,82 +1,133 @@
 import { Text, StyleSheet } from 'react-native';
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 
 import { colors, typography } from 'styles';
 
-const Light = ({ style, ...otherProps }) => (
-  <Text style={[styles.light, style]} {...otherProps} />
-);
+class Light extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.light, style]} {...otherProps} />;
+  }
+}
+
 Light.propTypes = Text.propTypes;
 
-const Heading = ({ style, ...otherProps }) => (
-  <Text style={[styles.heading, style]} {...otherProps} />
-);
+class Heading extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.heading, style]} {...otherProps} />;
+  }
+}
+
 Heading.propTypes = Text.propTypes;
 
-const SubHeading = ({ style, ...otherProps }) => (
-  <Text style={[styles.subheading, style]} {...otherProps} />
-);
+class SubHeading extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.subheading, style]} {...otherProps} />;
+  }
+}
+
 SubHeading.propTypes = Text.propTypes;
 
-const GrayedOut = ({ style, ...otherProps }) => (
-  <Text style={[styles.grayedOut, style]} {...otherProps} />
-);
+class GrayedOut extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.grayedOut, style]} {...otherProps} />;
+  }
+}
+
 GrayedOut.propTypes = Text.propTypes;
 
-const SemiBold = ({ style, ...otherProps }) => (
-  <Text style={[styles.semiBold, style]} {...otherProps} />
-);
+class SemiBold extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.semiBold, style]} {...otherProps} />;
+  }
+}
+
 SemiBold.propTypes = Text.propTypes;
 
-const Small = ({ style, ...otherProps }) => (
-  <Text style={[styles.small, style]} {...otherProps} />
-);
+class Small extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.small, style]} {...otherProps} />;
+  }
+}
+
 Small.propTypes = Text.propTypes;
 
-const ButtonText = ({ style, ...otherProps }) => (
-  <Text style={[styles.small, style]} {...otherProps} />
-);
+class ButtonText extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.small, style]} {...otherProps} />;
+  }
+}
 ButtonText.propTypes = Text.propTypes;
 
-const Price = ({ style, ...otherProps }) => (
-  <Text style={[styles.price, style]} {...otherProps} />
-);
+class Price extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.price, style]} {...otherProps} />;
+  }
+}
 Price.propTypes = Text.propTypes;
 
-const PriceLarge = ({ style, ...otherProps }) => (
-  <Text style={[styles.priceLarge, style]} {...otherProps} />
-);
+class PriceLarge extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.priceLarge, style]} {...otherProps} />;
+  }
+}
 PriceLarge.propTypes = Text.propTypes;
 
-const PriceHeading = ({ style, ...otherProps }) => (
-  <Text style={[styles.priceHeading, style]} {...otherProps} />
-);
+class PriceHeading extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.priceHeading, style]} {...otherProps} />;
+  }
+}
 PriceHeading.propTypes = Text.propTypes;
 
-const TitleAlternate = ({ style, ...otherProps }) => (
-  <Text style={[styles.titleAlternate, style]} {...otherProps} />
-);
+class TitleAlternate extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.titleAlternate, style]} {...otherProps} />;
+  }
+}
 TitleAlternate.propTypes = Text.propTypes;
 
-const SemiBoldAlternate = ({ style, ...otherProps }) => (
-  <Text style={[styles.semiBoldAlternate, style]} {...otherProps} />
-);
+class SemiBoldAlternate extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.semiBoldAlternate, style]} {...otherProps} />;
+  }
+}
 SemiBoldAlternate.propTypes = Text.propTypes;
 
-const SubtitleAlternate = ({ style, ...otherProps }) => (
-  <Text style={[styles.subtitleAlternate, style]} {...otherProps} />
-);
+class SubtitleAlternate extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.subtitleAlternate, style]} {...otherProps} />;
+  }
+}
 SubtitleAlternate.propTypes = Text.propTypes;
 
-const SmallAlternate = ({ style, ...otherProps }) => (
-  <Text style={[styles.smallAlternate, style]} {...otherProps} />
-);
+class SmallAlternate extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.smallAlternate, style]} {...otherProps} />;
+  }
+}
 SmallAlternate.propTypes = Text.propTypes;
 
-const Paragraph = ({ style, ...otherProps }) => (
-  <Text style={[styles.base, style]} {...otherProps} />
-);
+class Paragraph extends PureComponent {
+  render() {
+    const { style, ...otherProps } = this.props;
+    return <Text style={[styles.base, style]} {...otherProps} />;
+  }
+}
 Paragraph.propTypes = Text.propTypes;
 
 const baseType = {
