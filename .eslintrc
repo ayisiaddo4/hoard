@@ -1,11 +1,14 @@
 {
   "parser": "babel-eslint",
-  "plugins": ["react", "react-native"],
+  "plugins": ["react", "react-native", "immutable"],
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "rules": {
     "react/display-name": 0,
     "react-native/no-unused-styles": 2,
-    "semi": [2, "always"]
+    "react/jsx-no-bind": 1,
+    "semi": [2, "always"],
+    "immutable/no-let": 2,
+    "immutable/no-mutation": 2
   },
   "globals": {
     "__DEV__": true,
