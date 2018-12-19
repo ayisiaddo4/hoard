@@ -19,13 +19,13 @@ export default class About extends Component {
             <Link
               icon={require('assets/blog.png')}
               title={t('about.social.blog')}
-              to="https://blog.hoardinvest.com"
+              to="https://blog.hoard.com"
               external={true}
             />
             <Link
               icon={require('assets/twitter.png')}
               title={t('about.social.twitter')}
-              to="https://twitter.com/hoardinvest"
+              to="https://twitter.com/hoard"
               external={true}
             />
             <Link

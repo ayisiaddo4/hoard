@@ -12,12 +12,12 @@ export default function GetHelp() {
           <Link
             external
             title={t('get_help.get_help.faq_link')}
-            to="https://support.hoardinvest.com/hc/en-us/sections/360000948793-FAQ"
+            to="https://support.hoard.com/hc/en-us/sections/360000948793-FAQ"
           />
           <Link
             external
             title={t('get_help.get_help.contact_link')}
-            to="mailto:support@hoardinvest.com"
+            to="mailto:support@hoard.com"
           />
           <Link
             title={t('get_help.get_help.ticket_link')}
@@ -26,7 +26,7 @@ export default function GetHelp() {
           <Link
             external
             title={t('get_help.get_help.support_link')}
-            to="https://support.hoardinvest.com"
+            to="https://support.hoard.com"
           />
         </View>
       </View>
