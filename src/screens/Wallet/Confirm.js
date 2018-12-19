@@ -73,36 +73,10 @@ export default class ConfirmTransaction extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-  },
-  xButton: {
-    alignSelf: 'flex-end',
-    fontSize: 30,
-    fontWeight: '100',
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
+  container: {},
   header: {
     fontSize: 25,
     fontWeight: '900',
     color: '#000',
   },
-  actionButtons: {
-    width: '100%',
-    marginTop: 'auto',
-    alignItems: 'center'
-  },
-  done: {
-    width: '100%',
-    alignItems: 'center',
-    borderColor: 'grey',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderStyle: 'solid',
-    borderRadius: 30,
-    padding: 20
-  },
-  cancel: {
-    padding: 20
-  }
 });

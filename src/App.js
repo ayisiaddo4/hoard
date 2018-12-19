@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Provider, connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
-import { Alert, StyleSheet, Text, YellowBox, View } from 'react-native';
+import { StyleSheet, YellowBox } from 'react-native';
 
 import NavigatorService from 'lib/navigator';
 import configureStore from './configureStore';
@@ -144,7 +144,7 @@ const ModalStack = createStackNavigator(
   }
 );
 
-class App extends React.Component {
+class App extends Component {
   constructor() {
     super();
 

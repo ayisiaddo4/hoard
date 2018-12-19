@@ -109,17 +109,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 20,
   },
-  title: {
-    fontSize: 15,
-    fontWeight: '300',
-    color: 'white',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 20,
-  },
   image: {
     height: 40,
     width: 40,
@@ -130,5 +119,4 @@ const styles = StyleSheet.create({
     margin: 20,
     textAlign: 'center',
   },
-  button: {},
 });

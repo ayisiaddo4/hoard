@@ -175,26 +175,6 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     backgroundColor: 'transparent',
   },
-  pinKeyboard: {
-    flex: -1,
-    flexShrink: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  pinKey: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    width: '33.33%',
-    height: 70,
-    borderWidth: 1,
-    borderColor: 'transparent',
-    color: 'white',
-    flexGrow: 1,
-    paddingTop: 8,
-  },
-  pinKeyEmpty: {
-    backgroundColor: 'transparent',
-  },
   pinPromptText: {
     color: 'white',
     margin: 10,
@@ -203,15 +183,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-  },
-  buttonContainer: {
-    margin: 20,
-    padding: 20,
-    width: '100%',
-  },
-  button: {
-    width: '100%',
-    padding: 10,
   },
   hiddenInputIOS: {
     display: 'none',

@@ -22,9 +22,6 @@ export default function OpenSource() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   header: {
     marginVertical: 35,
   },

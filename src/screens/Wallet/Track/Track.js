@@ -69,44 +69,6 @@ export default class Track extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
-  headerContainer: {
-    padding: 20,
-    paddingTop: 40,
-    backgroundColor: "#223252"
-  },
-  headingStyle: {
-    color: "#ffffff"
-  },
-  bodyContainer: {
-    flexGrow: 1,
-    padding: 20,
-    paddingBottom: 0
-  },
-  refresh: {},
-  footerContainer: {
-    padding: 20
-  },
-  mnemonicList: {},
-  mnemonicChoice: {
-    padding: 10,
-    borderRadius: 8,
-    backgroundColor: "#223252",
-    marginBottom: 20,
-    flexDirection: "column"
-  },
-  mnemonicChoiceNumner: {
-    textAlign: "center",
-    color: "#ffffff",
-    fontSize: 12
-  },
-  mnemonicChoiceText: {
-    textAlign: "center",
-    color: "#ffffff",
-    fontSize: 14
-  },
-  scrollView: {
-    marginVertical: 10
-  }
 });

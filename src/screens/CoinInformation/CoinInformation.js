@@ -299,9 +299,6 @@ export default class CoinInformation extends React.Component {
   }
 }
 
-const buttonBackgroundColor = 'rgba(255,255,255, 0.05)';
-const buttonTextColor = 'white';
-
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
@@ -318,22 +315,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: 'white',
   },
-  cardStyle: {
-    width: '100%',
-  },
-  imageContainer: {
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 30,
-  },
   image: {
     width: 25,
     height: 25,
     marginBottom: 5,
     resizeMode: 'contain',
-  },
-  holdings: {
-    marginVertical: 40,
   },
   actionButtonContainer: {
     flexDirection: 'row',
@@ -352,7 +338,7 @@ const styles = StyleSheet.create({
   },
   contactTransactionsContainer: {
     marginHorizontal: -15,
-    marginBottom: 20
+    marginBottom: 20,
   },
   walletAction: {
     flex: 1,
@@ -373,7 +359,7 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     marginBottom: 5,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   walletActionText: {
     color: '#fff',

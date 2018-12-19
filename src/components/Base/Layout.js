@@ -40,23 +40,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View as AnimatedView } from 'react-native-animatable';
-import _ from 'lodash';
+import invoke from 'lodash/invoke';
+import has from 'lodash/has';
 import Icon from 'components/Icon';
 import { Try } from 'components/Conditional';
 
 import {
   Animated,
-  ScrollView,
   InteractionManager,
   StyleSheet,
   View,
   ViewPropTypes,
   KeyboardAvoidingView,
-  Platform,
   StatusBar,
 } from 'react-native';
-
-import LoadingSpinner from 'components/LoadingSpinner';
 
 class Layout extends Component {
   static propTypes = {
@@ -148,16 +145,16 @@ class Layout extends Component {
     ).start();
   };
   handleAnimations = () => {
-    _.invoke(this, 'animatedLoading.fadeOutDown', 250);
+    invoke(this, 'animatedLoading.fadeOutDown', 250);
 
-    if (_.has(this, 'animatedView.fadeOut')) {
+    if (has(this, 'animatedView.fadeOut')) {
       this.animatedView.fadeOut(this.props.duration).then(() => {
         this.setState({ hasFaded: true });
       });
 
       // Animate the content in as view is fading out
       setTimeout(() => {
-        _.invoke(this, 'animatedBody.fadeIn');
+        invoke(this, 'animatedBody.fadeIn');
       }, 100);
     }
   };

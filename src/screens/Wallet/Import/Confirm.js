@@ -85,64 +85,25 @@ export default class Confirm extends Component {
 }
 
 const styles = StyleSheet.create({
-  inputRow: {
-    marginTop: 20,
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: 'black'
-  },
-  inputWrapper: {
-    flexGrow: 1,
-    flexDirection: 'column'
-  },
-  animationWrapper: {},
-  animation: {
-    width: 70,
-    height: 50
-  },
-  input: {
-    flexGrow: 1
-  },
-  answer: {
-  },
+  answer: {},
   container: {
-    flex: 1
+    flex: 1,
   },
   headerContainer: {
     padding: 20,
     paddingTop: 40,
-    backgroundColor: '#223252'
+    backgroundColor: '#223252',
   },
   bodyContainer: {
     flexGrow: 1,
     padding: 20,
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   statusCheck: {
-    marginTop: 40
-  },
-  footerContainer: {
-    padding: 20
-  },
-  mnemonicChoice: {
-    padding: 10,
-    borderRadius: 8,
-    backgroundColor: '#223252',
-    marginBottom: 20,
-    flexDirection: 'column'
-  },
-  mnemonicChoiceNumner: {
-    textAlign: 'center',
-    color: '#ffffff',
-    fontSize: 12
-  },
-  mnemonicChoiceText: {
-    textAlign: 'center',
-    color: '#ffffff',
-    fontSize: 14
+    marginTop: 40,
   },
   textButton: {
     marginTop: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });

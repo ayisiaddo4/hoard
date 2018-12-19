@@ -8,7 +8,7 @@ import { Try } from 'components/Conditional';
 import { dimensions, breakpoints } from 'styles';
 
 import { Layout, Body, Header, Footer } from 'components/Base';
-import _ from 'lodash';
+import invoke from 'lodash/invoke';
 
 import Button from 'components/Button';
 import Input from 'components/Input';
@@ -87,7 +87,7 @@ export default class Login extends Component {
     this.setState({ [fieldName]: text });
   };
 
-  safeFocus = element => _.invoke(element, 'inputRef.focus');
+  safeFocus = element => invoke(element, 'inputRef.focus');
 
   render() {
     return (

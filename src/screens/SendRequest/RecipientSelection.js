@@ -71,42 +71,4 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
   },
-  addressContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  qrbackground: {
-    backgroundColor: 'white',
-    borderRadius: 7.5,
-    padding: 10,
-  },
-  qrcontainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 20,
-  },
-  title: {
-    fontSize: 15,
-    fontWeight: '300',
-    color: 'white',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 20,
-  },
-  image: {
-    height: 40,
-    width: 40,
-    resizeMode: 'contain',
-  },
-  address: {
-    color: 'white',
-    margin: 20,
-    textAlign: 'center',
-  },
-  button: {
-  },
 });

@@ -542,9 +542,6 @@ export default class SendRequest extends Component {
 }
 
 const styles = StyleSheet.create({
-  text: {
-    marginVertical: 20,
-  },
   input: {},
   recipientContainer: {
     paddingVertical: 10,
@@ -572,10 +569,6 @@ const styles = StyleSheet.create({
   action: {
     marginBottom: -10,
   },
-  button: {
-    flex: 1,
-    margin: 20,
-  },
   flex1: {
     flex: 1,
   },
@@ -591,21 +584,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     color: colors.white,
     marginBottom: 20,
-  },
-  subheadingContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 30,
-  },
-  changeCoin: {
-    alignItems: 'center',
-  },
-  coinImage: {
-    height: 30,
-    width: 30,
-    borderRadius: 15,
-    margin: 10,
-    resizeMode: 'cover',
   },
   valueInputs: {
     flexDirection: 'row',

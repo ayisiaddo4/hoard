@@ -5,7 +5,6 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import CurrencyButton from './CurrencyButton';
 import ValueStatement from 'components/ValueStatement';
 import IntervalSelectionChart from 'components/IntervalSelectionChart';
-import Scene from 'components/Scene';
 import { t } from 'translations/i18n';
 
 import { Intervals } from 'components/GetCurrencyHistory';

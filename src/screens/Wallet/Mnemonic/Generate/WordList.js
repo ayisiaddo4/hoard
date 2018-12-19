@@ -125,16 +125,8 @@ export default class WordList extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   body: {
     paddingHorizontal: 20,
-  },
-  headerContainer: {
-    padding: 20,
-    paddingTop: 40,
-    backgroundColor: '#223252',
   },
   headingStyle: {
     marginVertical: 20,
@@ -146,8 +138,6 @@ const styles = StyleSheet.create({
     fontWeight: '200',
     fontSize: 16,
   },
-
-  mnemonicList: {},
   mnemonicChoice: {
     padding: 20,
     borderRadius: 8,

@@ -61,9 +61,6 @@ export default class DisplayCurrency extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   heading: {
     color: 'white',
     padding: 20,
@@ -102,5 +99,4 @@ const styles = StyleSheet.create({
     width: 20,
     resizeMode: 'contain',
   },
-  content: {},
 });

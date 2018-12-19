@@ -291,11 +291,11 @@ const styles = StyleSheet.create({
   nextButton: {
     borderRadius: 0,
     marginHorizontal: -20,
-    marginBottom: -40
+    marginBottom: -40,
   },
   subtitle: {
     color: 'white',
-    marginBottom: 0
+    marginBottom: 0,
   },
   contactsHeader: {
     color: 'white',
@@ -303,22 +303,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   contact: {
-    marginVertical: 7.5
+    marginVertical: 7.5,
   },
   infoContainer: {
     alignItems: 'center',
-    marginTop: 'auto'
+    marginTop: 'auto',
   },
   infoIcon: {
     height: 19,
     width: 19,
     resizeMode: 'contain',
-  },
-  heading: {
-    fontWeight: '300',
-    textAlign: 'center',
-    color: 'white',
-    margin: 5,
   },
   content: {
     fontFamily: 'HelveticaNeue-Light',
@@ -328,7 +322,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   bottomFade: {
-    position:'absolute',
+    position: 'absolute',
     height: 40,
     left: 20,
     width: '100%',

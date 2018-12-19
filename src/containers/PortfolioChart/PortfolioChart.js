@@ -4,7 +4,6 @@ import { View, ViewPropTypes } from 'react-native';
 import { VictoryArea } from 'victory-native';
 import { getCurrencyHistory, Intervals } from 'components/GetCurrencyHistory';
 import { Try } from 'components/Conditional';
-import get from 'lodash/get';
 
 import { mergeTimeValueLists } from './helpers';
 
