@@ -333,15 +333,14 @@ function handleDeepLink({ paths, params }) {
       currency: params.currency,
       amount: params.amount,
     });
-    if (mainPath === 'confirm_transaction') {
-      NavigatorService.navigateDeep([
-        { routeName: 'Wallet' },
-        { routeName: 'Confirm', params: params },
-      ]);
-    } else {
-      // TODO handle default or unhandled deeplinks
-      NavigatorService.navigate('Dashboard');
-    }
+  } else if (mainPath === 'confirm_transaction') {
+    NavigatorService.navigateDeep([
+      { routeName: 'Wallet' },
+      { routeName: 'Confirm', params: params },
+    ]);
+  } else {
+    // TODO handle default or unhandled deeplinks
+    NavigatorService.navigate('Dashboard');
   }
 }
 
@@ -414,6 +413,23 @@ function handleUrbanAirshipListeners(action) {
                   );
                 },
               },
+            ],
+          })
+        );
+      } else if (mainPath === 'transaction_confirmation') {
+        const { notification } = StoreRegistry.getStore().dispatch(
+          notificationRecieved({
+            type: 'secondary',
+            title: pushNotification.alert,
+            content: '',
+            actions: [
+              {
+                title: 'Dismiss',
+                onPress: () =>
+                  StoreRegistry.getStore().dispatch(
+                    notificationDismissed(notification)
+                  ),
+              }
             ],
           })
         );
