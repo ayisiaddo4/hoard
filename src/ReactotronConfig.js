@@ -7,6 +7,7 @@ import Reactotron, {
 } from 'reactotron-react-native';
 import { reactotronRedux } from 'reactotron-redux';
 import sagaPlugin from 'reactotron-redux-saga';
+require('./debug'); // Import debug utils
 
 const instance = Reactotron.configure({
   name: 'React Native Demo',
