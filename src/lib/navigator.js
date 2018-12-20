@@ -26,7 +26,11 @@ NavigatorService.navigate("Menu");
 ]);
 */
 
-import { NavigationActions, StackActions, DrawerActions } from 'react-navigation';
+import {
+  NavigationActions,
+  StackActions,
+  DrawerActions,
+} from 'react-navigation';
 
 let _container; // eslint-disable-line
 
@@ -35,15 +39,11 @@ function setContainer(container) {
 }
 
 function closeDrawer() {
-  _container.dispatch(
-    DrawerActions.closeDrawer()
-  );
+  _container.dispatch(DrawerActions.closeDrawer());
 }
 
 function openDrawer() {
-  _container.dispatch(
-    DrawerActions.openDrawer()
-  );
+  _container.dispatch(DrawerActions.openDrawer());
 }
 
 function resetNavigate(routeName, params) {
@@ -75,11 +75,25 @@ function resetReplace(fromRoute, toRoute, params) {
   );
 }
 
+function resetReplaceDeep(fromRoute, innerRoutes) {
+  const replace = innerRoutes[0];
+  _container.dispatch(
+    StackActions.reset({
+      index: 0,
+      actions: [
+        StackActions.replace({
+          key: fromRoute,
+          routeName: replace.routeName,
+          params: replace.params,
+          action: buildDeepNavigation(innerRoutes.slice(1)),
+        }),
+      ],
+    })
+  );
+}
 
 function back() {
-  _container.dispatch(
-    NavigationActions.back()
-  );
+  _container.dispatch(NavigationActions.back());
 }
 
 function navigate(routeName, params) {
@@ -92,19 +106,21 @@ function navigate(routeName, params) {
   );
 }
 
-function navigateDeep(actions) {
-  _container.dispatch(
-    actions.reduceRight(
-      (prevAction, action) =>
-        NavigationActions.navigate({
-          type: 'Navigation/NAVIGATE',
-          routeName: action.routeName,
-          params: action.params,
-          action: prevAction,
-        }),
-      undefined
-    )
+function buildDeepNavigation(actions) {
+  return actions.reduceRight(
+    (prevAction, action) =>
+      NavigationActions.navigate({
+        type: 'Navigation/NAVIGATE',
+        routeName: action.routeName,
+        params: action.params,
+        action: prevAction,
+      }),
+    undefined
   );
+}
+
+function navigateDeep(actions) {
+  _container.dispatch(buildDeepNavigation(actions));
 }
 
 function getCurrentRoute() {
@@ -121,6 +137,7 @@ export default {
   navigate,
   resetNavigate,
   resetReplace,
+  resetReplaceDeep,
   back,
   closeDrawer,
   openDrawer,

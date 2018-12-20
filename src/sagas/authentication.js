@@ -193,19 +193,24 @@ export default function* authenticationWatcher() {
         resetReplace = true;
         to = 'Menu';
       } else if (mnemonicPhrase && !pin) {
-        to = 'Store';
+        to = [{ routeName: 'Menu' }, { routeName: 'Store' }];
       } else {
         to = 'Mnemonic';
       }
 
-      const currentRoute = NavigatorService.getCurrentRoute().routes[0].routeName;
+      const currentRoute = NavigatorService.getCurrentRoute().routes[0]
+        .routeName;
       if (currentRoute === 'LoadingScreen') {
-        yield put({type: 'POST_LOAD_REDIRECT', to});
+        yield put({ type: 'POST_LOAD_REDIRECT', to });
       } else {
         if (resetReplace) {
           NavigatorService.resetReplace(currentRoute, to);
         } else {
-          NavigatorService.navigate(to);
+          if (Array.isArray(to)) {
+            NavigatorService.navigateDeep(to);
+          } else {
+            NavigatorService.navigate(to);
+          }
         }
       }
     }

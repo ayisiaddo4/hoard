@@ -11,14 +11,22 @@ export const transactionHashesByAddressForSymbolSelector = createSelector(
 export const transactionHashesForWalletSelector = createSelector(
   transactionHashesByAddressForSymbolSelector,
   (state, symbol, address) => address,
-  (transactionHashesByAddressForSymbol, address) => transactionHashesByAddressForSymbol[address] || []
+  (transactionHashesByAddressForSymbol, address) =>
+    transactionHashesByAddressForSymbol[address] || []
 );
 
 // (state, symbol) => { string: {} }
 export const blockchainTransactionsForSymbolSelector = createSelector(
-  (state) => state.transactions.blockchainTransactions,
+  state => state.transactions.blockchainTransactions,
   (state, symbol) => symbol,
   (blockchainTransactions, symbol) => blockchainTransactions[symbol] || {}
+);
+
+// (state, symbol) => {}
+export const blockchainTransactionSelector = createSelector(
+  blockchainTransactionsForSymbolSelector,
+  (state, symbol, hash) => hash,
+  (transactionsForSymbol, hash) => transactionsForSymbol[hash]
 );
 
 // (state, symbol, address) => [ {} ]
@@ -26,7 +34,9 @@ export const transactionsForWalletSelector = createSelector(
   transactionHashesForWalletSelector,
   blockchainTransactionsForSymbolSelector,
   (transactionHashesForWallet, blockchainTransactionsForSymbol) =>
-    transactionHashesForWallet.map(hash => blockchainTransactionsForSymbol[hash])
+    transactionHashesForWallet.map(
+      hash => blockchainTransactionsForSymbol[hash]
+    )
 );
 
 // (state, symbol, address, sort) => [ {} ] (sorted)
@@ -41,7 +51,7 @@ export const sortedTransactionsForWalletSelector = createSelector(
 
 // (state, symbol) => [ string ]
 export const contactTransactionUidsForSymbolSelector = createSelector(
-  (state) => state.transactions.contactTransactionsBySymbol,
+  state => state.transactions.contactTransactionsBySymbol,
   (state, symbol) => symbol,
   (contactTransactionUids, symbol) => contactTransactionUids[symbol] || []
 );
@@ -49,7 +59,7 @@ export const contactTransactionUidsForSymbolSelector = createSelector(
 // (state, symbol) => [ {} ]
 export const contactTransactionsForSymbolSelector = createSelector(
   contactTransactionUidsForSymbolSelector,
-  (state) => state.transactions.contactTransactions,
+  state => state.transactions.contactTransactions,
   (contactTransactionUidsForSymbol, contactTransactions) =>
     contactTransactionUidsForSymbol.map(uid => contactTransactions[uid])
 );
@@ -67,7 +77,7 @@ export const sortedContactTransactionsForSymbolSelector = createSelector(
 // (state, symbol, address) => [ {} ] (sorted)
 export const fiatTradesForWalletSelector = createSelector(
   transactionsForWalletSelector,
-  (transactionsForWallet) => transactionsForWallet.filter(tx => tx.fiatTrade)
+  transactionsForWallet => transactionsForWallet.filter(tx => tx.fiatTrade)
 );
 
 // (state, symbol, address, sort) => [ {} ] (sorted)
@@ -84,7 +94,7 @@ export const sortedFiatTradesForWalletSelector = createSelector(
 export const fiatTradesForWalletsSelector = createSelector(
   (state, wallets = []) =>
     wallets.reduce(
-      (list, {symbol, publicAddress}) => [
+      (list, { symbol, publicAddress }) => [
         ...list,
         ...fiatTradesForWalletsSelector(state, symbol, publicAddress),
       ],
