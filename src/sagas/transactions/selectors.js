@@ -33,9 +33,10 @@ export const transactionsForWalletSelector = createSelector(
 export const sortedTransactionsForWalletSelector = createSelector(
   transactionsForWalletSelector,
   (state, symbol, address, sort) => sort,
-  (transactionsForWallet, sort = 'ASC') => sort.toUpperCase() === 'ASC'
-    ? transactionsForWallet.sort((a, b) => a.date - b.date)
-    : transactionsForWallet.sort((a, b) => b.date - a.date)
+  (transactionsForWallet, sort = 'ASC') =>
+    sort.toUpperCase() === 'ASC'
+      ? [...transactionsForWallet].sort((a, b) => a.date - b.date)
+      : [...transactionsForWallet].sort((a, b) => b.date - a.date)
 );
 
 // (state, symbol) => [ string ]
@@ -57,9 +58,10 @@ export const contactTransactionsForSymbolSelector = createSelector(
 export const sortedContactTransactionsForSymbolSelector = createSelector(
   contactTransactionsForSymbolSelector,
   (state, symbol, sort) => sort,
-  (contactTransactionsForSymbol, sort = 'ASC') => sort.toUpperCase() === 'ASC'
-    ? contactTransactionsForSymbol.sort((a, b) => a.date - b.date)
-    : contactTransactionsForSymbol.sort((a, b) => b.date - a.date)
+  (contactTransactionsForSymbol, sort = 'ASC') =>
+    sort.toUpperCase() === 'ASC'
+      ? [...contactTransactionsForSymbol].sort((a, b) => a.date - b.date)
+      : [...contactTransactionsForSymbol].sort((a, b) => b.date - a.date)
 );
 
 // (state, symbol, address) => [ {} ] (sorted)
@@ -72,9 +74,10 @@ export const fiatTradesForWalletSelector = createSelector(
 export const sortedFiatTradesForWalletSelector = createSelector(
   fiatTradesForWalletSelector,
   (state, symbol, address, sort) => sort,
-  (fiatTrades, sort = 'ASC') => sort.toUpperCase() === 'ASC'
-    ? fiatTrades.sort((a, b) => a.date - b.date)
-    : fiatTrades.sort((a, b) => b.date - a.date)
+  (fiatTrades, sort = 'ASC') =>
+    sort.toUpperCase() === 'ASC'
+      ? [...fiatTrades].sort((a, b) => a.date - b.date)
+      : [...fiatTrades].sort((a, b) => b.date - a.date)
 );
 
 // (state, [ { symbol, publicAddress } ]) => [ {} ] (sorted)
@@ -93,7 +96,8 @@ export const fiatTradesForWalletsSelector = createSelector(
 export const sortedFiatTradesForWalletsSelector = createSelector(
   fiatTradesForWalletsSelector,
   (state, wallets, sort) => sort,
-  (fiatTrades, sort = 'ASC') => sort.toUpperCase() === 'ASC'
-    ? fiatTrades.sort((a, b) => a.date - b.date)
-    : fiatTrades.sort((a, b) => b.date - a.date)
+  (fiatTrades, sort = 'ASC') =>
+    sort.toUpperCase() === 'ASC'
+      ? [...fiatTrades].sort((a, b) => a.date - b.date)
+      : [...fiatTrades].sort((a, b) => b.date - a.date)
 );
