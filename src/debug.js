@@ -2,37 +2,58 @@
 /* eslint-disable no-undef*/
 /* eslint-disable no-console*/
 
-global.timer = 0;
-global.timerStep = null;
+global.timer = {};
 
-function start(l) {
-  const label = l || '';
+function start(key) {
+  if (!key) {
+    console.log('You must pass a timer key');
+  }
+
   const now = performance.now();
-  console.log(`${label + ' '}START: now`);
-  global.timer = now;
+
+  console.log(`${key}: START`);
+
+  global.timer[key] = [now];
 }
 
-function step(l) {
-  const label = l || '';
+function step(key) {
+  if (!key) {
+    console.log('You must pass a timer key');
+  }
+
   const now = performance.now();
+  const prev = global.timer[key][global.timer[key].length - 1];
+  global.timer[key].push(now);
 
-  const duration = global.timerStep
-    ? now - global.timerStep
-    : now - global.timer;
+  const duration = now - prev;
 
-  const durationInSec = duration / 1000;
   global.timerStep = now;
-  console.log(`${label + ' '} STEP: ${durationInSec} sec, ${duration} ms`);
+  console.log(
+    `${key + ' '} STEP ${global.timer[key].length - 1} to STEP ${
+      global.timer[key].length
+    }: ${duration} ms`
+  );
 }
 
-function stop(l) {
-  const label = l || '';
+function stop(key) {
+  if (!key) {
+    console.log('You must pass a timer key');
+  }
+
   const now = performance.now();
-  const duration = now - global.timer;
-  const durationInSec = duration / 1000;
-  console.log(`${label + ' '} DURATION: ${durationInSec} sec, ${duration} ms`);
-  global.timer = 0;
-  global.timerStep = null;
+  const prev = global.timer[key][global.timer[key].length - 1];
+  global.timer[key].push(now);
+
+  const duration = now - prev;
+
+  global.timerStep = now;
+  console.log(
+    `${key + ' '} STEP ${global.timer[key].length - 1} to STEP ${
+      global.timer[key].length
+    }: ${duration} ms. DONE!`
+  );
+
+  delete global.timer[key];
 }
 
 if (__DEV__) {
