@@ -120,7 +120,8 @@
     "reactotron-react-native": "^2.1.0",
     "reactotron-redux": "^2.1.0",
     "reactotron-redux-saga": "^2.1.0",
-    "schedule": "0.4.0"
+    "schedule": "0.4.0",
+    "why-did-you-update": "0.1.1"
   },
   "detox": {
     "configurations": {

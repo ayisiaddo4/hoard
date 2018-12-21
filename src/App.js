@@ -32,6 +32,11 @@ if (__DEV__) {
   var Reactotron = require('./ReactotronConfig').default;
 }
 
+if (__DEV__) {
+  const { whyDidYouUpdate } = require('why-did-you-update');
+  whyDidYouUpdate(React);
+}
+
 import {
   cardStyle,
   transitionConfig,

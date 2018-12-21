@@ -1,0 +1,18 @@
+patch-package
+--- a/node_modules/why-did-you-update/lib/defaultNotifier.js
++++ b/node_modules/why-did-you-update/lib/defaultNotifier.js
+@@ -23,10 +23,10 @@ var defaultNotifier = function defaultNotifier(groupByComponent, collapseCompone
+ exports.defaultNotifier = defaultNotifier;
+ // Disables yellow box in React Native before warn
+ var consoleWarn = function consoleWarn(args) {
+-  var oldDisableYellowBox = console.disableYellowBox;
+-  console.disableYellowBox = true;
+-  console.warn(args);
+-  console.disableYellowBox = oldDisableYellowBox;
++  // var oldDisableYellowBox = console.disableYellowBox;
++  // console.disableYellowBox = true;
++  console.log(args);
++  // console.disableYellowBox = oldDisableYellowBox;
+ };
+ 
+ var notifyDiff = function notifyDiff(_ref) {
