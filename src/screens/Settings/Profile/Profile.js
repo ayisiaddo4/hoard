@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 
 import PropTypes from 'prop-types';
-import invoke from 'lodash/invoke';
 import memoize from 'lodash/memoize';
 
 import { StyleSheet, View } from 'react-native';
 import { Try } from 'components/Conditional';
-import LoadingSpinner from 'components/LoadingSpinner';
 import Button from 'components/Button';
 
 import { Layout, Body, Header } from 'components/Base';
-import { colors, calculateHitSlop } from 'styles';
+import { colors } from 'styles';
 import Input from 'components/Input';
 import T from 'components/Typography';
 import Config from 'react-native-config';
@@ -58,6 +56,13 @@ export default class Profile extends Component {
       },
     };
   }
+
+  // Setup References for focusable inputs
+  signupFirstNameInput = React.createRef();
+  signupLastNameInput = React.createRef();
+  signupUsernameInput = React.createRef();
+  signupEmailAddressInput = React.createRef();
+  signupPhoneInput = React.createRef();
 
   updateUser = newUser => {
     api
@@ -141,7 +146,9 @@ export default class Profile extends Component {
     return firstNameChanged || lastNameChanged || phoneNumberChanged;
   };
 
-  safeFocus = memoize(element => () => invoke(element, 'inputRef.focus'));
+  safeFocus = memoize(element => () => {
+    this[element].current.focus();
+  });
 
   render() {
     const { answers } = this.state;
@@ -164,49 +171,49 @@ export default class Profile extends Component {
               </View>
             </Try>
             <Input
-              ref={el => (this.signupFirstNameInput = el)}
+              inputRef={this.signupFirstNameInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
               placeholder={t('profile.first_name')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus(this.signupLastNameInput)}
+              onSubmitEditing={this.safeFocus('signupLastNameInput')}
               onChangeText={this.updateFormField('first_name')}
               value={answers.first_name}
               type="underline"
               style={styles.input}
+              blurOnSubmit={false}
             />
             <Input
-              ref={el => (this.signupLastNameInput = el)}
+              inputRef={this.signupLastNameInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
               placeholder={t('profile.last_name')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus(this.signupEmailAddressInput)}
+              onSubmitEditing={this.safeFocus('signupPhoneInput')}
               onChangeText={this.updateFormField('last_name')}
               value={answers.last_name}
               type="underline"
               style={styles.input}
+              blurOnSubmit={false}
             />
             <Input
-              ref={el => (this.signupUsernameInput = el)}
               autoCapitalize="none"
               autoCorrect={false}
               editable={false}
               placeholder={t('profile.username')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus(this.signupPasswordInput)}
+              onSubmitEditing={this.safeFocus('signupPhoneInput')}
               onChangeText={this.updateFormField('username')}
               value={this.props.user.username}
               type="underline"
               style={styles.input}
             />
             <Input
-              ref={el => (this.signupEmailAddressInput = el)}
               autoCapitalize="none"
               autoCorrect={false}
               editable={false}
@@ -214,21 +221,21 @@ export default class Profile extends Component {
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
               keyboardType="email-address"
-              onSubmitEditing={this.safeFocus(this.signupPhoneInput)}
+              onSubmitEditing={this.safeFocus('signupPhoneInput')}
               onChangeText={this.updateFormField('email_address')}
               value={this.props.user.email_address}
               type="underline"
               style={styles.input}
             />
             <Input
-              ref={el => (this.signupPhoneInput = el)}
+              inputRef={this.signupPhoneInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
               placeholder={t('profile.phone_number')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus(this.signupUsernameInput)}
+              onSubmitEditing={this.safeFocus('signupUsernameInput')}
               onChangeText={this.updateFormField('phone_number')}
               value={answers.phone_number}
               type="underline"

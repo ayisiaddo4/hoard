@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import find from 'lodash/find';
-import invoke from 'lodash/invoke';
 import memoize from 'lodash/memoize';
 
 import { StyleSheet, View } from 'react-native';
@@ -45,6 +44,15 @@ export default class Signup extends Component {
     loading: false,
     loggedIn: false,
   };
+
+  // Setup References for focusable inputs
+  signupFirstNameInput = React.createRef();
+  signupLastNameInput = React.createRef();
+  signupEmailAddressInput = React.createRef();
+  signupPhoneInput = React.createRef();
+  signupUsernameInput = React.createRef();
+  signupPasswordInput = React.createRef();
+  signupPasswordConfirmationInput = React.createRef();
 
   static getDerivedStateFromProps(props, state) {
     if (state.loading && !props.signup.requesting && !props.signup.successful) {
@@ -122,7 +130,9 @@ export default class Signup extends Component {
       answers.phone_number.replace(/[-N*,;/#.\s()]/g, ''),
   });
 
-  safeFocus = memoize(element => () => invoke(element, 'inputRef.focus'));
+  safeFocus = memoize(element => () => {
+    this[element].current.focus();
+  });
 
   render() {
     const { answers, errors, showErrors, showPasswordsMatch } = this.state;
@@ -154,37 +164,39 @@ export default class Signup extends Component {
               </View>
             </Try>
             <Input
-              ref={el => (this.signupFirstNameInput = el)}
+              inputRef={this.signupFirstNameInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
               placeholder={t('signup.input_first_name')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus(this.signupLastNameInput)}
+              onSubmitEditing={this.safeFocus('signupLastNameInput')}
               onChangeText={this.updateFormField('first_name')}
               value={answers.first_name}
               error={showErrors && errors.first_name}
               type="underline"
               style={styles.input}
+              blurOnSubmit={false}
             />
             <Input
-              ref={el => (this.signupLastNameInput = el)}
+              inputRef={this.signupLastNameInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
               placeholder={t('signup.input_last_name')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus(this.signupEmailAddressInput)}
+              onSubmitEditing={this.safeFocus('signupEmailAddressInput')}
               onChangeText={this.updateFormField('last_name')}
               value={answers.last_name}
               error={showErrors && errors.last_name}
               type="underline"
               style={styles.input}
+              blurOnSubmit={false}
             />
             <Input
-              ref={el => (this.signupEmailAddressInput = el)}
+              inputRef={this.signupEmailAddressInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
@@ -192,15 +204,16 @@ export default class Signup extends Component {
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
               keyboardType="email-address"
-              onSubmitEditing={this.safeFocus(this.signupPhoneInput)}
+              onSubmitEditing={this.safeFocus('signupPhoneInput')}
               onChangeText={this.updateFormField('email_address')}
               value={answers.email_address}
               error={showErrors && errors.email_address}
               type="underline"
               style={styles.input}
+              blurOnSubmit={false}
             />
             <Input
-              ref={el => (this.signupPhoneInput = el)}
+              inputRef={this.signupPhoneInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
@@ -208,30 +221,32 @@ export default class Signup extends Component {
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
               keyboardType="phone-pad"
-              onSubmitEditing={this.safeFocus(this.signupUsernameInput)}
+              onSubmitEditing={this.safeFocus('signupUsernameInput')}
               onChangeText={this.updateFormField('phone_number')}
               value={answers.phone_number}
               error={showErrors && errors.phone_number}
               type="underline"
               style={styles.input}
+              blurOnSubmit={false}
             />
             <Input
-              ref={el => (this.signupUsernameInput = el)}
+              inputRef={this.signupUsernameInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
               placeholder={t('signup.input_username')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus(this.signupPasswordInput)}
+              onSubmitEditing={this.safeFocus('signupPasswordInput')}
               onChangeText={this.updateFormField('username')}
               value={answers.username}
               error={showErrors && errors.username}
               type="underline"
               style={styles.input}
+              blurOnSubmit={false}
             />
             <Input
-              ref={el => (this.signupPasswordInput = el)}
+              inputRef={this.signupPasswordInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
@@ -240,13 +255,14 @@ export default class Signup extends Component {
               returnKeyType="go"
               secureTextEntry
               onSubmitEditing={this.safeFocus(
-                this.signupPasswordConfirmationInput
+                'signupPasswordConfirmationInput'
               )}
               onChangeText={this.updateFormField('password')}
               value={answers.password}
               error={showErrors && errors.password}
               type="underline"
               style={styles.input}
+              blurOnSubmit={false}
             />
             <Input
               style={
@@ -255,7 +271,7 @@ export default class Signup extends Component {
                   ? styles.inputSuccess
                   : {}
               }
-              ref={el => (this.signupPasswordConfirmationInput = el)}
+              inputRef={this.signupPasswordConfirmationInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}

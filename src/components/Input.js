@@ -60,8 +60,6 @@ export default class Input extends Component {
 
   state = { active: false };
 
-  inputRef = null;
-
   componentWillMount() {
     this._animatedIsActive = new Animated.Value(
       this.props.value === '' ? 0 : 1
@@ -74,8 +72,6 @@ export default class Input extends Component {
       duration: 250,
     }).start();
   }
-
-  setupInputRef = input => (this.inputRef = input);
 
   handleFocus = () =>
     this.setState({
@@ -175,7 +171,7 @@ export default class Input extends Component {
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
             underlineColorAndroid="transparent"
-            ref={this.setupInputRef}
+            ref={this.props.inputRef || null}
             secureTextEntry={this.props.secureTextEntry}
             selectionColor={colors.active}
           />

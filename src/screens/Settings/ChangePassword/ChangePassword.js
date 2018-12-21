@@ -13,7 +13,6 @@ import api from 'lib/api';
 import { colors } from 'styles';
 import { t } from 'translations/i18n';
 
-import invoke from 'lodash/invoke';
 import memoize from 'lodash/memoize';
 
 export default class ChangePassword extends Component {
@@ -43,6 +42,11 @@ export default class ChangePassword extends Component {
     errorMessage: '',
     loading: false,
   };
+
+  // Setup References for focusable inputs
+  oldPasswordInput = React.createRef();
+  newPasswordInput = React.createRef();
+  confirmPasswordInput = React.createRef();
 
   updatePassword = async ({ username, current_password, new_password }) => {
     try {
@@ -114,7 +118,9 @@ export default class ChangePassword extends Component {
     };
   };
 
-  safeFocus = memoize(element => () => invoke(element, 'inputRef.focus'));
+  safeFocus = memoize(element => () => {
+    this[element].current.focus();
+  });
 
   checkForErrors = (answers, inputsHaveBlurred) => {
     const currentPasswordError = answers.current_password.length
@@ -189,7 +195,7 @@ export default class ChangePassword extends Component {
               </View>
             </Try>
             <Input
-              ref={el => (this.oldPasswordInput = el)}
+              inputRef={this.oldPasswordInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
@@ -197,16 +203,17 @@ export default class ChangePassword extends Component {
               placeholder={t('change_password.current_password')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus(this.newPasswordInput)}
+              onSubmitEditing={this.safeFocus('newPasswordInput')}
               onChangeText={this.updateFormField('current_password')}
               onEndEditing={this.handleBlur('current_password')}
               value={answers.current_password}
               error={errors.current_password}
               type="underline"
               style={styles.input}
+              blurOnSubmit={false}
             />
             <Input
-              ref={el => (this.newPasswordInput = el)}
+              inputRef={this.newPasswordInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}
@@ -214,16 +221,17 @@ export default class ChangePassword extends Component {
               placeholder={t('change_password.new_password')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus(this.confirmPasswordInput)}
+              onSubmitEditing={this.safeFocus('confirmPasswordInput')}
               onChangeText={this.updateFormField('new_password')}
               onEndEditing={this.handleBlur('new_password')}
               value={answers.new_password}
               error={errors.new_password}
               type="underline"
               style={styles.input}
+              blurOnSubmit={false}
             />
             <Input
-              ref={el => (this.confirmPasswordInput = el)}
+              inputRef={this.confirmPasswordInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!this.state.loading}

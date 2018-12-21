@@ -8,7 +8,7 @@ import { Try } from 'components/Conditional';
 import { dimensions, breakpoints } from 'styles';
 
 import { Layout, Body, Header, Footer } from 'components/Base';
-import invoke from 'lodash/invoke';
+import memoize from 'lodash/memoize';
 
 import Button from 'components/Button';
 import Input from 'components/Input';
@@ -32,6 +32,9 @@ export default class Login extends Component {
     username_or_email: null,
     password: null,
   };
+
+  // Setup References for focusable inputs
+  loginPasswordInput = React.createRef();
 
   static getDerivedStateFromProps(props, state) {
     if (
@@ -87,7 +90,9 @@ export default class Login extends Component {
     this.setState({ [fieldName]: text });
   };
 
-  safeFocus = element => invoke(element, 'inputRef.focus');
+  safeFocus = memoize(element => () => {
+    this[element].current.focus();
+  });
 
   render() {
     return (
@@ -128,14 +133,15 @@ export default class Login extends Component {
               returnKeyType="next"
               keyboardType="email-address"
               editable={!this.state.loading}
-              onSubmitEditing={() => this.safeFocus(this.loginPasswordInput)}
+              onSubmitEditing={this.safeFocus('loginPasswordInput')}
               onChangeText={this.updateFormField('username_or_email')}
               value={this.state.username_or_email || ''}
               type="underline"
+              blurOnSubmit={false}
             />
             <Input
               testID="PasswordInput"
-              ref={el => (this.loginPasswordInput = el)}
+              inputRef={this.loginPasswordInput}
               placeholder={t('input_password')}
               autoCapitalize="none"
               autoCorrect={false}
