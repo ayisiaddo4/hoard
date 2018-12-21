@@ -2,20 +2,23 @@ import bip39 from 'react-native-bip39';
 import Bitcoin from 'bitcoinjs-lib';
 import Config from 'react-native-config';
 
-import { SYMBOL_BTC } from "containers/App/constants";
-import { getNetworkForCoin } from "lib/currency-metadata";
+import { SYMBOL_BTC } from 'containers/App/constants';
+import { getNetworkForCoin } from 'lib/currency-metadata';
 import api from 'lib/api';
 
 const config = {
   endpoint: Config.BTC_NODE_ENDPOINT,
   network: Bitcoin.networks[getNetworkForCoin(SYMBOL_BTC)],
-  coinPath: Config.BTC_COINPATH
+  coinPath: Config.BTC_COINPATH,
 };
 
 export default class BtcWallet {
   constructor(isMnemonic, initializer) {
     if (isMnemonic) {
-      this._wallet = Bitcoin.HDNode.fromSeedBuffer(bip39.mnemonicToSeed(initializer), config.network);
+      this._wallet = Bitcoin.HDNode.fromSeedBuffer(
+        bip39.mnemonicToSeed(initializer),
+        config.network
+      );
     } else {
       this._wallet = Bitcoin.HDNode.fromBase58(initializer, config.network);
     }
@@ -30,23 +33,25 @@ export default class BtcWallet {
     const endpoint = `${Config.BTC_NODE_ENDPOINT}/addr/${address}/utxo`;
     const utxos = await api.get(endpoint);
     return utxos;
-  }
+  };
 
-  _broadcastTransaction = async (rawtx) => {
+  _broadcastTransaction = async rawtx => {
     const endpoint = `${Config.BTC_NODE_ENDPOINT}/tx/send`;
-    return api.post(endpoint, {rawtx});
-  }
+    return api.post(endpoint, { rawtx });
+  };
 
   _estimateFee = async () => {
     const numBlocks = 2;
-    const endpoint = `${Config.BTC_NODE_ENDPOINT}/utils/estimatefee?nbBlocks=${numBlocks}`;
+    const endpoint = `${
+      Config.BTC_NODE_ENDPOINT
+    }/utils/estimatefee?nbBlocks=${numBlocks}`;
     const feeResponse = await api.get(endpoint);
     return Number(feeResponse[numBlocks]);
-  }
+  };
 
   _calculateTransactionSize = (numIn, numOut) => {
-    return (numIn * 180) + (numOut * 34) + 10 + 1;
-  }
+    return numIn * 180 + numOut * 34 + 10 + 1;
+  };
 
   getBalance = async () => {
     try {
@@ -55,7 +60,7 @@ export default class BtcWallet {
       const balanceSatoshis = await api.get(endpoint);
       const balance = balanceSatoshis * 1e-8;
       return balance;
-    } catch(e) {
+    } catch (e) {
       if (__DEV__) {
         // eslint-disable-next-line no-console
         console.log('error in btc balance fetching', e);
@@ -87,7 +92,9 @@ export default class BtcWallet {
     const utxos = await this._getUtxos();
 
     const transactionSize = this._calculateTransactionSize(utxos.length, 2);
-    const fee = Math.ceil(feeSatoshisPerKilobyte * Math.ceil(transactionSize / 1024));
+    const fee = Math.ceil(
+      feeSatoshisPerKilobyte * Math.ceil(transactionSize / 1024)
+    );
 
     const change = balanceSatoshis - fee - amountSatoshis;
 
@@ -96,7 +103,9 @@ export default class BtcWallet {
     tx.addOutput(address, change);
     tx.addOutput(toAddress, amountSatoshis);
 
-    utxos.map((_, idx) => tx.sign(idx, this._wallet.derivePath(this._derivationPath).keyPair));
+    utxos.map((_, idx) =>
+      tx.sign(idx, this._wallet.derivePath(this._derivationPath).keyPair)
+    );
 
     const builtTransaction = tx.build().toHex();
 

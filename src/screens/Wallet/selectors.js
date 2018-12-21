@@ -4,15 +4,13 @@ import { SUPPORTED_COINS_WALLET } from 'containers/App/constants';
 export const allWalletsSelector = createSelector(
   state => state.wallet.walletIds,
   state => state.wallet.wallets,
-  (ids, wallets) =>
-    ids.map(id => wallets[id])
+  (ids, wallets) => ids.map(id => wallets[id])
 );
 
 export const walletsForSymbolSelector = createSelector(
   allWalletsSelector,
   (_, symbol) => symbol,
-  (wallets, symbol) =>
-    wallets.filter(wallet => wallet.symbol === symbol)
+  (wallets, symbol) => wallets.filter(wallet => wallet.symbol === symbol)
 );
 
 export const walletSelector = createSelector(

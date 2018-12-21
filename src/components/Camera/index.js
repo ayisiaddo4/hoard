@@ -11,7 +11,7 @@ import Scanner from './Scanner';
 export default class Camera extends Component {
   state = {
     result: {},
-    address: ''
+    address: '',
   };
 
   handleOnRead = result => {

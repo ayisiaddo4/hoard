@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
   PanResponder,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import T from 'components/Typography';
 
@@ -21,8 +21,16 @@ const backgroundColors = {
 
 function clamp(value, min, max) {
   return min < max
-    ? (value < min ? min : value > max ? max : value)
-    : (value < max ? max : value > min ? min : value);
+    ? value < min
+      ? min
+      : value > max
+      ? max
+      : value
+    : value < max
+    ? max
+    : value > min
+    ? min
+    : value;
 }
 
 const SWIPE_THRESHOLD = 120;
@@ -36,11 +44,13 @@ export default class Notification extends Component {
       content: PropTypes.string.isRequired,
       icon: PropTypes.any,
       onDismiss: PropTypes.func.isRequired,
-      actions: PropTypes.arrayOf(PropTypes.shape({
-        title: PropTypes.string.isRequired,
-        onPress: PropTypes.func.isRequired,
-      })).isRequired,
-    })
+      actions: PropTypes.arrayOf(
+        PropTypes.shape({
+          title: PropTypes.string.isRequired,
+          onPress: PropTypes.func.isRequired,
+        })
+      ).isRequired,
+    }),
   };
 
   constructor(props) {
@@ -58,26 +68,23 @@ export default class Notification extends Component {
 
   componentWillMount() {
     this._panResponder = PanResponder.create({
-      onMoveShouldSetPanResponder: (e, {dx, dy}) => {
+      onMoveShouldSetPanResponder: (e, { dx, dy }) => {
         const draggedDown = dy > TOUCH_THRESHOLD;
         const draggedUp = dy < -TOUCH_THRESHOLD;
         const draggedLeft = dx < -TOUCH_THRESHOLD;
         const draggedRight = dx > TOUCH_THRESHOLD;
 
-
         return draggedDown || draggedUp || draggedLeft || draggedRight;
       },
 
       onPanResponderGrant: () => {
-        this.state.pan.setOffset({x: 0, y: this.state.pan.y._value});
-        this.state.pan.setValue({x: 0, y: 0});
+        this.state.pan.setOffset({ x: 0, y: this.state.pan.y._value });
+        this.state.pan.setValue({ x: 0, y: 0 });
       },
 
-      onPanResponderMove: Animated.event([
-        null, {dy: this.state.pan.y},
-      ]),
+      onPanResponderMove: Animated.event([null, { dy: this.state.pan.y }]),
 
-      onPanResponderRelease: (e, {vy}) => {
+      onPanResponderRelease: (e, { vy }) => {
         this.state.pan.flattenOffset();
         var velocity;
 
@@ -87,19 +94,18 @@ export default class Notification extends Component {
           velocity = clamp(vy * -1, 3, 5) * -1;
         }
 
-
         if (Math.abs(this.state.pan.y._value) > SWIPE_THRESHOLD) {
           Animated.decay(this.state.pan, {
-            velocity: {x: 0, y: velocity},
-            deceleration: 0.98
+            velocity: { x: 0, y: velocity },
+            deceleration: 0.98,
           }).start(this.handleExited);
         } else {
           Animated.spring(this.state.pan, {
-            toValue: {x: 0, y: 0},
-            friction: 4
+            toValue: { x: 0, y: 0 },
+            friction: 4,
           }).start();
         }
-      }
+      },
     });
 
     if (this.props.notification.loading) {
@@ -128,56 +134,58 @@ export default class Notification extends Component {
       })
     );
     animation.start();
-    this.setState({loadingAnimation: animation});
-  }
+    this.setState({ loadingAnimation: animation });
+  };
 
   stopLoadingSpinner = () => {
     if (this.state.loadingAnimation) {
       this.state.loadingAnimation.stop;
     }
-  }
+  };
 
   handleExited = () => {
-    this.setState({exited: true});
+    this.setState({ exited: true });
     if (this.props.notification.onDismiss) {
       this.props.notification.onDismiss();
     }
     this.props.notificationDismissed(this.props.notification);
-  }
+  };
 
-  handleLayout = (e) => {
+  handleLayout = e => {
     const height = e.nativeEvent.layout.height;
     if (!this.state.entered) {
-      this.setState({entered: true}, () =>
-        Animated.spring(
-          this.state.enter,
-          { toValue: height, friction: 8 }
-        ).start()
+      this.setState({ entered: true }, () =>
+        Animated.spring(this.state.enter, {
+          toValue: height,
+          friction: 8,
+        }).start()
       );
     }
-  }
+  };
 
   render() {
-    const {notification} = this.props;
+    const { notification } = this.props;
     let { pan } = this.state;
 
     let translateY = pan.y;
     let opacity = pan.y.interpolate({
       inputRange: [-200, -SWIPE_THRESHOLD, 0, SWIPE_THRESHOLD, 200],
-      outputRange: [0.5, 1,1,1, 0.5]
+      outputRange: [0.5, 1, 1, 1, 0.5],
     });
 
-    if (this.state.exited) { opacity = 0; }
+    if (this.state.exited) {
+      opacity = 0;
+    }
 
     let spin;
     if (notification.loading) {
       spin = this.state.loadingState.interpolate({
         inputRange: [0, 1],
-        outputRange: ['0deg', '360deg']
+        outputRange: ['0deg', '360deg'],
       });
     }
 
-    let animatedCardStyles = {transform: [{translateY}], opacity};
+    let animatedCardStyles = { transform: [{ translateY }], opacity };
     return (
       <Animated.View
         onLayout={this.handleLayout}
@@ -185,25 +193,35 @@ export default class Notification extends Component {
           styles.card,
           styles.container,
           animatedCardStyles,
-          {backgroundColor: backgroundColors[notification.type || 'neutral']}
+          { backgroundColor: backgroundColors[notification.type || 'neutral'] },
         ]}
         {...this._panResponder.panHandlers}
       >
-          <View style={styles.touchIndicatorContainer}>
-            <View style={styles.touchIndicator} />
-          </View>
+        <View style={styles.touchIndicatorContainer}>
+          <View style={styles.touchIndicator} />
+        </View>
         <View style={styles.mainSection}>
           {notification.loading ? (
             <View style={styles.loadingContainer}>
-              <Animated.View style={[{transform: [{rotate: spin}] }, styles.loadingCircle]} />
-              <Image source={require('assets/boar_icon.png')} style={styles.loadingIcon} />
+              <Animated.View
+                style={[
+                  { transform: [{ rotate: spin }] },
+                  styles.loadingCircle,
+                ]}
+              />
+              <Image
+                source={require('assets/boar_icon.png')}
+                style={styles.loadingIcon}
+              />
             </View>
-          ): null}
+          ) : null}
           {!notification.loading && notification.icon ? (
             <Image source={notification.icon} style={styles.icon} />
-          ): null}
+          ) : null}
           <View style={styles.body}>
-            <T.SubHeading style={styles.header}>{notification.title}</T.SubHeading>
+            <T.SubHeading style={styles.header}>
+              {notification.title}
+            </T.SubHeading>
             <T.Light style={styles.content}>{notification.content}</T.Light>
           </View>
         </View>
@@ -218,19 +236,22 @@ export default class Notification extends Component {
                     ? styles.multipleActions
                     : styles.singleAction,
                   {
-                    borderRightWidth: notification.actions.length > 1 && i < notification.actions.length - 1
-                      ? 1
-                      : 0
-                  }
+                    borderRightWidth:
+                      notification.actions.length > 1 &&
+                      i < notification.actions.length - 1
+                        ? 1
+                        : 0,
+                  },
                 ]}
                 onPress={action.onPress}
               >
-                <T.SubHeading style={styles.buttonText}>{action.title}</T.SubHeading>
+                <T.SubHeading style={styles.buttonText}>
+                  {action.title}
+                </T.SubHeading>
               </TouchableOpacity>
-
             ))}
           </View>
-        ): null}
+        ) : null}
       </Animated.View>
     );
   }
@@ -249,7 +270,7 @@ const styles = StyleSheet.create({
   mainSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1
+    flex: 1,
   },
   loadingContainer: {
     height: 50,
@@ -283,7 +304,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   body: {
-    flex: 1
+    flex: 1,
   },
   header: {
     fontSize: 14,
@@ -301,7 +322,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: 'rgba(255,255,255,0.2)',
-    marginTop: 15
+    marginTop: 15,
   },
   button: {
     alignSelf: 'center',

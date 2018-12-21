@@ -19,11 +19,13 @@ export async function makeTransactionRequest(url, queries) {
 }
 
 export default class ConfirmTransaction extends Component {
-
-  handleRequest = async (confirm) => {
+  handleRequest = async confirm => {
     return `{success: ${confirm}}`;
     try {
-      const json = await makeTransactionRequest(TRANSACTION_URL, `confirm=${confirm}`);
+      const json = await makeTransactionRequest(
+        TRANSACTION_URL,
+        `confirm=${confirm}`
+      );
       if (json.success) {
         // TODO: handle success
       }
@@ -35,39 +37,39 @@ export default class ConfirmTransaction extends Component {
   };
 
   confirmTransaction = () => {
-    this.handleRequest(true).then((response)=> alert('Handle Approve', response));
-
-  }
+    this.handleRequest(true).then(response =>
+      alert('Handle Approve', response)
+    );
+  };
 
   denyTransaction = () => {
-    this.handleRequest(false).then((response)=> alert('Handle Reject',  response ) );
-  }
+    this.handleRequest(false).then(response =>
+      alert('Handle Reject', response)
+    );
+  };
 
   render() {
-
     return (
-      <View
-        style={styles.container}
-      >
+      <View style={styles.container}>
         <Text style={styles.header}>Continue transaction?</Text>
-        <Text style={styles.header}>Send to: {this.props.navigation.state.params.uid || 'Unknown User'}</Text>
-        <Text style={styles.header}>Transaction ID: {this.props.navigation.state.params.tx || 'Unknown Transaction'}</Text>
-        <Text style={styles.text}>Your contact is now online. Would you like to continue and broadcast this transaction?</Text>
-        <Button
-          onPress={this.confirmTransaction}
-          type="primary"
-        >
+        <Text style={styles.header}>
+          Send to: {this.props.navigation.state.params.uid || 'Unknown User'}
+        </Text>
+        <Text style={styles.header}>
+          Transaction ID:{' '}
+          {this.props.navigation.state.params.tx || 'Unknown Transaction'}
+        </Text>
+        <Text style={styles.text}>
+          Your contact is now online. Would you like to continue and broadcast
+          this transaction?
+        </Text>
+        <Button onPress={this.confirmTransaction} type="primary">
           Yes, continue this transaction.
         </Button>
-        <Button
-          onPress={this.denyTransaction}
-          type="secondary"
-        >
+        <Button onPress={this.denyTransaction} type="secondary">
           No, cancel this transaction.
         </Button>
-
       </View>
-
     );
   }
 }

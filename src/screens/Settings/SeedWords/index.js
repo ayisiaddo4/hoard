@@ -16,32 +16,40 @@ export default class SeedWords extends Component {
     pin: null,
     pinSuccess: false,
     lastDisplayTime: null,
-    page: 0
-  }
+    page: 0,
+  };
 
   componentDidMount() {
-    getKey()
-      .then(pin => this.setState({pin}));
-    AsyncStorage.getItem(SEED_WORDS_ACCESS_TIME_KEY)
-      .then(lastDisplayTime => this.setState({lastDisplayTime}));
+    getKey().then(pin => this.setState({ pin }));
+    AsyncStorage.getItem(SEED_WORDS_ACCESS_TIME_KEY).then(lastDisplayTime =>
+      this.setState({ lastDisplayTime })
+    );
   }
 
-  increment = () => this.setState({page: this.state.page + 1})
-  decrement = () => this.setState({page: this.state.page - 1})
+  increment = () => this.setState({ page: this.state.page + 1 });
+  decrement = () => this.setState({ page: this.state.page - 1 });
 
   onPinSuccess = () => {
     const lastDisplayTime = Date.now();
-    AsyncStorage.setItem(SEED_WORDS_ACCESS_TIME_KEY, lastDisplayTime.toString());
-    this.setState({pinSuccess: true, lastDisplayTime});
-  }
+    AsyncStorage.setItem(
+      SEED_WORDS_ACCESS_TIME_KEY,
+      lastDisplayTime.toString()
+    );
+    this.setState({ pinSuccess: true, lastDisplayTime });
+  };
 
-  toSettings = () => NavigatorService.navigate('Settings')
+  toSettings = () => NavigatorService.navigate('Settings');
 
   render() {
     const { page, pin, pinSuccess, lastDisplayTime } = this.state;
 
     if (page === 0) {
-      return <SeedWordsSplash onDisplay={this.increment} lastDisplayTime={lastDisplayTime}/>;
+      return (
+        <SeedWordsSplash
+          onDisplay={this.increment}
+          lastDisplayTime={lastDisplayTime}
+        />
+      );
     }
 
     if (pin && !pinSuccess) {
@@ -84,5 +92,4 @@ export default class SeedWords extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-});
+const styles = StyleSheet.create({});

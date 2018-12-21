@@ -9,7 +9,10 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  documentVerificationRequest
+  documentVerificationRequest,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentVerification);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DocumentVerification);

@@ -4,14 +4,17 @@ import { userSelector } from 'containers/User/selectors';
 
 import Profile from './Profile';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    user: userSelector(state)
+    user: userSelector(state),
   };
 };
 
 const mapDispatchToProps = {
-  updateUser
+  updateUser,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Profile);

@@ -12,13 +12,10 @@ export default function SelectableImageHeader({
   console.log(selection, emptyText);
   return (
     <View style={styles.container}>
-      {selection &&
-        <T.SubHeading style={styles.title}>{title}</T.SubHeading>
-      }
-      <TouchableOpacity style={styles.touchable}onPress={onPress}>
-        {selection
-          ? (
-           <View style={styles.selectionContainer}>
+      {selection && <T.SubHeading style={styles.title}>{title}</T.SubHeading>}
+      <TouchableOpacity style={styles.touchable} onPress={onPress}>
+        {selection ? (
+          <View style={styles.selectionContainer}>
             <View style={styles.imageContainer}>
               <Image style={styles.image} source={selection.image} />
             </View>
@@ -30,14 +27,10 @@ export default function SelectableImageHeader({
                 {selection.subtitle}
               </T.Light>
             </View>
-           </View>
-          )
-          : (
-            <T.SubHeading style={styles.emptyText}>
-              {emptyText}
-            </T.SubHeading>
-          )
-        }
+          </View>
+        ) : (
+          <T.SubHeading style={styles.emptyText}>{emptyText}</T.SubHeading>
+        )}
       </TouchableOpacity>
     </View>
   );

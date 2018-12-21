@@ -38,10 +38,7 @@ function SuccessFailureScreen({
         )}
       </View>
       <View style={styles.buttons}>
-        <Button
-          style={styles.mainButton}
-          onPress={onPressMain}
-        >
+        <Button style={styles.mainButton} onPress={onPressMain}>
           {mainButtonText}
         </Button>
         {secondaryButtonText && (

@@ -4,14 +4,14 @@ import {
   NOTIFICATION_DISMISSED,
   NOTIFICATION_UPDATED,
   NOTIFICATIONS_START_FLOW,
-  NOTIFICATION_RECIEVED
+  NOTIFICATION_RECIEVED,
 } from './constants';
 
-export function startNotificationFlow({flowType, type, ...otherDetails}) {
+export function startNotificationFlow({ flowType, type, ...otherDetails }) {
   return {
     type: NOTIFICATIONS_START_FLOW,
     flowType,
-    ...otherDetails
+    ...otherDetails,
   };
 }
 
@@ -20,8 +20,8 @@ export function notificationRecieved(notification) {
     type: NOTIFICATION_RECIEVED,
     notification: {
       ...notification,
-      uuid: uuid()
-    }
+      uuid: uuid(),
+    },
   };
 }
 
@@ -35,6 +35,6 @@ export function notificationUpdated(notification) {
 export function notificationDismissed(notification) {
   return {
     type: NOTIFICATION_DISMISSED,
-    notification
+    notification,
   };
 }

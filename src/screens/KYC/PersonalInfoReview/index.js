@@ -9,7 +9,10 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  infoVerificationConfirmation
+  infoVerificationConfirmation,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PersonalInfoReview);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PersonalInfoReview);

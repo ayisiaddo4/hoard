@@ -73,14 +73,15 @@ export default class SendRequest extends Component {
   constructor(props) {
     super(props);
 
-    const params = props.navigation.state && props.navigation.state.params || {};
+    const params =
+      (props.navigation.state && props.navigation.state.params) || {};
     const {
       wallet: selectedId,
       recipient = initialState.recipient,
       recipientAddress = initialState.recipientAddress,
       recipientType = initialState.recipientType,
       amount = initialState.amount,
-      type: transactionType = initialState.transactionType
+      type: transactionType = initialState.transactionType,
     } = params;
 
     let completionAction = () => {};
@@ -98,9 +99,11 @@ export default class SendRequest extends Component {
       recipient,
       recipientAddress,
       selectedId,
-      recipientType: recipientType || (transactionType === TYPE_SEND
-        ? RECIPIENT_TYPE_ADDRESS
-        : RECIPIENT_TYPE_OTHER),
+      recipientType:
+        recipientType ||
+        (transactionType === TYPE_SEND
+          ? RECIPIENT_TYPE_ADDRESS
+          : RECIPIENT_TYPE_OTHER),
     };
   }
 
@@ -113,9 +116,17 @@ export default class SendRequest extends Component {
       wallet => wallet.id === this.state.selectedId
     );
 
-    const oldPrice = this.state.prices && selectedWallet && this.state.prices[selectedWallet.symbol];
+    const oldPrice =
+      this.state.prices &&
+      selectedWallet &&
+      this.state.prices[selectedWallet.symbol];
 
-    if (!oldPrice && this.state.amount && selectedWallet && newProps.prices[selectedWallet.symbol]) {
+    if (
+      !oldPrice &&
+      this.state.amount &&
+      selectedWallet &&
+      newProps.prices[selectedWallet.symbol]
+    ) {
       this.handleChangeAmount(this.state.amount);
     }
   }
@@ -178,25 +189,33 @@ export default class SendRequest extends Component {
     });
   };
 
-  handleOnPressRecipient = () => NavigatorService.navigate('RecipientSelection', {
-    transactionType: this.state.transactionType,
-    isSignedIn: this.props.isSignedIn,
-    onChangeRecipient: this.handleChangeRecipient
-  });
+  handleOnPressRecipient = () =>
+    NavigatorService.navigate('RecipientSelection', {
+      transactionType: this.state.transactionType,
+      isSignedIn: this.props.isSignedIn,
+      onChangeRecipient: this.handleChangeRecipient,
+    });
 
-  handleChangeRecipient = ({recipientType, recipient}) => this.setState({recipientType, recipient, recipientAddress: recipientType === RECIPIENT_TYPE_ADDRESS ? recipient : ''});
+  handleChangeRecipient = ({ recipientType, recipient }) =>
+    this.setState({
+      recipientType,
+      recipient,
+      recipientAddress:
+        recipientType === RECIPIENT_TYPE_ADDRESS ? recipient : '',
+    });
 
-  handleOnPressCurrency = () => NavigatorService.navigate('CurrencyModal', {
-    onChangeCurrency: this.handleChangeCurrency,
-    selectedId: this.state.selectedId,
-  });
+  handleOnPressCurrency = () =>
+    NavigatorService.navigate('CurrencyModal', {
+      onChangeCurrency: this.handleChangeCurrency,
+      selectedId: this.state.selectedId,
+    });
 
   handleChangeCurrency = value =>
     this.setState(
       {
         amount: '',
         fiat: '',
-        selectedId: value
+        selectedId: value,
       },
       this.fetchPrice
     );
@@ -254,7 +273,9 @@ export default class SendRequest extends Component {
         Config.CURRENCY_NETWORK_TYPE === 'main' ? 'prod' : 'testnet'
       )
     ) {
-      Alert.alert(t('send_request.invalid_address', { symbol: selectedWallet.symbol }));
+      Alert.alert(
+        t('send_request.invalid_address', { symbol: selectedWallet.symbol })
+      );
       return false;
     }
 
@@ -291,7 +312,9 @@ export default class SendRequest extends Component {
       if (this.state.recipientType === RECIPIENT_TYPE_OTHER) {
         try {
           const { symbol, publicAddress } = selectedWallet;
-          const recipientValue = this.getValueFromRecipient(this.state.recipient);
+          const recipientValue = this.getValueFromRecipient(
+            this.state.recipient
+          );
           const contact = this.state.recipient;
           const amount = Number(this.state.amount);
 
@@ -306,7 +329,10 @@ export default class SendRequest extends Component {
             postData.transaction_uid = transaction_uid;
           }
 
-          const response = await api.post(`${Config.EREBOR_ENDPOINT}/contacts/transaction`, postData);
+          const response = await api.post(
+            `${Config.EREBOR_ENDPOINT}/contacts/transaction`,
+            postData
+          );
           transaction_uid = response.transaction_uid;
 
           this.props.recordContactTransaction({
@@ -321,7 +347,7 @@ export default class SendRequest extends Component {
             details: {
               ...response,
               uid: transaction_uid,
-            }
+            },
           });
 
           if (response.success) {
@@ -335,7 +361,9 @@ export default class SendRequest extends Component {
           }
         } catch (e) {
           Alert.alert(
-            `${t('requests.apologetic_interjection_of_mild_dismay')} ${e.message}: ${e.errors && e.errors[0] && e.errors[0].message}`
+            `${t('requests.apologetic_interjection_of_mild_dismay')} ${
+              e.message
+            }: ${e.errors && e.errors[0] && e.errors[0].message}`
           );
         }
       }
@@ -368,12 +396,15 @@ export default class SendRequest extends Component {
         const contact = this.state.recipient;
         const amount = Number(this.state.amount);
 
-        const response = await api.post(`${Config.EREBOR_ENDPOINT}/request_funds`, {
-          email_address: emailAddress,
-          amount,
-          recipient: recipientValue,
-          currency: symbol,
-        });
+        const response = await api.post(
+          `${Config.EREBOR_ENDPOINT}/request_funds`,
+          {
+            email_address: emailAddress,
+            amount,
+            recipient: recipientValue,
+            currency: symbol,
+          }
+        );
 
         this.props.recordContactTransaction({
           type: TYPE_REQUEST,
@@ -387,7 +418,7 @@ export default class SendRequest extends Component {
           details: {
             ...response,
             uid: response.transaction_uid,
-          }
+          },
         });
 
         NavigatorService.navigate('TransactionStatus', {
@@ -397,7 +428,9 @@ export default class SendRequest extends Component {
         });
       } catch (e) {
         Alert.alert(
-          `${t('requests.apologetic_interjection_of_mild_dismay')} ${e.message}: ${e.errors && e.errors[0] && e.errors[0].message}`
+          `${t('requests.apologetic_interjection_of_mild_dismay')} ${
+            e.message
+          }: ${e.errors && e.errors[0] && e.errors[0].message}`
         );
       }
     }
@@ -410,12 +443,12 @@ export default class SendRequest extends Component {
   getValueFromRecipient(recipient) {
     if (typeof recipient === 'object') {
       return [
-        recipient.emailAddresses
-          && recipient.emailAddresses[0]
-          && recipient.emailAddresses[0].email,
-        recipient.phoneNumbers
-          && recipient.phoneNumbers[0]
-          && recipient.phoneNumbers[0].number
+        recipient.emailAddresses &&
+          recipient.emailAddresses[0] &&
+          recipient.emailAddresses[0].email,
+        recipient.phoneNumbers &&
+          recipient.phoneNumbers[0] &&
+          recipient.phoneNumbers[0].number,
       ].find(v => v);
     } else {
       return recipient;
@@ -473,12 +506,17 @@ export default class SendRequest extends Component {
                           </T.Light>
                         </Try>
                         <Otherwise>
-                          <View style={{height: 22}}/>
+                          <View style={{ height: 22 }} />
                         </Otherwise>
                       </Conditional>
                       <View style={styles.recipientContent}>
                         <Conditional>
-                          <Try condition={!!this.state.recipient && typeof this.state.recipient === 'object'}>
+                          <Try
+                            condition={
+                              !!this.state.recipient &&
+                              typeof this.state.recipient === 'object'
+                            }
+                          >
                             <Contact contact={this.state.recipient} />
                           </Try>
                           <Otherwise>
@@ -494,11 +532,20 @@ export default class SendRequest extends Component {
                               style={styles.action}
                               onPress={this.clearValue('recipient')}
                             >
-                              <Icon icon="ios-close-circle" style={{ size: clearSize, color: 'rgba(255,255,255,0.5)' }} />
+                              <Icon
+                                icon="ios-close-circle"
+                                style={{
+                                  size: clearSize,
+                                  color: 'rgba(255,255,255,0.5)',
+                                }}
+                              />
                             </TouchableOpacity>
                           </Try>
                           <Otherwise>
-                            <Image style={styles.recipientChevron} source={require('assets/chevron.png')} />
+                            <Image
+                              style={styles.recipientChevron}
+                              source={require('assets/chevron.png')}
+                            />
                           </Otherwise>
                         </Conditional>
                       </View>
@@ -518,7 +565,9 @@ export default class SendRequest extends Component {
                       keyboardType="numeric"
                       label={
                         selectedWallet
-                          ? `${t('send_request.enter')} ${selectedWallet.symbol}`
+                          ? `${t('send_request.enter')} ${
+                              selectedWallet.symbol
+                            }`
                           : t('send_request.enter_amount')
                       }
                       onChangeText={this.handleChangeAmount}
@@ -529,7 +578,9 @@ export default class SendRequest extends Component {
                     <UnderlineInput
                       style={styles.input}
                       keyboardType="numeric"
-                      label={`${t('send_request.enter')} ${this.props.tradingPair}`}
+                      label={`${t('send_request.enter')} ${
+                        this.props.tradingPair
+                      }`}
                       onChangeText={this.handleChangeFiat}
                       value={fiat}
                     />

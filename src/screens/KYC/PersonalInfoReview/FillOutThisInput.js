@@ -6,33 +6,28 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
 } from 'react-native';
 import Input from 'components/Input';
 import Button from 'components/Button';
-import withDismissableKeyboard from "hocs/withDismissableKeyboard";
+import withDismissableKeyboard from 'hocs/withDismissableKeyboard';
 
 const DismissableView = withDismissableKeyboard(View);
 
 export default class IsThisYou extends React.Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
 
   static propTypes = {
     label: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     onChangeText: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired
-  }
+    onSubmit: PropTypes.func.isRequired,
+  };
 
   render() {
-    const {
-      label,
-      value,
-      onChangeText,
-      onSubmit
-    } = this.props;
+    const { label, value, onChangeText, onSubmit } = this.props;
 
     const keyboardVerticalOffset = Platform.OS === 'ios' ? 60 : 0;
 
@@ -68,25 +63,24 @@ export default class IsThisYou extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
-    flex: 1
+    flex: 1,
   },
   image: {
     width: null,
     height: null,
-    resizeMode: 'cover'
+    resizeMode: 'cover',
   },
   returnedInputsContainer: {
     marginTop: 20,
   },
   input: {
-    marginBottom: 10
+    marginBottom: 10,
   },
   inputLabel: {
     color: '#fff',
   },
-  disabledInput: {
-  },
+  disabledInput: {},
   imageView: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });

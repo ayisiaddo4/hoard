@@ -1,20 +1,21 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import {
-  getCurrencyPrice
-} from 'sagas/pricing/actions';
+import { getCurrencyPrice } from 'sagas/pricing/actions';
 
 import ICO from './ICO';
 
-const mapStateToProps = ({pricing}) => ({
+const mapStateToProps = ({ pricing }) => ({
   prices: {
     BTC: pricing.BTC.price.price,
-    ETH: pricing.ETH.price.price
-  }
+    ETH: pricing.ETH.price.price,
+  },
 });
 
 const mapDispatchToProps = {
-  getCurrencyPrice
+  getCurrencyPrice,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ICO);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ICO);

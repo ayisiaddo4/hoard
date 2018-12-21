@@ -7,7 +7,7 @@ const mapStateToProps = (state, ownProps) => {
     transaction: transactionStatusSelector(
       state,
       ownProps.navigation.state.params.id
-    )
+    ),
   };
 };
 

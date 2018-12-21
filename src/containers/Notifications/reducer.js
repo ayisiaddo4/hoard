@@ -1,7 +1,7 @@
 import {
   NOTIFICATION_DISMISSED,
   NOTIFICATION_UPDATED,
-  NOTIFICATION_RECIEVED
+  NOTIFICATION_RECIEVED,
 } from './constants';
 
 const initialState = [];
@@ -9,10 +9,7 @@ const initialState = [];
 export default function(state = initialState, action) {
   switch (action.type) {
     case NOTIFICATION_RECIEVED: {
-      return [
-        ...state,
-        action.notification
-      ];
+      return [...state, action.notification];
     }
     case NOTIFICATION_UPDATED: {
       const index = state.findIndex(
@@ -33,10 +30,7 @@ export default function(state = initialState, action) {
       const index = state.findIndex(
         notification => notification.uuid === action.notification.uuid
       );
-      return [
-        ...state.slice(0, index),
-        ...state.slice(index + 1),
-      ];
+      return [...state.slice(0, index), ...state.slice(index + 1)];
     }
     default:
       return state;

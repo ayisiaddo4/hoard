@@ -21,7 +21,12 @@ export default class Input extends Component {
       'words',
       'characters',
     ]),
-    keyboardType: PropTypes.oneOf(['numeric', 'email-address', 'default', 'phone-pad']),
+    keyboardType: PropTypes.oneOf([
+      'numeric',
+      'email-address',
+      'default',
+      'phone-pad',
+    ]),
     returnKeyType: PropTypes.oneOf(['done', 'go', 'next', 'search', 'send']),
     light: PropTypes.bool,
     placeholder: PropTypes.string.isRequired,
@@ -95,11 +100,11 @@ export default class Input extends Component {
       ? this.props.light
         ? styles.input_active_light
         : this.props.type === 'underline'
-          ? styles.inputUnderline_active
-          : styles.input_active
+        ? styles.inputUnderline_active
+        : styles.input_active
       : this.props.light
-        ? styles.input_inactive_light
-        : styles.input_inactive;
+      ? styles.input_inactive_light
+      : styles.input_inactive;
 
     const inputColors = this.props.light
       ? styles.input_light
@@ -199,10 +204,7 @@ export default class Input extends Component {
             <View style={styles.errorContainer}>
               <View style={styles.errorIconContainer}>
                 <View style={styles.errorIconUnderlay} />
-                <Icon
-                  style={{size: 17, color: '#ff6161',}}
-                  icon="md-alert"
-                />
+                <Icon style={{ size: 17, color: '#ff6161' }} icon="md-alert" />
               </View>
               <T.Small style={styles.errorText}>{this.props.error}</T.Small>
             </View>
@@ -305,6 +307,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   errorText: {
-    color: '#ff6161'
+    color: '#ff6161',
   },
 });

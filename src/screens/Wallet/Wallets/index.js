@@ -1,28 +1,28 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import Wallets from './Wallets';
 
-import {
-  getCurrencyPrice
-} from 'sagas/pricing/actions';
+import { getCurrencyPrice } from 'sagas/pricing/actions';
 
 import { SUPPORTED_COINS_WALLET } from 'containers/App/constants';
 
 import {
   allWalletsSelector,
   availableCoinsSelector,
-  mnemonicPhraseSelector
+  mnemonicPhraseSelector,
 } from '../selectors';
 import {
   allPricesLoadedSelector,
-  totalHoldingsSelector
+  totalHoldingsSelector,
 } from 'sagas/pricing/selectors';
-import { isSignedInSelector } from "containers/User/selectors";
-import { notificationRecieved, notificationDismissed } from "containers/Notifications/actions";
+import { isSignedInSelector } from 'containers/User/selectors';
+import {
+  notificationRecieved,
+  notificationDismissed,
+} from 'containers/Notifications/actions';
 import { updateBalance } from '../actions';
 
-
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   wallets: allWalletsSelector(state),
   hasMnemonic: !!mnemonicPhraseSelector(state),
   isSignedIn: isSignedInSelector(state),
@@ -32,19 +32,21 @@ const mapStateToProps = (state) => ({
   prices: SUPPORTED_COINS_WALLET.reduce(
     (prices, symbol) => ({
       ...prices,
-      [symbol]: state.pricing &&
-        state.pricing[symbol] &&
-        state.pricing[symbol].price
+      [symbol]:
+        state.pricing && state.pricing[symbol] && state.pricing[symbol].price,
     }),
     {}
-  )
+  ),
 });
 
 const mapDispatchToProps = {
   getCurrencyPrice,
   notificationRecieved,
   notificationDismissed,
-  updateBalance
+  updateBalance,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Wallets);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Wallets);

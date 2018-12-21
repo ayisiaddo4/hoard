@@ -149,7 +149,11 @@ export default class Login extends Component {
               type="underline"
             />
 
-            <Button type="text" onPress={this.handleCantLogIn} style={styles.buttonContainerAlt}>
+            <Button
+              type="text"
+              onPress={this.handleCantLogIn}
+              style={styles.buttonContainerAlt}
+            >
               {t('login.cant_log_in')}
             </Button>
           </Body>
@@ -164,7 +168,11 @@ export default class Login extends Component {
             >
               {t('login.log_in_button')}
             </Button>
-            <Button type="text" onPress={this.handleSignupButton} style={styles.buttonContainerAlt}>
+            <Button
+              type="text"
+              onPress={this.handleSignupButton}
+              style={styles.buttonContainerAlt}
+            >
               {t('login.new_sign_up')}
             </Button>
             <Button type="text" onPress={this.handleBypassButton}>

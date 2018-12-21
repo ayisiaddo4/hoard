@@ -1,7 +1,7 @@
 import { SYMBOL_ETH, SYMBOL_BOAR, SYMBOL_BTC } from 'containers/App/constants';
 import EthWallet from './EthWallet';
-import BoarWallet from "./BoarWallet";
-import BtcWallet from "./BtcWallet";
+import BoarWallet from './BoarWallet';
+import BtcWallet from './BtcWallet';
 
 /*
   class Wallet {
@@ -13,7 +13,6 @@ import BtcWallet from "./BtcWallet";
   send(amount, toAddress)
   }
 */
-
 
 export function initializeWallet(symbol, isMnemonic, mnemonicOrPrivateKey) {
   switch (symbol) {

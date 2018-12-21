@@ -11,21 +11,21 @@ export default StyleSheet.create({
     backgroundColor: blue,
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   input: {
     height: 50,
     backgroundColor: '#fff',
     marginHorizontal: 10,
     marginVertical: 5,
-    width: window.width - 30
+    width: window.width - 30,
   },
   logo: {
     height: IMAGE_HEIGHT,
     resizeMode: 'contain',
     marginBottom: 20,
     padding: 10,
-    marginTop: 20
+    marginTop: 20,
   },
 
   button: {
@@ -34,11 +34,11 @@ export default StyleSheet.create({
     borderRadius: 5,
     marginBottom: 20,
     width: '70%',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
 
   buttonText: {
     color: '#4c69a5',
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });

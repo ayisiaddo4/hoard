@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { Layout, Body, Header, Footer } from 'components/Base';
 import Button from 'components/Button';
@@ -47,7 +45,7 @@ export default class Confirm extends Component {
           ...initialStateQuestion,
           answer: item.word,
           number: item.i + 1,
-        }))
+        })),
       };
     }
     return null;
@@ -63,40 +61,45 @@ export default class Confirm extends Component {
     });
   };
 
-  updateFormField = memoize(index => value => this.setState({
-    questions: [
-      ...this.state.questions.slice(0, index),
-      {
-        ...this.state.questions[index],
-        showConfirmationStatus: false,
-        value,
-      },
-      ...this.state.questions.slice(index + 1),
-    ]
-  }));
-
-  checkField = memoize(index => () => {
-    const item = this.state.questions[index];
+  updateFormField = memoize(index => value =>
     this.setState({
       questions: [
         ...this.state.questions.slice(0, index),
         {
-          ...item,
-          confirmed: item.answer === item.value,
-          showConfirmationStatus: true,
+          ...this.state.questions[index],
+          showConfirmationStatus: false,
+          value,
         },
         ...this.state.questions.slice(index + 1),
       ],
+    })
+  );
 
-    }, this.checkFormState);
+  checkField = memoize(index => () => {
+    const item = this.state.questions[index];
+    this.setState(
+      {
+        questions: [
+          ...this.state.questions.slice(0, index),
+          {
+            ...item,
+            confirmed: item.answer === item.value,
+            showConfirmationStatus: true,
+          },
+          ...this.state.questions.slice(index + 1),
+        ],
+      },
+      this.checkFormState
+    );
   });
 
-  checkFormState = () => this.setState({
-    allChecksPassed: this.state.questions.reduce(
-      (allChecksPassed, item) => allChecksPassed && item.confirmed,
-      true
-    )
-  });
+  checkFormState = () =>
+    this.setState({
+      allChecksPassed: this.state.questions.reduce(
+        (allChecksPassed, item) => allChecksPassed && item.confirmed,
+        true
+      ),
+    });
 
   handleCreate = () =>
     this.setState({ loading: true }, () => {
@@ -105,7 +108,6 @@ export default class Confirm extends Component {
     });
 
   render() {
-
     return (
       <Layout preload={false}>
         <Body scrollable style={styles.body}>
@@ -125,7 +127,9 @@ export default class Confirm extends Component {
                 type="underline"
                 autoCapitalize="none"
                 autoCorrect={false}
-                placeholder={t('wallet.input_confirm_word', {word_number: question.number})}
+                placeholder={t('wallet.input_confirm_word', {
+                  word_number: question.number,
+                })}
                 returnKeyType="next"
                 onChangeText={this.updateFormField(i)}
                 onEndEditing={this.checkField(i)}

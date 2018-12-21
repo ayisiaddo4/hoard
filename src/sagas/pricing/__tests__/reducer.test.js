@@ -2,7 +2,6 @@ import {
   getCurrencyHistory,
   getCurrencyHistoryFailure,
   getCurrencyHistorySuccess,
-
   getCurrencyPrice,
   getCurrencyPriceFailure,
   getCurrencyPriceSuccess,
@@ -14,38 +13,39 @@ describe('pricing reducer', () => {
   describe('get single currency price', () => {
     describe('on requesting', () => {
       it("should initialize a new state if one doesn't already exist", () => {
-        expect(
-          reducer(undefined, getCurrencyPrice('ETH')).ETH.price
-        ).toEqual({
+        expect(reducer(undefined, getCurrencyPrice('ETH')).ETH.price).toEqual({
           requesting: true,
           successful: false,
           errors: [],
-          price: null
+          price: null,
         });
       });
       it('should change the requesting state of the price key', () => {
         expect(
-          reducer({
-            BTC: {},
-            ETH: {
-              price: {
-                requesting: false,
-                successful: null,
-                errors: [],
-                price: null
+          reducer(
+            {
+              BTC: {},
+              ETH: {
+                price: {
+                  requesting: false,
+                  successful: null,
+                  errors: [],
+                  price: null,
+                },
+                history: {
+                  requesting: null,
+                  successful: null,
+                  errors: [],
+                  interval: null,
+                  limit: null,
+                  data: [],
+                  positive: null,
+                  change: null,
+                },
               },
-              history: {
-                requesting: null,
-                successful: null,
-                errors: [],
-                interval: null,
-                limit: null,
-                data: [],
-                positive: null,
-                change: null
-              }
-            }
-          }, getCurrencyPrice('ETH'))
+            },
+            getCurrencyPrice('ETH')
+          )
         ).toEqual({
           BTC: {},
           ETH: {
@@ -53,7 +53,7 @@ describe('pricing reducer', () => {
               requesting: true,
               successful: null,
               errors: [],
-              price: null
+              price: null,
             },
             history: {
               requesting: null,
@@ -63,9 +63,9 @@ describe('pricing reducer', () => {
               limit: null,
               data: [],
               positive: null,
-              change: null
-            }
-          }
+              change: null,
+            },
+          },
         });
       });
     });
@@ -73,27 +73,30 @@ describe('pricing reducer', () => {
     describe('on success', () => {
       it('should update the price of the coin', () => {
         expect(
-          reducer({
-            BTC: {},
-            ETH: {
-              price: {
-                requesting: true,
-                successful: null,
-                errors: [],
-                price: null
+          reducer(
+            {
+              BTC: {},
+              ETH: {
+                price: {
+                  requesting: true,
+                  successful: null,
+                  errors: [],
+                  price: null,
+                },
+                history: {
+                  requesting: null,
+                  successful: null,
+                  errors: [],
+                  interval: null,
+                  limit: null,
+                  data: [],
+                  positive: null,
+                  change: null,
+                },
               },
-              history: {
-                requesting: null,
-                successful: null,
-                errors: [],
-                interval: null,
-                limit: null,
-                data: [],
-                positive: null,
-                change: null
-              }
-            }
-          }, getCurrencyPriceSuccess('ETH', 1, true, '12%'))
+            },
+            getCurrencyPriceSuccess('ETH', 1, true, '12%')
+          )
         ).toEqual({
           BTC: {},
           ETH: {
@@ -101,7 +104,7 @@ describe('pricing reducer', () => {
               requesting: false,
               successful: true,
               errors: [],
-              price: 1
+              price: 1,
             },
             history: {
               requesting: null,
@@ -111,20 +114,23 @@ describe('pricing reducer', () => {
               limit: null,
               data: [],
               positive: null,
-              change: null
-            }
-          }
+              change: null,
+            },
+          },
         });
       });
       it('should clear the previous errors', () => {
         expect(
-          reducer({
-            ETH: {
-              price: {
-                errors: ['a']
-              }
-            }
-          }, getCurrencyPriceSuccess('ETH', 1, true, '12%')).ETH.price.errors
+          reducer(
+            {
+              ETH: {
+                price: {
+                  errors: ['a'],
+                },
+              },
+            },
+            getCurrencyPriceSuccess('ETH', 1, true, '12%')
+          ).ETH.price.errors
         ).toEqual([]);
       });
     });
@@ -132,27 +138,30 @@ describe('pricing reducer', () => {
     describe('on failure', () => {
       it('should surface errors but not overwrite the previous price', () => {
         expect(
-          reducer({
-            BTC: {},
-            ETH: {
-              price: {
-                requesting: true,
-                successful: null,
-                errors: [],
-                price: 1
+          reducer(
+            {
+              BTC: {},
+              ETH: {
+                price: {
+                  requesting: true,
+                  successful: null,
+                  errors: [],
+                  price: 1,
+                },
+                history: {
+                  requesting: null,
+                  successful: null,
+                  errors: [],
+                  interval: null,
+                  limit: null,
+                  data: [],
+                  positive: null,
+                  change: null,
+                },
               },
-              history: {
-                requesting: null,
-                successful: null,
-                errors: [],
-                interval: null,
-                limit: null,
-                data: [],
-                positive: null,
-                change: null
-              }
-            }
-          }, getCurrencyPriceFailure('ETH', ['a', 'b']))
+            },
+            getCurrencyPriceFailure('ETH', ['a', 'b'])
+          )
         ).toEqual({
           BTC: {},
           ETH: {
@@ -160,7 +169,7 @@ describe('pricing reducer', () => {
               requesting: false,
               successful: false,
               errors: ['a', 'b'],
-              price: 1
+              price: 1,
             },
             history: {
               requesting: null,
@@ -170,9 +179,9 @@ describe('pricing reducer', () => {
               limit: null,
               data: [],
               positive: null,
-              change: null
-            }
-          }
+              change: null,
+            },
+          },
         });
       });
     });
@@ -182,7 +191,10 @@ describe('pricing reducer', () => {
     describe('on requesting', () => {
       it("should initialize a new state if one doesn't already exist", () => {
         expect(
-          reducer(undefined, getCurrencyHistory('ETH', {limit: 1, interval: 'hour'})).ETH.history
+          reducer(
+            undefined,
+            getCurrencyHistory('ETH', { limit: 1, interval: 'hour' })
+          ).ETH.history
         ).toEqual({
           requesting: true,
           successful: false,
@@ -191,33 +203,36 @@ describe('pricing reducer', () => {
           limit: 1,
           data: [],
           positive: null,
-          change: null
+          change: null,
         });
       });
 
       it('should change the requesting state of the price key', () => {
         expect(
-          reducer({
-            BTC: {},
-            ETH: {
-              price: {
-                requesting: null,
-                successful: null,
-                errors: [],
-                price: null
+          reducer(
+            {
+              BTC: {},
+              ETH: {
+                price: {
+                  requesting: null,
+                  successful: null,
+                  errors: [],
+                  price: null,
+                },
+                history: {
+                  requesting: false,
+                  successful: null,
+                  errors: [],
+                  interval: null,
+                  limit: null,
+                  data: [],
+                  positive: null,
+                  change: null,
+                },
               },
-              history: {
-                requesting: false,
-                successful: null,
-                errors: [],
-                interval: null,
-                limit: null,
-                data: [],
-                positive: null,
-                change: null
-              }
-            }
-          }, getCurrencyHistory('ETH', {limit: 1, interval: 'hour'}))
+            },
+            getCurrencyHistory('ETH', { limit: 1, interval: 'hour' })
+          )
         ).toEqual({
           BTC: {},
           ETH: {
@@ -225,7 +240,7 @@ describe('pricing reducer', () => {
               requesting: null,
               successful: null,
               errors: [],
-              price: null
+              price: null,
             },
             history: {
               requesting: true,
@@ -235,9 +250,9 @@ describe('pricing reducer', () => {
               limit: 1,
               data: [],
               positive: null,
-              change: null
-            }
-          }
+              change: null,
+            },
+          },
         });
       });
     });
@@ -245,27 +260,30 @@ describe('pricing reducer', () => {
     describe('on success', () => {
       it('should update the history of the coin', () => {
         expect(
-          reducer({
-            BTC: {},
-            ETH: {
-              price: {
-                requesting: null,
-                successful: null,
-                errors: [],
-                price: null
+          reducer(
+            {
+              BTC: {},
+              ETH: {
+                price: {
+                  requesting: null,
+                  successful: null,
+                  errors: [],
+                  price: null,
+                },
+                history: {
+                  requesting: null,
+                  successful: null,
+                  errors: [],
+                  interval: null,
+                  limit: null,
+                  data: [],
+                  positive: null,
+                  change: null,
+                },
               },
-              history: {
-                requesting: null,
-                successful: null,
-                errors: [],
-                interval: null,
-                limit: null,
-                data: [],
-                positive: null,
-                change: null
-              }
-            }
-          }, getCurrencyHistorySuccess('ETH', [1,2,3,4,5,6], true, 'a'))
+            },
+            getCurrencyHistorySuccess('ETH', [1, 2, 3, 4, 5, 6], true, 'a')
+          )
         ).toEqual({
           BTC: {},
           ETH: {
@@ -273,7 +291,7 @@ describe('pricing reducer', () => {
               requesting: null,
               successful: null,
               errors: [],
-              price: null
+              price: null,
             },
             history: {
               requesting: false,
@@ -281,11 +299,11 @@ describe('pricing reducer', () => {
               errors: [],
               interval: null,
               limit: null,
-              data: [1,2,3,4,5,6],
+              data: [1, 2, 3, 4, 5, 6],
               positive: true,
-              change: 'a'
-            }
-          }
+              change: 'a',
+            },
+          },
         });
       });
     });
@@ -293,27 +311,30 @@ describe('pricing reducer', () => {
     describe('on failure', () => {
       it('should surface errors but not overwrite the previous price', () => {
         expect(
-          reducer({
-            BTC: {},
-            ETH: {
-              price: {
-                requesting: null,
-                successful: null,
-                errors: [],
-                price: null
+          reducer(
+            {
+              BTC: {},
+              ETH: {
+                price: {
+                  requesting: null,
+                  successful: null,
+                  errors: [],
+                  price: null,
+                },
+                history: {
+                  requesting: null,
+                  successful: null,
+                  errors: [],
+                  interval: null,
+                  limit: null,
+                  data: [],
+                  positive: null,
+                  change: null,
+                },
               },
-              history: {
-                requesting: null,
-                successful: null,
-                errors: [],
-                interval: null,
-                limit: null,
-                data: [],
-                positive: null,
-                change: null
-              }
-            }
-          }, getCurrencyHistoryFailure('ETH', ['a', 'b']))
+            },
+            getCurrencyHistoryFailure('ETH', ['a', 'b'])
+          )
         ).toEqual({
           BTC: {},
           ETH: {
@@ -321,7 +342,7 @@ describe('pricing reducer', () => {
               requesting: null,
               successful: null,
               errors: [],
-              price: null
+              price: null,
             },
             history: {
               requesting: false,
@@ -331,9 +352,9 @@ describe('pricing reducer', () => {
               limit: null,
               data: [],
               positive: null,
-              change: null
-            }
-          }
+              change: null,
+            },
+          },
         });
       });
     });

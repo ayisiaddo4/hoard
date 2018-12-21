@@ -34,12 +34,7 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Animated,
-} from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Animated } from 'react-native';
 
 export default class Flippable extends Component {
   static propTypes = {
@@ -107,10 +102,7 @@ export default class Flippable extends Component {
     };
 
     return (
-      <TouchableOpacity
-        style={styles.container}
-        onPress={this.flipCard}
-      >
+      <TouchableOpacity style={styles.container} onPress={this.flipCard}>
         <View>
           <Animated.View
             style={[

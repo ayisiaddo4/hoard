@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { View, Image, StyleSheet } from 'react-native';
-import {Layout, Body, Header, Footer} from 'components/Base';
+import { Layout, Body, Header, Footer } from 'components/Base';
 import Button from 'components/Button';
 import { Try } from 'components/Conditional';
 import T from 'components/Typography';
@@ -52,11 +52,12 @@ export default class SeedWordsSplash extends Component {
                 {t('settings.last_display_time')}
               </T.Light>
               <T.SemiBold style={styles.seedWordBottom}>
-                {date && date.toLocaleString(undefined, {
-                   month: 'long',
-                   day: 'numeric',
-                   year: 'numeric'
-                })}
+                {date &&
+                  date.toLocaleString(undefined, {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
               </T.SemiBold>
             </Fragment>
           </Try>
@@ -68,19 +69,19 @@ export default class SeedWordsSplash extends Component {
 
 const styles = StyleSheet.create({
   title: {
-    color: "#ffffff"
+    color: '#ffffff',
   },
   subtitle: {
-    fontWeight: "500",
-    color: "#ffffff"
+    fontWeight: '500',
+    color: '#ffffff',
   },
   container: {
-    padding: 20
+    padding: 20,
   },
   image: {
     height: undefined,
     width: undefined,
-    flex: 1
+    flex: 1,
   },
   textContainer: {
     justifyContent: 'center',
@@ -93,20 +94,19 @@ const styles = StyleSheet.create({
   bodyText: {
     fontSize: 16,
     marginVertical: 10,
-    textAlign: "center",
-    color: "#ffffff"
+    textAlign: 'center',
+    color: '#ffffff',
   },
   button: {
     marginBottom: 20,
   },
   seedWordTop: {
-    textAlign: "center",
-    color: "#ffffff"
+    textAlign: 'center',
+    color: '#ffffff',
   },
   seedWordBottom: {
-    textAlign: "center",
+    textAlign: 'center',
     fontWeight: 'bold',
-    color: "#ffffff"
+    color: '#ffffff',
   },
 });
-

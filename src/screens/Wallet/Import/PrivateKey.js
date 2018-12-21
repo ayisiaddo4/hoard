@@ -1,21 +1,21 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { StyleSheet, View } from "react-native";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { StyleSheet, View } from 'react-native';
 
-import Button from "components/Button";
-import Input from "components/Input";
-import T from "components/Typography";
+import Button from 'components/Button';
+import Input from 'components/Input';
+import T from 'components/Typography';
 
 import { t } from 'translations/i18n';
 
 export default class PrivateKey extends Component {
   static propTypes = {
     onCancel: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired
+    onSubmit: PropTypes.func.isRequired,
   };
 
   state = {
-    privateKey: ""
+    privateKey: '',
   };
 
   updateAnswer = privateKey => this.setState({ privateKey });
@@ -63,21 +63,21 @@ export default class PrivateKey extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   headerContainer: {
     padding: 20,
     paddingTop: 40,
-    backgroundColor: "#223252"
+    backgroundColor: '#223252',
   },
   headingStyle: {
-    color: "#ffffff"
+    color: '#ffffff',
   },
   footerContainer: {
     padding: 20,
-    marginTop: "auto"
+    marginTop: 'auto',
   },
   input: {
-    margin: 20
-  }
+    margin: 20,
+  },
 });

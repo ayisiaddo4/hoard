@@ -6,7 +6,7 @@ const initialState = {
   successful: false,
   messages: [],
   errors: [],
-  app: {}
+  app: {},
 };
 
 export default function initReducer(state = initialState, action) {
@@ -18,7 +18,7 @@ export default function initReducer(state = initialState, action) {
         successful: false,
         messages: [],
         errors: [],
-        app: {}
+        app: {},
       };
 
     case INIT_SUCCESS:
@@ -28,7 +28,7 @@ export default function initReducer(state = initialState, action) {
         successful: true,
         messages: [],
         errors: [],
-        app: { ...state.app, ...action.payload }
+        app: { ...state.app, ...action.payload },
       };
 
     // Append any errors to the current state, if any.
@@ -38,7 +38,7 @@ export default function initReducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: [],
-        errors: [...state.errors, ...action.errors]
+        errors: [...state.errors, ...action.errors],
       };
 
     default:

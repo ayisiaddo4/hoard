@@ -1,10 +1,16 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { StyleSheet, ScrollView, View, Image, TouchableOpacity } from "react-native";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 
-import Button from "components/Button";
-import Input from "components/Input";
-import T from "components/Typography";
+import Button from 'components/Button';
+import Input from 'components/Input';
+import T from 'components/Typography';
 
 import { t } from 'translations/i18n';
 
@@ -14,21 +20,21 @@ export default class InputList extends Component {
     offset: PropTypes.number.isRequired,
     onCancel: PropTypes.func.isRequired,
     updateAnswers: PropTypes.func.isRequired,
-    saveAndContinue: PropTypes.func.isRequired
+    saveAndContinue: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super();
 
     this.state = {
-      completed: this.isCompleted(props.answers)
+      completed: this.isCompleted(props.answers),
     };
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.answers !== this.props.answers) {
       this.setState({
-        completed: this.isCompleted(newProps.answers)
+        completed: this.isCompleted(newProps.answers),
       });
     }
   }
@@ -43,7 +49,7 @@ export default class InputList extends Component {
     const answers = [
       ...this.props.answers.slice(0, i),
       answer,
-      ...this.props.answers.slice(i + 1)
+      ...this.props.answers.slice(i + 1),
     ];
 
     this.props.updateAnswers(answers);
@@ -75,7 +81,9 @@ export default class InputList extends Component {
                 style={styles.input}
                 autoCapitalize="none"
                 returnKeyType="next"
-                placeholder={t('wallet.input_seed_phrase_word', {word_number: i + offset})}
+                placeholder={t('wallet.input_seed_phrase_word', {
+                  word_number: i + offset,
+                })}
                 value={answer}
                 onChangeText={this.updateAnswer(i)}
                 type="underline"
@@ -83,8 +91,16 @@ export default class InputList extends Component {
             );
           })}
           <View style={styles.footerContainer}>
-            <T.Light style={{color: 'lightgrey', textAlign: 'center', paddingBottom: 10}}>
-              {t('wallet.x_of_12_words',{ word_number: offset + answers.length - 1})}
+            <T.Light
+              style={{
+                color: 'lightgrey',
+                textAlign: 'center',
+                paddingBottom: 10,
+              }}
+            >
+              {t('wallet.x_of_12_words', {
+                word_number: offset + answers.length - 1,
+              })}
             </T.Light>
             <Button
               style={styles.nextButton}
@@ -107,7 +123,7 @@ const styles = StyleSheet.create({
   headingStyle: {
     padding: 20,
     paddingTop: 40,
-    color: "#ffffff"
+    color: '#ffffff',
   },
   bodyContainer: {
     padding: 20,
@@ -117,8 +133,6 @@ const styles = StyleSheet.create({
     padding: 20,
     marginTop: 20,
   },
-  input: {
-  },
-  nextButton: {
-  }
+  input: {},
+  nextButton: {},
 });

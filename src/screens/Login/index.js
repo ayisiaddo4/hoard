@@ -4,20 +4,23 @@
 | state & actions to ./Login component.
 |--------------------------------------------------
 */
-import { connect } from "react-redux";
-import loginRequest from "./actions";
-import Login from "./Login";
+import { connect } from 'react-redux';
+import loginRequest from './actions';
+import Login from './Login';
 import { mnemonicPhraseSelector } from 'screens/Wallet/selectors';
 
 function mapStateToProps(state) {
   return {
     login: state.login,
-    hasMnemonic: !!mnemonicPhraseSelector(state)
+    hasMnemonic: !!mnemonicPhraseSelector(state),
   };
 }
 
 const mapDispatchToProps = {
-  loginRequest
+  loginRequest,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

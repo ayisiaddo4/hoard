@@ -27,7 +27,6 @@ export const isSignedInSelector = createSelector(
   user_uid => !!user_uid
 );
 
-
 export const emailSelector = createSelector(
   userSelector,
   (user = {}) => user.email_address

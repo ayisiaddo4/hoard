@@ -42,8 +42,7 @@ export function* fetchTransaction(action, transaction) {
     if (wasSend) {
       from = action.payload.publicAddress;
       const firstOtherVout = transaction.vout.find(
-        vout =>
-          vout.scriptPubKey.addresses[0] !== action.payload.publicAddress
+        vout => vout.scriptPubKey.addresses[0] !== action.payload.publicAddress
       );
 
       if (firstOtherVout) {
@@ -61,8 +60,7 @@ export function* fetchTransaction(action, transaction) {
       from = inAddresses[0];
       to = action.payload.publicAddress;
       const firstMyVout = transaction.vout.find(
-        vout =>
-          vout.scriptPubKey.addresses[0] === action.payload.publicAddress
+        vout => vout.scriptPubKey.addresses[0] === action.payload.publicAddress
       );
       amount = Number(firstMyVout.value);
     }

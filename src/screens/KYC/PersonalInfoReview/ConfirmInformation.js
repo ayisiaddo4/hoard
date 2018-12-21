@@ -5,7 +5,7 @@ import {
   ScrollView,
   Text,
   View,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import Input from 'components/Input';
 import Button from 'components/Button';
@@ -13,36 +13,38 @@ import T from 'components/Typography';
 
 export default class Verification extends React.Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
 
   static propTypes = {
     cancelText: PropTypes.string.isRequired,
     confirmText: PropTypes.string.isRequired,
-    fields: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired
-    })),
+    fields: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
+      })
+    ),
     introText: PropTypes.string.isRequired,
     onCancel: PropTypes.func.isRequired,
-    onConfirm: PropTypes.func.isRequired
+    onConfirm: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    introText: 'Please verify the following information is correct. If there is an error, please contact us immediately.',
-    cancelText: 'Having trouble? Contact us and we\'ll help!',
-    confirmText: 'Yes, this information is correct.'
-  }
+    introText:
+      'Please verify the following information is correct. If there is an error, please contact us immediately.',
+    cancelText: "Having trouble? Contact us and we'll help!",
+    confirmText: 'Yes, this information is correct.',
+  };
 
   render() {
-
     const {
       introText,
       cancelText,
       confirmText,
       fields,
       onCancel,
-      onConfirm
+      onConfirm,
     } = this.props;
 
     return (
@@ -55,7 +57,7 @@ export default class Verification extends React.Component {
           <View style={styles.formContainer}>
             <T.Light style={styles.text}>{introText}</T.Light>
             <View style={styles.fieldsContainer}>
-              {fields.map(({label, value}) => (
+              {fields.map(({ label, value }) => (
                 <View key={label} style={styles.returnedInputsContainer}>
                   <Text style={styles.inputLabel}>{label}</Text>
                   <Input
@@ -90,32 +92,32 @@ const styles = StyleSheet.create({
   image: {
     width: null,
     height: null,
-    resizeMode: 'cover'
+    resizeMode: 'cover',
   },
   text: {
     backgroundColor: 'transparent',
     color: '#ffffff',
-    marginBottom: 10
+    marginBottom: 10,
   },
   formContainer: {
-    padding: 20
+    padding: 20,
   },
   returnedInputsContainer: {
     marginTop: 20,
   },
   input: {
-    marginBottom: 10
+    marginBottom: 10,
   },
   inputLabel: {
     color: '#fff',
   },
   button: {
-    marginTop: 20
+    marginTop: 20,
   },
   supportButton: {
     color: '#ffffff',
   },
   imageView: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });

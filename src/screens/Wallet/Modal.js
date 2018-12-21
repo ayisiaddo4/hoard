@@ -8,7 +8,7 @@ export default function Modal({
   show,
   title,
   onCancel,
-  onDone
+  onDone,
 }) {
   return (
     <View
@@ -37,11 +37,11 @@ Modal.propTypes = {
   show: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
-  onDone: PropTypes.func.isRequired
+  onDone: PropTypes.func.isRequired,
 };
 
 Modal.defaultProps = {
-  height: '95%'
+  height: '95%',
 };
 
 const styles = StyleSheet.create({
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: '#FFF',
     borderTopRightRadius: 20,
-    borderTopLeftRadius: 20
+    borderTopLeftRadius: 20,
   },
   xButton: {
     alignSelf: 'flex-end',
@@ -62,16 +62,16 @@ const styles = StyleSheet.create({
     fontWeight: '100',
     backgroundColor: 'transparent',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   header: {
     fontSize: 25,
-    fontWeight: '900'
+    fontWeight: '900',
   },
   actionButtons: {
     width: '100%',
     marginTop: 'auto',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   done: {
     width: '100%',
@@ -80,9 +80,9 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderStyle: 'solid',
     borderRadius: 30,
-    padding: 20
+    padding: 20,
   },
   cancel: {
-    padding: 20
-  }
+    padding: 20,
+  },
 });

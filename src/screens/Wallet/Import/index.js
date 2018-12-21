@@ -4,17 +4,20 @@
 | state & actions to ./Import component.
 |--------------------------------------------------
 */
-import { connect } from "react-redux";
-import { importWallet } from "../actions";
+import { connect } from 'react-redux';
+import { importWallet } from '../actions';
 
-import Import from "./Import";
+import Import from './Import';
 
 function mapStateToProps(state) {
   return { wallet: state.wallet };
 }
 
 const mapDispatchToProps = {
-  importWallet
+  importWallet,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Import);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Import);

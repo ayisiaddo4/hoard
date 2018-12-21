@@ -49,7 +49,7 @@ import PortfolioChart from 'containers/PortfolioChart';
 const { width: viewportWidth } = Dimensions.get('window');
 
 function calcWidth(percentage) {
-  const value = percentage * viewportWidth / 100;
+  const value = (percentage * viewportWidth) / 100;
   return Math.round(value);
 }
 
@@ -62,9 +62,7 @@ export const cardHeight = slideWidth * 1.618 * 0.4;
 export default class Card extends Component {
   static propTypes = {
     icon: Image.propTypes.source,
-    colors: PropTypes.arrayOf(
-      PropTypes.string
-    ).isRequired,
+    colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     title: PropTypes.node,
     subtitle: PropTypes.node,
     additionalInfo: PropTypes.node,
@@ -72,24 +70,14 @@ export default class Card extends Component {
   };
 
   render() {
-    const {
-      additionalInfo,
-      colors,
-      icon,
-      style,
-      subtitle,
-      title,
-    } = this.props;
+    const { additionalInfo, colors, icon, style, subtitle, title } = this.props;
 
     return (
       <LinearGradient
         start={{ x: 0, y: 1 }}
         end={{ x: 1, y: 1 }}
         colors={colors}
-        style={[
-          styles.card,
-          style,
-        ]}
+        style={[styles.card, style]}
       >
         <View style={styles.top}>
           <View style={styles.titleContainer}>
@@ -99,20 +87,16 @@ export default class Card extends Component {
                   height: 15,
                   width: 15,
                   marginRight: 2,
-                  resizeMode: 'contain'
+                  resizeMode: 'contain',
                 }}
                 source={icon}
               />
             </Try>
-            <Text style={[styles.text, styles.title]}>
-              {title}
-            </Text>
+            <Text style={[styles.text, styles.title]}>{title}</Text>
           </View>
-          <Text style={[styles.text, styles.subtitle]}>
-            {subtitle}
-          </Text>
+          <Text style={[styles.text, styles.subtitle]}>{subtitle}</Text>
         </View>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <PortfolioChart
             style={styles.chart}
             wallets={this.props.walletsToChart}
@@ -139,15 +123,14 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 20,
   },
-  top: {
-  },
+  top: {},
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 5,
   },
   text: {
-    color: 'white'
+    color: 'white',
   },
   icon: {
     height: 15,

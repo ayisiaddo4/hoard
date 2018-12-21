@@ -22,17 +22,17 @@ export default class Recover extends Component {
   state = {
     step: 1,
     answers: {
-      step1: Array.from({ length: 6 }, () => ""),
-      step2: Array.from({ length: 6 }, () => "")
-    }
+      step1: Array.from({ length: 6 }, () => ''),
+      step2: Array.from({ length: 6 }, () => ''),
+    },
   };
 
   saveAnswers = step => stepAnswers => {
     this.setState({
       answers: {
         ...this.state.answers,
-        [step]: stepAnswers
-      }
+        [step]: stepAnswers,
+      },
     });
   };
 
@@ -82,7 +82,7 @@ export default class Recover extends Component {
     ethers.Wallet.fromMnemonic(answers.join(' '));
   };
 
-  saveNewWallet = answers => this.props.saveAndContinue(answers.join(" "));
+  saveNewWallet = answers => this.props.saveAndContinue(answers.join(' '));
 
   render() {
     const { step } = this.state;
@@ -92,7 +92,7 @@ export default class Recover extends Component {
         <InputList
           offset={1}
           answers={this.state.answers.step1}
-          updateAnswers={this.saveAnswers("step1")}
+          updateAnswers={this.saveAnswers('step1')}
           saveAndContinue={this.goForward}
           onCancel={this.goBack}
           onBack={this.goBack}
@@ -104,7 +104,7 @@ export default class Recover extends Component {
         <InputList
           offset={this.state.answers.step1.length + 1}
           answers={this.state.answers.step2}
-          updateAnswers={this.saveAnswers("step2")}
+          updateAnswers={this.saveAnswers('step2')}
           saveAndContinue={this.goForward}
           onCancel={this.goBack}
           onBack={this.goBack}

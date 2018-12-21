@@ -13,24 +13,28 @@ const mapStateToProps = state => {
     prices: SUPPORTED_COINS_WALLET.reduce(
       (prices, symbol) => ({
         ...prices,
-        [symbol]: state.pricing &&
+        [symbol]:
+          state.pricing &&
           state.pricing[symbol] &&
           state.pricing[symbol].price &&
-          state.pricing[symbol].price.price
+          state.pricing[symbol].price.price,
       }),
       {}
     ),
     wallets: allWalletsSelector(state),
     emailAddress: emailSelector(state),
     isSignedIn: isSignedInSelector(state),
-    tradingPair: tradingPairSelector(state)
+    tradingPair: tradingPairSelector(state),
   };
 };
 
 const mapDispatchToProps = {
   recordContactTransaction,
   getCurrencyPrice,
-  sendFunds
+  sendFunds,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SendRequest);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SendRequest);

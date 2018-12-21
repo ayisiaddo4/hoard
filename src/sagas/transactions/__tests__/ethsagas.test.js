@@ -1,7 +1,7 @@
 import ethers from 'ethers';
 import { AsyncStorage } from 'react-native';
-import { call, put } from "redux-saga/effects";
-import { WALLET_CREATE_SUCCESS } from "screens/Wallet/constants";
+import { call, put } from 'redux-saga/effects';
+import { WALLET_CREATE_SUCCESS } from 'screens/Wallet/constants';
 import {
   BLOCK_ADDED_TO_QUEUE,
   BLOCK_NUMBER_STORAGE_KEY,
@@ -17,9 +17,10 @@ import {
 
 import * as transactionSagas from '../ethsagas';
 
-const runTillDone = (saga) => {
+const runTillDone = saga => {
   const values = [];
-  while (true) { // eslint-disable-line no-constant-condition
+  while (true) {
+    // eslint-disable-line no-constant-condition
     const result = saga.next();
     if (!result.done) {
       values.push(result.value);
@@ -31,79 +32,91 @@ const runTillDone = (saga) => {
 };
 
 describe('Transaction Sagas -- Ethereum', () => {
-  describe("listeners", () => {
+  describe('listeners', () => {
     const transactionListeners = transactionSagas.default().next().value.ALL;
-    it ('should set up all listeners', () => {
+    it('should set up all listeners', () => {
       expect(transactionListeners).toBeDefined();
 
       const initializer = transactionListeners.find(
-        (l) => l.CALL && l.CALL.fn === transactionSagas.initialize
+        l => l.CALL && l.CALL.fn === transactionSagas.initialize
       );
 
       expect(initializer).toBeDefined();
     });
 
-    it ('should listen for block found events', () => {
+    it('should listen for block found events', () => {
       const blockFound = transactionListeners.find(
-        (l) => l.FORK && l.FORK.args[0] === INTERESTING_BLOCK_FOUND
+        l => l.FORK && l.FORK.args[0] === INTERESTING_BLOCK_FOUND
       );
 
       expect(blockFound).toBeDefined();
       expect(blockFound.FORK.args[1]).toEqual(transactionSagas.addBlockToQueue);
     });
 
-    it ('should set up wallet event listeners on wallet creation', () => {
+    it('should set up wallet event listeners on wallet creation', () => {
       const walletCreate = transactionListeners.find(
-        (l) => l.FORK && l.FORK.args[0] === WALLET_CREATE_SUCCESS
+        l => l.FORK && l.FORK.args[0] === WALLET_CREATE_SUCCESS
       );
 
       expect(walletCreate).toBeDefined();
-      expect(walletCreate.FORK.args[1]).toEqual(transactionSagas.listenForWalletEvents);
+      expect(walletCreate.FORK.args[1]).toEqual(
+        transactionSagas.listenForWalletEvents
+      );
     });
 
-    it ('should listen for block search events', () => {
+    it('should listen for block search events', () => {
       const searchListener = transactionListeners.find(
-        (l) => l.FORK && l.FORK.args[0] === SEARCH_FOR_INTERESTING_BLOCKS
+        l => l.FORK && l.FORK.args[0] === SEARCH_FOR_INTERESTING_BLOCKS
       );
 
       expect(searchListener).toBeDefined();
-      expect(searchListener.FORK.args[1]).toEqual(transactionSagas.fetchHistoryEth);
+      expect(searchListener.FORK.args[1]).toEqual(
+        transactionSagas.fetchHistoryEth
+      );
     });
-
   });
 
   describe('initialization', () => {
-    describe("setup processes", () => {
+    describe('setup processes', () => {
       const initializedProcesses = runTillDone(transactionSagas.initialize());
 
       it('should setup continual listeners', () => {
-        expect(initializedProcesses.find(
-          p => p.FORK && p.FORK.fn === transactionSagas.setupActionBridgeChannel
-        ))
-          .toBeDefined();
-        expect(initializedProcesses.find(
-          p => p.FORK && p.FORK.fn === transactionSagas.processTransactionsBlockQueue
-        ))
-          .toBeDefined();
+        expect(
+          initializedProcesses.find(
+            p =>
+              p.FORK && p.FORK.fn === transactionSagas.setupActionBridgeChannel
+          )
+        ).toBeDefined();
+        expect(
+          initializedProcesses.find(
+            p =>
+              p.FORK &&
+              p.FORK.fn === transactionSagas.processTransactionsBlockQueue
+          )
+        ).toBeDefined();
       });
 
       it('should hydrate the app with saved state', () => {
-        expect(initializedProcesses.find(
-          p => p.CALL && p.CALL.fn === transactionSagas.hydrate
-        ))
-          .toBeDefined();
+        expect(
+          initializedProcesses.find(
+            p => p.CALL && p.CALL.fn === transactionSagas.hydrate
+          )
+        ).toBeDefined();
       });
     });
 
     describe('action bridge', () => {
       it('should forward all actions from the channel to the main thread', () => {
         const listener = transactionSagas.setupActionBridgeChannel();
-        expect(listener.next().value.TAKE.channel).toEqual(transactionSagas.actionBridgeChannel);
+        expect(listener.next().value.TAKE.channel).toEqual(
+          transactionSagas.actionBridgeChannel
+        );
         expect(listener.next('hi').value.PUT.action).toEqual('hi');
 
         // should then listen for the next action to come through
-        expect(listener.next().value
-               .TAKE.channel).toEqual(transactionSagas.actionBridgeChannel);
+        expect(listener.next().value.TAKE.channel).toEqual(
+          transactionSagas.actionBridgeChannel
+        );
       });
     });
 
@@ -111,7 +124,9 @@ describe('Transaction Sagas -- Ethereum', () => {
       it('should wait for a block to be added to the queue when the queue is empty', () => {
         const processor = transactionSagas.processTransactionsBlockQueue();
         expect(transactionSagas.transactionsBlockQueue.length).toEqual(0);
-        expect(processor.next().value.TAKE.pattern).toEqual(BLOCK_ADDED_TO_QUEUE);
+        expect(processor.next().value.TAKE.pattern).toEqual(
+          BLOCK_ADDED_TO_QUEUE
+        );
       });
 
       it('should process the next transaction when the queue has length', () => {
@@ -122,7 +137,9 @@ describe('Transaction Sagas -- Ethereum', () => {
         expect(transactionSagas.transactionsBlockQueue.length).toEqual(1);
 
         const next = processor.next().value;
-        expect(next.TAKE && next.TAKE.pattern === BLOCK_ADDED_TO_QUEUE).toBeFalsy();
+        expect(
+          next.TAKE && next.TAKE.pattern === BLOCK_ADDED_TO_QUEUE
+        ).toBeFalsy();
 
         transactionSagas.transactionsBlockQueue.pop();
         expect(transactionSagas.transactionsBlockQueue.length).toEqual(0);
@@ -133,9 +150,10 @@ describe('Transaction Sagas -- Ethereum', () => {
         const fakeBlock = { block: 1, transactionCount: 2 };
         const fakeWallet = { walletAddresses: 'a' };
         it('should initiate a search for the each item in the queue for all your ethereum addresses', () => {
-
           transactionSagas.transactionsBlockQueue.push(fakeBlock);
-          expect(processor.next().value.CALL.fn).toEqual(transactionSagas.transactionsBlockQueue.pop);
+          expect(processor.next().value.CALL.fn).toEqual(
+            transactionSagas.transactionsBlockQueue.pop
+          );
 
           expect(processor.next(fakeBlock).value.SELECT).toBeTruthy();
           const search = processor.next(fakeWallet).value.CALL;
@@ -146,17 +164,18 @@ describe('Transaction Sagas -- Ethereum', () => {
           expect(search.args).toEqual([
             fakeBlock.block,
             fakeWallet.walletAddresses,
-            fakeBlock.transactionCount
+            fakeBlock.transactionCount,
           ]);
 
           transactionSagas.transactionsBlockQueue.pop();
         });
 
         it('should restart the process', () => {
-          expect(processor.next().value.TAKE.pattern).toEqual(BLOCK_ADDED_TO_QUEUE);
+          expect(processor.next().value.TAKE.pattern).toEqual(
+            BLOCK_ADDED_TO_QUEUE
+          );
         });
       });
-
     });
 
     describe('hydration process', () => {
@@ -196,13 +215,12 @@ describe('Transaction Sagas -- Ethereum', () => {
 
         const expectedFinish = hydrateSaga.next('{"a":0}');
         expect(expectedFinish.done).toBeTruthy();
-        expect(expectedFinish.value).toEqual({a: 0});
+        expect(expectedFinish.value).toEqual({ a: 0 });
       });
     });
   });
 
-
-  describe("block number helpers", () => {
+  describe('block number helpers', () => {
     describe('update', () => {
       it('should update the local block number', () => {
         const previousa = transactionSagas.lastCheckedBlockNumber['a'];
@@ -210,29 +228,44 @@ describe('Transaction Sagas -- Ethereum', () => {
 
         expect(transactionSagas.lastCheckedBlockNumber['a']).toEqual(1234);
 
-        runTillDone(transactionSagas.updateLastCheckedBlockNumber('a', previousa));
+        runTillDone(
+          transactionSagas.updateLastCheckedBlockNumber('a', previousa)
+        );
       });
 
       it('should save the block number to the device', () => {
         const previousa = transactionSagas.lastCheckedBlockNumber['a'];
-        const updates = runTillDone(transactionSagas.updateLastCheckedBlockNumber('a', 1234));
+        const updates = runTillDone(
+          transactionSagas.updateLastCheckedBlockNumber('a', 1234)
+        );
 
-        const storageCall = updates.find(u => u.CALL && u.CALL.fn === AsyncStorage.setItem);
+        const storageCall = updates.find(
+          u => u.CALL && u.CALL.fn === AsyncStorage.setItem
+        );
         expect(storageCall).toBeDefined();
-        expect(storageCall.CALL.args).toEqual([BLOCK_NUMBER_STORAGE_KEY, JSON.stringify(transactionSagas.lastCheckedBlockNumber)]);
+        expect(storageCall.CALL.args).toEqual([
+          BLOCK_NUMBER_STORAGE_KEY,
+          JSON.stringify(transactionSagas.lastCheckedBlockNumber),
+        ]);
 
-        runTillDone(transactionSagas.updateLastCheckedBlockNumber('a', previousa));
+        runTillDone(
+          transactionSagas.updateLastCheckedBlockNumber('a', previousa)
+        );
       });
 
       it('should notify the app that the block number has been updated', () => {
         const previousa = transactionSagas.lastCheckedBlockNumber['a'];
-        const updates = runTillDone(transactionSagas.updateLastCheckedBlockNumber('a', 1234));
+        const updates = runTillDone(
+          transactionSagas.updateLastCheckedBlockNumber('a', 1234)
+        );
 
         const updatePut = updates.find(u => u.PUT);
         expect(updatePut).toBeDefined();
         expect(updatePut.PUT.action).toEqual(blockUpdated());
 
-        runTillDone(transactionSagas.updateLastCheckedBlockNumber('a', previousa));
+        runTillDone(
+          transactionSagas.updateLastCheckedBlockNumber('a', previousa)
+        );
       });
     });
 
@@ -241,9 +274,13 @@ describe('Transaction Sagas -- Ethereum', () => {
         const previousa = transactionSagas.lastCheckedBlockNumber['a'];
         runTillDone(transactionSagas.updateLastCheckedBlockNumber('a', 1234));
 
-        expect(transactionSagas.getLastCheckedBlockForAddress('a')).toEqual(1234);
+        expect(transactionSagas.getLastCheckedBlockForAddress('a')).toEqual(
+          1234
+        );
 
-        runTillDone(transactionSagas.updateLastCheckedBlockNumber('a', previousa));
+        runTillDone(
+          transactionSagas.updateLastCheckedBlockNumber('a', previousa)
+        );
       });
 
       it('should return 0 for address when not', () => {
@@ -252,16 +289,18 @@ describe('Transaction Sagas -- Ethereum', () => {
 
         expect(transactionSagas.getLastCheckedBlockForAddress('b')).toEqual(0);
 
-        runTillDone(transactionSagas.updateLastCheckedBlockNumber('b', previousb));
+        runTillDone(
+          transactionSagas.updateLastCheckedBlockNumber('b', previousb)
+        );
       });
     });
   });
 
-  describe("when a block is found", () => {
+  describe('when a block is found', () => {
     it('should add block to queue and trigger event', () => {
       expect(transactionSagas.transactionsBlockQueue.length).toBe(0);
 
-      const saga = transactionSagas.addBlockToQueue({block: 1});
+      const saga = transactionSagas.addBlockToQueue({ block: 1 });
       const put = saga.next();
 
       expect(put.value.PUT).toBeDefined();
@@ -271,14 +310,18 @@ describe('Transaction Sagas -- Ethereum', () => {
     });
   });
 
-  describe("search for blocks that may contain transactions", () => {
-    describe("starting the search", () => {
+  describe('search for blocks that may contain transactions', () => {
+    describe('starting the search', () => {
       it('should be able to handle a failure of the blockNumber call', () => {
-        const hydrateSaga = transactionSagas.fetchHistoryEth({publicAddress: 'a'});
+        const hydrateSaga = transactionSagas.fetchHistoryEth({
+          publicAddress: 'a',
+        });
         const getPreviousNumber = hydrateSaga.next();
 
         expect(getPreviousNumber.value.CALL).toBeDefined();
-        expect(getPreviousNumber.value.CALL.fn).toBe(transactionSagas.getLastCheckedBlockForAddress);
+        expect(getPreviousNumber.value.CALL.fn).toBe(
+          transactionSagas.getLastCheckedBlockForAddress
+        );
         expect(getPreviousNumber.value.CALL.args[0]).toBe('a');
 
         hydrateSaga.next(12);
@@ -289,7 +332,9 @@ describe('Transaction Sagas -- Ethereum', () => {
         const updateToBlock = hydrateSaga.next();
 
         expect(updateToBlock.value.CALL).toBeDefined();
-        expect(updateToBlock.value.CALL.fn).toBe(transactionSagas.updateLastCheckedBlockNumber);
+        expect(updateToBlock.value.CALL.fn).toBe(
+          transactionSagas.updateLastCheckedBlockNumber
+        );
         expect(updateToBlock.value.CALL.args).toEqual(['a', 12]);
 
         const expectedFinish = hydrateSaga.next();
@@ -297,18 +342,15 @@ describe('Transaction Sagas -- Ethereum', () => {
       });
 
       it('should kick of search for a given address between the last checked block and the most recent block', () => {
-        const hydrateSaga = transactionSagas.fetchHistoryEth({publicAddress: 'a'});
+        const hydrateSaga = transactionSagas.fetchHistoryEth({
+          publicAddress: 'a',
+        });
         hydrateSaga.next();
         hydrateSaga.next(12);
         const expectedAll = hydrateSaga.next(34);
 
         expect(expectedAll.value.ALL).toEqual([
-          call(
-            transactionSagas.searchForInterestingBlocks,
-            'a',
-            12,
-            34
-          )
+          call(transactionSagas.searchForInterestingBlocks, 'a', 12, 34),
         ]);
 
         const updateToBlock = hydrateSaga.next();
@@ -321,26 +363,18 @@ describe('Transaction Sagas -- Ethereum', () => {
         transactionSagas.searchInRangeList.push({
           publicAddress: 'b',
           startBlockNumber: 76,
-          endBlockNumber: 98
+          endBlockNumber: 98,
         });
-        const hydrateSaga = transactionSagas.fetchHistoryEth({publicAddress: 'a'});
+        const hydrateSaga = transactionSagas.fetchHistoryEth({
+          publicAddress: 'a',
+        });
         hydrateSaga.next();
         hydrateSaga.next(12);
         const expectedAll = hydrateSaga.next(34);
 
         expect(expectedAll.value.ALL).toEqual([
-          call(
-            transactionSagas.searchForInterestingBlocks,
-            'b',
-            76,
-            98
-          ),
-          call(
-            transactionSagas.searchForInterestingBlocks,
-            'a',
-            12,
-            34
-          )
+          call(transactionSagas.searchForInterestingBlocks, 'b', 76, 98),
+          call(transactionSagas.searchForInterestingBlocks, 'a', 12, 34),
         ]);
 
         const updateToBlock = hydrateSaga.next();
@@ -360,8 +394,8 @@ describe('Transaction Sagas -- Ethereum', () => {
         {
           publicAddress: 'a',
           startBlockNumber: 0,
-          endBlockNumber: 10
-        }
+          endBlockNumber: 10,
+        },
       ]);
     });
 
@@ -399,11 +433,13 @@ describe('Transaction Sagas -- Ethereum', () => {
       searchFn.next(2).value.CALL;
 
       const expectedEnd = searchFn.next(3).value.PUT;
-      expect(expectedEnd.action).toEqual(interestingBlockFound({
-        block: 1,
-        publicAddress: 'a',
-        transactionCount: Infinity
-      }));
+      expect(expectedEnd.action).toEqual(
+        interestingBlockFound({
+          block: 1,
+          publicAddress: 'a',
+          transactionCount: Infinity,
+        })
+      );
     });
 
     it('should rerun this function on both halves of interesting ranges if there is a halfway point between start and end blocks', () => {
@@ -414,12 +450,15 @@ describe('Transaction Sagas -- Ethereum', () => {
       const expectedFirstHalf = searchFn.next(3).value.FORK;
       const expectedSecondHalf = searchFn.next().value.FORK;
 
-      expect(expectedFirstHalf.fn).toEqual(transactionSagas.searchForInterestingBlocks);
+      expect(expectedFirstHalf.fn).toEqual(
+        transactionSagas.searchForInterestingBlocks
+      );
       expect(expectedFirstHalf.args).toEqual(['a', 0, 1]);
 
-      expect(expectedSecondHalf.fn).toEqual(transactionSagas.searchForInterestingBlocks);
+      expect(expectedSecondHalf.fn).toEqual(
+        transactionSagas.searchForInterestingBlocks
+      );
       expect(expectedSecondHalf.args).toEqual(['a', 1, 2]);
-
     });
 
     it('should return the end block if there is nothing else to search through', () => {
@@ -428,28 +467,38 @@ describe('Transaction Sagas -- Ethereum', () => {
       searchFn.next(1).value.CALL;
 
       const expectedEnd = searchFn.next(3).value.PUT;
-      expect(expectedEnd.action).toEqual(interestingBlockFound({
-        block: 1,
-        publicAddress: 'a',
-        transactionCount: 2
-      }));
+      expect(expectedEnd.action).toEqual(
+        interestingBlockFound({
+          block: 1,
+          publicAddress: 'a',
+          transactionCount: 2,
+        })
+      );
     });
   });
 
-  describe("search for transactions in an interesting block", () => {
+  describe('search for transactions in an interesting block', () => {
     it('should get the block info for that block', () => {
-      const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], 3);
+      const searchFn = transactionSagas.searchBlockForTransactions(
+        1,
+        ['a', 'b'],
+        3
+      );
       const blockCall = searchFn.next();
       expect(blockCall.value.CALL.fn).toEqual(transactionSagas.getBlock);
       expect(blockCall.value.CALL.args).toEqual([1]);
     });
 
     it('should put the block back in the queue if an error occurs', () => {
-      const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], 3);
+      const searchFn = transactionSagas.searchBlockForTransactions(
+        1,
+        ['a', 'b'],
+        3
+      );
       searchFn.next();
       const putBackInQueue = searchFn.throw(new Error());
       expect(putBackInQueue.value).toEqual(
-        put(interestingBlockFound({block: 1, transactionCount: 3}))
+        put(interestingBlockFound({ block: 1, transactionCount: 3 }))
       );
 
       const expectedFinish = searchFn.next();
@@ -457,70 +506,115 @@ describe('Transaction Sagas -- Ethereum', () => {
     });
 
     describe('for a given transaction', () => {
-
       it('should get the full transaction', () => {
-        const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], 3);
+        const searchFn = transactionSagas.searchBlockForTransactions(
+          1,
+          ['a', 'b'],
+          3
+        );
         searchFn.next();
-        const transactionCall = searchFn.next({transactions: [11,22,33]});
+        const transactionCall = searchFn.next({ transactions: [11, 22, 33] });
 
-        expect(transactionCall.value.CALL.fn).toEqual(transactionSagas.getTransaction);
+        expect(transactionCall.value.CALL.fn).toEqual(
+          transactionSagas.getTransaction
+        );
         expect(transactionCall.value.CALL.args).toEqual([11]);
       });
 
       it('should get the price for the time the transaction was mined', () => {
-        const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], 3);
+        const searchFn = transactionSagas.searchBlockForTransactions(
+          1,
+          ['a', 'b'],
+          3
+        );
         searchFn.next();
-        searchFn.next({timestamp: 987, transactions: [11,22,33]});
-        const priceCall = searchFn.next({to: 'a'});
+        searchFn.next({ timestamp: 987, transactions: [11, 22, 33] });
+        const priceCall = searchFn.next({ to: 'a' });
 
-        expect(priceCall.value.CALL.fn).toEqual(transactionSagas.timestampPriceApi.makeRequest);
+        expect(priceCall.value.CALL.fn).toEqual(
+          transactionSagas.timestampPriceApi.makeRequest
+        );
         expect(priceCall.value.CALL.args[0].includes(`ts=987`)).toBeTruthy();
       });
 
       it('should emit an event if the address is in the "to" field', () => {
-        const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], 3);
+        const searchFn = transactionSagas.searchBlockForTransactions(
+          1,
+          ['a', 'b'],
+          3
+        );
         searchFn.next();
-        searchFn.next({timestamp: 987, transactions: [11,22,33]});
-        searchFn.next({to: 'a', from: 'not', gasPrice: '', gasLimit: '', value: ''});
-        const transactionFoundPut = searchFn.next({ETH: {USD: 1234}});
+        searchFn.next({ timestamp: 987, transactions: [11, 22, 33] });
+        searchFn.next({
+          to: 'a',
+          from: 'not',
+          gasPrice: '',
+          gasLimit: '',
+          value: '',
+        });
+        const transactionFoundPut = searchFn.next({ ETH: { USD: 1234 } });
 
         expect(transactionFoundPut.value.PUT).toBeDefined();
         expect(transactionFoundPut.value.PUT.action.transaction.to).toBe('a');
       });
 
       it('should emit an event if the address is in the "from" field', () => {
-        const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], 3);
+        const searchFn = transactionSagas.searchBlockForTransactions(
+          1,
+          ['a', 'b'],
+          3
+        );
         searchFn.next();
-        searchFn.next({timestamp: 987, transactions: [11,22,33]});
-        searchFn.next({to: 'not', from: 'a', gasPrice: '', gasLimit: '', value: ''});
-        const transactionFoundPut = searchFn.next({ETH: {USD: 1234}});
+        searchFn.next({ timestamp: 987, transactions: [11, 22, 33] });
+        searchFn.next({
+          to: 'not',
+          from: 'a',
+          gasPrice: '',
+          gasLimit: '',
+          value: '',
+        });
+        const transactionFoundPut = searchFn.next({ ETH: { USD: 1234 } });
 
         expect(transactionFoundPut.value.PUT).toBeDefined();
         expect(transactionFoundPut.value.PUT.action.transaction.from).toBe('a');
       });
 
       it('should not emit an event if the address is in neither "to" or "from"', () => {
-        const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], 3);
+        const searchFn = transactionSagas.searchBlockForTransactions(
+          1,
+          ['a', 'b'],
+          3
+        );
         searchFn.next();
-        searchFn.next({timestamp: 987, transactions: [11,22,33]});
-        searchFn.next({to: 'not', from: 'not', gasPrice: '', gasLimit: '', value: ''});
-        const transactionFoundPut = searchFn.next({ETH: {USD: 1234}});
+        searchFn.next({ timestamp: 987, transactions: [11, 22, 33] });
+        searchFn.next({
+          to: 'not',
+          from: 'not',
+          gasPrice: '',
+          gasLimit: '',
+          value: '',
+        });
+        const transactionFoundPut = searchFn.next({ ETH: { USD: 1234 } });
 
         expect(transactionFoundPut.value.PUT).not.toBeDefined();
       });
 
       it('convert the bigNumber representation of wei values to ether number string', () => {
-        const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], 3);
+        const searchFn = transactionSagas.searchBlockForTransactions(
+          1,
+          ['a', 'b'],
+          3
+        );
         searchFn.next();
-        searchFn.next({timestamp: 987, transactions: [11,22,33]});
+        searchFn.next({ timestamp: 987, transactions: [11, 22, 33] });
         searchFn.next({
           to: 'a',
           from: 'not',
           gasPrice: ethers.utils.bigNumberify(1e10),
           gasLimit: ethers.utils.bigNumberify(2e9),
-          value: ethers.utils.bigNumberify(3e8)
+          value: ethers.utils.bigNumberify(3e8),
         });
-        const transactionFoundPut = searchFn.next({ETH: {USD: 1234}});
+        const transactionFoundPut = searchFn.next({ ETH: { USD: 1234 } });
 
         expect(transactionFoundPut.value.PUT).toBeDefined();
         const transaction = transactionFoundPut.value.PUT.action.transaction;
@@ -530,17 +624,21 @@ describe('Transaction Sagas -- Ethereum', () => {
       });
 
       it('add the mining time to the transaction, in milliseconds', () => {
-        const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], 3);
+        const searchFn = transactionSagas.searchBlockForTransactions(
+          1,
+          ['a', 'b'],
+          3
+        );
         searchFn.next();
-        searchFn.next({timestamp: 987, transactions: [11,22,33]});
+        searchFn.next({ timestamp: 987, transactions: [11, 22, 33] });
         searchFn.next({
           to: 'a',
           from: 'not',
           gasPrice: '',
           gasLimit: '',
-          value: ''
+          value: '',
         });
-        const transactionFoundPut = searchFn.next({ETH: {USD: 1234}});
+        const transactionFoundPut = searchFn.next({ ETH: { USD: 1234 } });
 
         expect(transactionFoundPut.value.PUT).toBeDefined();
         const transaction = transactionFoundPut.value.PUT.action.transaction;
@@ -548,17 +646,21 @@ describe('Transaction Sagas -- Ethereum', () => {
       });
 
       it('add price at the the mining time to the transaction', () => {
-        const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], 3);
+        const searchFn = transactionSagas.searchBlockForTransactions(
+          1,
+          ['a', 'b'],
+          3
+        );
         searchFn.next(); // block call
-        searchFn.next({timestamp: 987, transactions: [11,22,33]});
+        searchFn.next({ timestamp: 987, transactions: [11, 22, 33] });
         searchFn.next({
           to: 'a',
           from: 'not',
           gasPrice: '',
           gasLimit: '',
-          value: ''
+          value: '',
         }); // price call
-        const transactionFoundPut = searchFn.next({ETH: {USD: 1234}});
+        const transactionFoundPut = searchFn.next({ ETH: { USD: 1234 } });
 
         expect(transactionFoundPut.value.PUT).toBeDefined();
         const transaction = transactionFoundPut.value.PUT.action.transaction;
@@ -568,13 +670,29 @@ describe('Transaction Sagas -- Ethereum', () => {
 
     it('should stop the search when we have found enough transactions', () => {
       // this test will find the 1 transaction on the second iteration
-      const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], 1);
+      const searchFn = transactionSagas.searchBlockForTransactions(
+        1,
+        ['a', 'b'],
+        1
+      );
       searchFn.next(); // block call
 
-      searchFn.next({timestamp: 987, transactions: [11,22,33]}); // transaction call
-      searchFn.next({to: 'not', from: 'not', gasPrice: '', gasLimit: '', value: ''}); // second transaction call
-      searchFn.next({to: 'a', from: 'not', gasPrice: '', gasLimit: '', value: ''}); // price call
-      const transactionFoundPut = searchFn.next({ETH: {USD: 1234}});
+      searchFn.next({ timestamp: 987, transactions: [11, 22, 33] }); // transaction call
+      searchFn.next({
+        to: 'not',
+        from: 'not',
+        gasPrice: '',
+        gasLimit: '',
+        value: '',
+      }); // second transaction call
+      searchFn.next({
+        to: 'a',
+        from: 'not',
+        gasPrice: '',
+        gasLimit: '',
+        value: '',
+      }); // price call
+      const transactionFoundPut = searchFn.next({ ETH: { USD: 1234 } });
 
       expect(transactionFoundPut.value.PUT).toBeDefined();
 
@@ -583,21 +701,42 @@ describe('Transaction Sagas -- Ethereum', () => {
       expect(finish.value.length).toBe(1);
     });
 
-    it('should loop through all transactions when we don\'t know how many transactions to look for', () => {
-      const searchFn = transactionSagas.searchBlockForTransactions(1, ['a', 'b'], Infinity);
+    it("should loop through all transactions when we don't know how many transactions to look for", () => {
+      const searchFn = transactionSagas.searchBlockForTransactions(
+        1,
+        ['a', 'b'],
+        Infinity
+      );
       searchFn.next(); // block call
 
-      searchFn.next({timestamp: 987, transactions: [11,22,33]}); // transaction call
-      searchFn.next({to: 'not', from: 'not', gasPrice: '', gasLimit: '', value: ''}); // secondTransactionCall
-      searchFn.next({to: 'a', from: 'not', gasPrice: '', gasLimit: '', value: ''}); // priceCall
+      searchFn.next({ timestamp: 987, transactions: [11, 22, 33] }); // transaction call
+      searchFn.next({
+        to: 'not',
+        from: 'not',
+        gasPrice: '',
+        gasLimit: '',
+        value: '',
+      }); // secondTransactionCall
+      searchFn.next({
+        to: 'a',
+        from: 'not',
+        gasPrice: '',
+        gasLimit: '',
+        value: '',
+      }); // priceCall
 
-      const transactionFoundPut = searchFn.next({ETH: {USD: 1234}});
+      const transactionFoundPut = searchFn.next({ ETH: { USD: 1234 } });
       expect(transactionFoundPut.value.PUT).toBeDefined();
-
 
       searchFn.next(); // thirdTransactionCall
 
-      const finish = searchFn.next({to: 'not', from: 'not', gasPrice: '', gasLimit: '', value: ''});
+      const finish = searchFn.next({
+        to: 'not',
+        from: 'not',
+        gasPrice: '',
+        gasLimit: '',
+        value: '',
+      });
       expect(finish.done).toBe(true);
       expect(finish.value.length).toBe(1);
     });

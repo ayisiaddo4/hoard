@@ -4,18 +4,18 @@
 | state & actions to ./Track component.
 |--------------------------------------------------
 */
-import { connect } from "react-redux";
-import { trackSymbol } from "../actions";
-import { availableCoinsSelector } from "../selectors";
+import { connect } from 'react-redux';
+import { trackSymbol } from '../actions';
+import { availableCoinsSelector } from '../selectors';
 
-import Track from "./Track";
+import Track from './Track';
 
 function mapStateToProps(state) {
   const { track_requesting, track_successful } = state.wallet;
   return {
     track_requesting,
     track_successful,
-    availableCoins: availableCoinsSelector(state)
+    availableCoins: availableCoinsSelector(state),
   };
 }
 
@@ -23,4 +23,7 @@ const mapDispatchToProps = {
   trackSymbol,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Track);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Track);

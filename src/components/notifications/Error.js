@@ -11,7 +11,7 @@ const Error = props => (
 
 Error.propTypes = {
   title: PropTypes.string,
-  message: PropTypes.message
+  message: PropTypes.message,
 };
 
 export default Error;
@@ -20,14 +20,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F03434',
     padding: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   title: {
     fontSize: 16,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   message: {
     fontSize: 14,
-    fontWeight: '300'
-  }
+    fontWeight: '300',
+  },
 });

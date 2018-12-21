@@ -39,15 +39,15 @@ export function stringToColor(str) {
   return color;
 }
 
-export function  validateEmail({ email_address }) {
+export function validateEmail({ email_address }) {
   const MATCH_PATTERN = '^[a-zA-Z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]+$';
 
   if (!email_address) {
-    return { error: 'An email is required'};
+    return { error: 'An email is required' };
   }
 
-  if (!email_address.toString().match(MATCH_PATTERN) ) {
-    return{ error: 'Must be a valid email'};
+  if (!email_address.toString().match(MATCH_PATTERN)) {
+    return { error: 'Must be a valid email' };
   }
 
   return true;

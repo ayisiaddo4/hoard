@@ -38,7 +38,7 @@ export default class SparkLine extends React.Component {
     const distance = width / (children.length - 1);
     const renderablePoints = children
       .map((v, i) => ({
-        y: (v - minValue) * height / range,
+        y: ((v - minValue) * height) / range,
         x: distance * i + (i ? distance : 0),
       }))
       .map(v => `${v.x},${-v.y + height}`);

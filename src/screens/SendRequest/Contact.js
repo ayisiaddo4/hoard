@@ -13,26 +13,32 @@ import { stringToColor } from 'lib/string-helpers';
 
 const exists = v => v;
 
-export default function Contact({contact, style, onPress}) {
-  const title = [
-    contact.givenName,
-    contact.middleName,
-    contact.familyName,
-  ].filter(exists).join(' ');
-  const initials = [
-    contact.givenName,
-    contact.familyName,
-  ].filter(exists).map(v => v && v[0]).join();
+export default function Contact({ contact, style, onPress }) {
+  const title = [contact.givenName, contact.middleName, contact.familyName]
+    .filter(exists)
+    .join(' ');
+  const initials = [contact.givenName, contact.familyName]
+    .filter(exists)
+    .map(v => v && v[0])
+    .join();
 
   const inner = (
     <View style={[styles.container, style]}>
       <View style={styles.imageContainer}>
         <Conditional>
           <Try condition={contact.hasThumbnail}>
-            <Image source={{ uri: contact.thumbnailPath }} style={styles.image}/>
+            <Image
+              source={{ uri: contact.thumbnailPath }}
+              style={styles.image}
+            />
           </Try>
           <Otherwise>
-            <View style={[styles.background, {backgroundColor: stringToColor(contact.recordID)}]}>
+            <View
+              style={[
+                styles.background,
+                { backgroundColor: stringToColor(contact.recordID) },
+              ]}
+            >
               <T.Light style={styles.initials}>{initials}</T.Light>
             </View>
           </Otherwise>
@@ -43,11 +49,7 @@ export default function Contact({contact, style, onPress}) {
   );
 
   if (onPress) {
-  return (
-    <TouchableOpacity onPress={onPress}>
-      {inner}
-    </TouchableOpacity>
-  );
+    return <TouchableOpacity onPress={onPress}>{inner}</TouchableOpacity>;
   } else {
     return inner;
   }
@@ -69,19 +71,19 @@ Contact.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   imageContainer: {
     width: 30,
     height: 30,
     borderRadius: 15,
     overflow: 'hidden',
-    marginRight: 15
+    marginRight: 15,
   },
   image: {
     width: 30,
     height: 30,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   background: {
     height: 30,

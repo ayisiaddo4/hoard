@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import T from 'components/Typography';
 import { Layout, Body } from 'components/Base';
@@ -13,7 +13,7 @@ export default function ReleaseNotes() {
           <T.Heading style={[styles.type, styles.header]}>
             {t('about.release_notes.title')}
           </T.Heading>
-          {Config.CURRENCY_NETWORK_TYPE !== 'main' &&
+          {Config.CURRENCY_NETWORK_TYPE !== 'main' && (
             <Fragment>
               <View style={styles.testnetWarning}>
                 <View style={styles.testnetIconWrapper}>
@@ -46,13 +46,11 @@ export default function ReleaseNotes() {
                 </T.Light>
               </View>
             </Fragment>
-          }
+          )}
           <T.SubHeading style={styles.subheading}>
             {t('about.release_notes.release')} 1.0
           </T.SubHeading>
-          <T.Light style={styles.type}>
-            &bull;  🎉 🎉 🎉 🎉 🎉
-          </T.Light>
+          <T.Light style={styles.type}>&bull; 🎉 🎉 🎉 🎉 🎉</T.Light>
         </Body>
       </Body>
     </Layout>
@@ -84,7 +82,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   testnetBody: {
-    flex: 1
+    flex: 1,
   },
   testnetHeader: {
     fontSize: 14,
@@ -95,14 +93,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'white',
   },
-  introText: {
-  },
-  header: {
-  },
+  introText: {},
+  header: {},
   subheading: {
     color: 'white',
     fontWeight: 'bold',
-    marginVertical: 20
+    marginVertical: 20,
   },
   body: {
     padding: 20,

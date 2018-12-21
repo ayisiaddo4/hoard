@@ -1,13 +1,11 @@
-import {
-  trackSymbolSuccess
-} from '../actions';
+import { trackSymbolSuccess } from '../actions';
 
 import reducer from '../../../rootReducer';
 
 import {
   walletSelector,
   allWalletsSelector,
-  walletsForSymbolSelector
+  walletsForSymbolSelector,
 } from '../selectors';
 
 describe('Wallets Selectors', () => {
@@ -22,7 +20,7 @@ describe('Wallets Selectors', () => {
         publicAddress: 'q',
         imported: false,
         symbol: 'a',
-        balance: 2
+        balance: 2,
       };
 
       const withOneWallet = reducer(undefined, trackSymbolSuccess(walletA));
@@ -33,13 +31,14 @@ describe('Wallets Selectors', () => {
         publicAddress: 'z',
         imported: false,
         symbol: 'b',
-        balance: 2
+        balance: 2,
       };
 
-      const withTwoWallets = reducer(withOneWallet, trackSymbolSuccess(walletB));
-      expect(allWalletsSelector(withTwoWallets))
-        .toEqual([walletA, walletB]);
-
+      const withTwoWallets = reducer(
+        withOneWallet,
+        trackSymbolSuccess(walletB)
+      );
+      expect(allWalletsSelector(withTwoWallets)).toEqual([walletA, walletB]);
     });
   });
 
@@ -58,9 +57,8 @@ describe('Wallets Selectors', () => {
         publicAddress: 'q',
         imported: false,
         symbol: 'a',
-        balance: 2
+        balance: 2,
       };
-
 
       const withOneWallet = reducer(undefined, trackSymbolSuccess(walletA));
       expect(walletsForSymbolSelector(withOneWallet, 'a')).toEqual([walletA]);
@@ -70,26 +68,32 @@ describe('Wallets Selectors', () => {
         publicAddress: 'z',
         imported: false,
         symbol: 'b',
-        balance: 2
+        balance: 2,
       };
 
-      const withTwoWallets = reducer(withOneWallet, trackSymbolSuccess(walletB));
-      expect(walletsForSymbolSelector(withTwoWallets, 'a'))
-        .toEqual([walletA]);
+      const withTwoWallets = reducer(
+        withOneWallet,
+        trackSymbolSuccess(walletB)
+      );
+      expect(walletsForSymbolSelector(withTwoWallets, 'a')).toEqual([walletA]);
 
       const walletC = {
         id: 'c',
         publicAddress: 'x',
         imported: false,
         symbol: 'a',
-        balance: 2
+        balance: 2,
       };
 
-      const withThreeWallets = reducer(withTwoWallets, trackSymbolSuccess(walletC));
+      const withThreeWallets = reducer(
+        withTwoWallets,
+        trackSymbolSuccess(walletC)
+      );
 
-      expect(walletsForSymbolSelector(withThreeWallets, 'a'))
-        .toEqual([walletA, walletC]);
-
+      expect(walletsForSymbolSelector(withThreeWallets, 'a')).toEqual([
+        walletA,
+        walletC,
+      ]);
 
       const a = walletsForSymbolSelector(withThreeWallets, 'a');
       const b = walletsForSymbolSelector(withThreeWallets, 'a');
@@ -109,7 +113,7 @@ describe('Wallets Selectors', () => {
         publicAddress: 'q',
         imported: false,
         symbol: 'a',
-        balance: 2
+        balance: 2,
       };
 
       const walletB = {
@@ -117,15 +121,17 @@ describe('Wallets Selectors', () => {
         imported: false,
         publicAddress: 'z',
         symbol: 'b',
-        balance: 2
+        balance: 2,
       };
 
       const withOneWallet = reducer(undefined, trackSymbolSuccess(walletA));
-      const withTwoWallets = reducer(withOneWallet, trackSymbolSuccess(walletB));
+      const withTwoWallets = reducer(
+        withOneWallet,
+        trackSymbolSuccess(walletB)
+      );
 
       expect(walletSelector(withOneWallet, 'a')).toEqual(walletA);
       expect(walletSelector(withTwoWallets, 'a')).toEqual(walletA);
-
     });
   });
 });

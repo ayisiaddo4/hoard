@@ -75,7 +75,13 @@ export default class Pin extends Component {
     } else {
       return (
         <Animatable.View animation="fadeInUp" style={styles.container}>
-          <View style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 20,
+            }}
+          >
             <Image
               style={{
                 height: 100,
@@ -90,9 +96,7 @@ export default class Pin extends Component {
               {this.state.valid ? '' : title}
               {this.state.pin && this.state.valid && LANG_SUCCESS_STRING}
             </T.Heading>
-            <T.Light style={styles.pinPromptText}>
-              {subtitle}
-            </T.Light>
+            <T.Light style={styles.pinPromptText}>{subtitle}</T.Light>
             <Animatable.View ref={this.handleInputRef}>
               <InputList pinLength={6} pinValue={this.state.pinValue} />
             </Animatable.View>

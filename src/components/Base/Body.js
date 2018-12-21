@@ -13,20 +13,26 @@ const Body = ({ style, children, navigationOffset, ...otherProps }) => {
     const dismissKeyboard = otherProps.dismissKeyboard;
     const dismissMode = Platform.OS === 'ios' ? 'on-drag' : 'none';
     return (
-      <View style={[
-        styles.body,
-        {
-          marginTop: navigationOffset ? -navigationOffset : 0,
-        }
-      ]}  {...otherProps}>
+      <View
+        style={[
+          styles.body,
+          {
+            marginTop: navigationOffset ? -navigationOffset : 0,
+          },
+        ]}
+        {...otherProps}
+      >
         <ScrollView
-          contentOffset = {{x: 0, y: 0}}
+          contentOffset={{ x: 0, y: 0 }}
           bounces={otherProps.bounces}
           keyboardShouldPersistTaps={dismissKeyboard}
           keyboardDismissMode={dismissMode}
           contentContainerStyle={[
             style,
-            { flexGrow: 1, paddingTop: navigationOffset ? navigationOffset : 0 }
+            {
+              flexGrow: 1,
+              paddingTop: navigationOffset ? navigationOffset : 0,
+            },
           ]}
         >
           {children}

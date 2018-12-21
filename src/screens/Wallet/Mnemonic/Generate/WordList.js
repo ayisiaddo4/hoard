@@ -13,7 +13,7 @@ export default class WordList extends Component {
     offset: PropTypes.number.isRequired,
     totalLength: PropTypes.number.isRequired,
     navigation: PropTypes.shape({
-      setParams: PropTypes.func.isRequired
+      setParams: PropTypes.func.isRequired,
     }).isRequired,
     goBack: PropTypes.func.isRequired,
     saveAndContinue: PropTypes.func.isRequired,
@@ -65,8 +65,12 @@ export default class WordList extends Component {
       <Layout preload={false}>
         <Body scrollable style={styles.body}>
           <Header>
-            <T.Heading style={styles.headingStyle}>{t('wallet.your_words')}</T.Heading>
-            <T.Light style={styles.text}>{t('wallet.your_words_description')}</T.Light>
+            <T.Heading style={styles.headingStyle}>
+              {t('wallet.your_words')}
+            </T.Heading>
+            <T.Light style={styles.text}>
+              {t('wallet.your_words_description')}
+            </T.Light>
           </Header>
           <Body>
             <Animations
@@ -108,7 +112,8 @@ export default class WordList extends Component {
                 paddingBottom: 10,
               }}
             >
-              {this.props.list.length + this.props.offset - 1} of {this.props.totalLength} words
+              {this.props.list.length + this.props.offset - 1} of{' '}
+              {this.props.totalLength} words
             </T.Light>
             <Button
               loading={this.state.loading}

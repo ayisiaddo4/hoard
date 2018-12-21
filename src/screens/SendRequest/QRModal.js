@@ -14,19 +14,19 @@ export default class QRModal extends Component {
     navigation: PropTypes.shape({
       state: PropTypes.shape({
         params: PropTypes.shape({
-          onChangeRecipient: PropTypes.func.isRequired
+          onChangeRecipient: PropTypes.func.isRequired,
         }),
       }),
     }),
   };
 
-  handleRead = (value) => {
+  handleRead = value => {
     this.props.navigation.state.params.onChangeRecipient({
       recipientType: RECIPIENT_TYPE_ADDRESS,
-      recipient: value.replace(/(\w+:)?(\w+)([\?\&]\w+=\w+)+/, '$2')
+      recipient: value.replace(/(\w+:)?(\w+)([\?\&]\w+=\w+)+/, '$2'),
     });
     NavigatorService.navigate('SendRequest');
-  }
+  };
 
   render() {
     return (

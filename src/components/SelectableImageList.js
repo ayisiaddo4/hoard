@@ -12,7 +12,9 @@ export default function SelectableImageList(props) {
         <T.SubHeading style={styles.subheading}>{props.title}</T.SubHeading>
       )}
       <ScrollView bounces={false}>
-        {props.items.map((item, i) => <SelectableImageRow key={i} {...item} />)}
+        {props.items.map((item, i) => (
+          <SelectableImageRow key={i} {...item} />
+        ))}
       </ScrollView>
     </View>
   );

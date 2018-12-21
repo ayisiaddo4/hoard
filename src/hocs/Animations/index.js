@@ -61,8 +61,8 @@ export function fadeStyle(animatedValue, parameters) {
       inputRange: [0, 1],
       outputRange: [parameters.start || 0, parameters.end || 1],
       extrapolate: 'clamp',
-      useNativeDriver: true
-    })
+      useNativeDriver: true,
+    }),
   };
 }
 
@@ -77,10 +77,10 @@ export function slideXStyle(animatedValue, parameters) {
           inputRange: [0, 1],
           outputRange: [parameters.start || 0, parameters.end || 1],
           extrapolate: 'clamp',
-          useNativeDriver: true
-        })
-      }
-    ]
+          useNativeDriver: true,
+        }),
+      },
+    ],
   };
 }
 export function slideYStyle(animatedValue, parameters) {
@@ -94,11 +94,10 @@ export function slideYStyle(animatedValue, parameters) {
           inputRange: [0, 1],
           outputRange: [parameters.start || 0, parameters.end || 1],
           extrapolate: 'clamp',
-          useNativeDriver: true
-        })
-      }
-    ]
-
+          useNativeDriver: true,
+        }),
+      },
+    ],
   };
 }
 
@@ -110,8 +109,8 @@ class Animations extends Component {
         type: PropTypes.string.isRequired,
         parameters: PropTypes.shape({
           start: PropTypes.number.isRequired,
-          end: PropTypes.number.isRequired
-        }).isRequired
+          end: PropTypes.number.isRequired,
+        }).isRequired,
       }).isRequired
     ).isRequired,
     startAnimation: PropTypes.bool.isRequired,
@@ -125,7 +124,7 @@ class Animations extends Component {
     exitStagger: PropTypes.number,
     onExitComplete: PropTypes.func,
     style: PropTypes.object,
-    itemStyle: PropTypes.object
+    itemStyle: PropTypes.object,
   };
 
   static defaultProps = {};
@@ -146,7 +145,7 @@ class Animations extends Component {
           toValue: 1,
           delay: this.props.enterDelay,
           duration: this.props.enterDuration,
-          stagger: this.props.enterStagger
+          stagger: this.props.enterStagger,
         },
         this.props.onEnterComplete
       );
@@ -157,7 +156,7 @@ class Animations extends Component {
           toValue: 0,
           delay: this.props.exitDelay,
           duration: this.props.exitDuration,
-          stagger: this.props.exitStagger
+          stagger: this.props.exitStagger,
         },
         this.props.onExitComplete
       );
@@ -174,7 +173,7 @@ class Animations extends Component {
       return Animated.timing(this.animatedValues[i], {
         toValue,
         delay: delay * i,
-        duration
+        duration,
       });
     });
     Animated.stagger(stagger, animations).start(completeCallback);
@@ -210,5 +209,5 @@ class Animations extends Component {
 export default Animations;
 
 const styles = StyleSheet.create({
-  container: {}
+  container: {},
 });

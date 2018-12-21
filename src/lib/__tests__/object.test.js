@@ -1,9 +1,7 @@
-import {keyMapper} from '../object-helpers';
+import { keyMapper } from '../object-helpers';
 
 describe('test keyMapper', () => {
-
   it('should properly map keys', () => {
-
     const KEY_TO_OTHER_KEY = {
       // jumio to base
       a: 'A',
@@ -19,7 +17,7 @@ describe('test keyMapper', () => {
       C: 'i',
       D: 'j',
       E: 'k',
-      F: 'l'
+      F: 'l',
     };
 
     const testResponse = {
@@ -29,7 +27,7 @@ describe('test keyMapper', () => {
       d: 4,
       e: 5,
       f: 6,
-      hullaballoo: 7
+      hullaballoo: 7,
     };
 
     const expectedResult = {
@@ -39,7 +37,7 @@ describe('test keyMapper', () => {
       D: 4,
       E: 5,
       F: 6,
-      hullaballoo: 7
+      hullaballoo: 7,
     };
 
     const complyAdvantageRequest = {
@@ -49,11 +47,12 @@ describe('test keyMapper', () => {
       j: 4,
       k: 5,
       l: 6,
-      hullaballoo: 7
+      hullaballoo: 7,
     };
 
     expect(keyMapper(testResponse, KEY_TO_OTHER_KEY)).toEqual(expectedResult);
-    expect(keyMapper(expectedResult, KEY_TO_OTHER_KEY)).toEqual(complyAdvantageRequest);
-
+    expect(keyMapper(expectedResult, KEY_TO_OTHER_KEY)).toEqual(
+      complyAdvantageRequest
+    );
   });
 });

@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Image } from "react-native";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { StyleSheet, View, Image } from 'react-native';
+import PropTypes from 'prop-types';
 import createStyles, { dimensions, colors, padding, typography } from 'styles';
 
-import Button from "components/Button";
-import T from "components/Typography";
+import Button from 'components/Button';
+import T from 'components/Typography';
 
 import { t } from 'translations/i18n';
 export default class Type extends Component {
@@ -39,7 +39,9 @@ export default class Type extends Component {
           <Button
             type="text"
             style={styles.recoverButton}
-            onPress={this.props.saveAndContinue(this.props.existingMnemonicType)}
+            onPress={this.props.saveAndContinue(
+              this.props.existingMnemonicType
+            )}
           >
             {t('wallet.existing_mnemonic')}
           </Button>
@@ -49,7 +51,7 @@ export default class Type extends Component {
   }
 }
 
-const imageWidth = dimensions.width * 0.40;
+const imageWidth = dimensions.width * 0.4;
 const imageHeight = imageWidth * 1.0989010989;
 
 const styles = StyleSheet.create({
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1
+    flex: 1,
   },
   heading: {
     color: colors.white,
@@ -75,19 +77,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   content: {
-    fontFamily: "HelveticaNeue",
+    fontFamily: 'HelveticaNeue',
     fontSize: 16,
-    fontWeight: "300",
-    fontStyle: "normal",
-    textAlign: "center",
-    color: "#9da0a5"
+    fontWeight: '300',
+    fontStyle: 'normal',
+    textAlign: 'center',
+    color: '#9da0a5',
   },
   buttonsContainer: {
-    marginTop: 'auto'
+    marginTop: 'auto',
   },
   generateButton: {
     marginBottom: padding.md,
   },
-  recoverButton: {
-  },
+  recoverButton: {},
 });

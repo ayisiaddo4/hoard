@@ -46,12 +46,11 @@ or via method:  export const translateHeaderText = (langKey) => ({screenProps}) 
 };
 */
 
-export const setLocale = (locale) => {
+export const setLocale = locale => {
   i18n.locale = locale;
 };
 
 export const getCurrentLocale = () => i18n.locale; // It will be used to define intial language state in reducer.
-
 
 // // Is it a RTL language?
 // export const isRTL = I18n.currentLocale().indexOf('he') === 0 || I18n.currentLocale().indexOf('ar') === 0;
@@ -69,7 +68,7 @@ export const getCurrentLocale = () => i18n.locale; // It will be used to define 
   <Text>{t('login.title')}</Text>  // or nested json
   <Text>{t('current', { language: 'en' })}</Text>
  */
-export const t = (key, params = {} ) => i18n.translate(key, params);
+export const t = (key, params = {}) => i18n.translate(key, params);
 
 /*
 Handle language changes

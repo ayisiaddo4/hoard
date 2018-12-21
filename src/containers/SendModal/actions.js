@@ -1,10 +1,10 @@
-import {SHOW_SEND_MODAL, HIDE_SEND_MODAL} from './constants';
+import { SHOW_SEND_MODAL, HIDE_SEND_MODAL } from './constants';
 
 export function showSendModal(id) {
   const selectedWalletId = typeof id === 'string' ? id : null;
-  return {type: SHOW_SEND_MODAL, selectedWalletId};
+  return { type: SHOW_SEND_MODAL, selectedWalletId };
 }
 
 export function hideSendModal() {
-  return {type: HIDE_SEND_MODAL};
+  return { type: HIDE_SEND_MODAL };
 }

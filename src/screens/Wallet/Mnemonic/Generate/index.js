@@ -14,7 +14,10 @@ function getXItemsFromList(number, list) {
     if (availableItems.length) {
       const selectedIndex = Math.floor(Math.random() * availableItems.length);
       const selectedItem = availableItems[selectedIndex];
-      availableItems = [...availableItems.slice(0, selectedIndex), ...availableItems.slice(selectedIndex + 1)];
+      availableItems = [
+        ...availableItems.slice(0, selectedIndex),
+        ...availableItems.slice(selectedIndex + 1),
+      ];
       selectedItems.push(selectedItem);
     } else {
       break;
@@ -27,13 +30,13 @@ function getXItemsFromList(number, list) {
 export default class Generate extends Component {
   static propTypes = {
     saveAndContinue: PropTypes.func.isRequired,
-    goBack: PropTypes.func.isRequired
+    goBack: PropTypes.func.isRequired,
   };
 
   state = {
     step: 1,
     mnemonic: ethers.Wallet.createRandom().mnemonic,
-    confirmationList: []
+    confirmationList: [],
   };
 
   componentDidMount() {
@@ -46,19 +49,22 @@ export default class Generate extends Component {
     });
   };
 
-  generateNewMnemonic = (extraEntropy) => {
-    this.setState({
-      mnemonic: ethers.Wallet.createRandom({extraEntropy}).mnemonic
-    }, this.nextStep);
-  }
+  generateNewMnemonic = extraEntropy => {
+    this.setState(
+      {
+        mnemonic: ethers.Wallet.createRandom({ extraEntropy }).mnemonic,
+      },
+      this.nextStep
+    );
+  };
 
   generateConfirmationList = () => {
     const list = this.state.mnemonic.split(' ');
     const confirmationList = getXItemsFromList(2, list)
-      .map(word => ({i: list.indexOf(word), word}))
+      .map(word => ({ i: list.indexOf(word), word }))
       .sort((a, b) => a.i - b.i);
 
-    this.setState({confirmationList}, this.nextStep);
+    this.setState({ confirmationList }, this.nextStep);
   };
 
   nextStep = () => {
@@ -66,7 +72,7 @@ export default class Generate extends Component {
     const nextStep = currentStep <= 3 ? currentStep + 1 : 1;
 
     this.setState({
-      step: nextStep
+      step: nextStep,
     });
   };
 
@@ -78,7 +84,7 @@ export default class Generate extends Component {
     }
 
     this.setState({ step });
-  }
+  };
 
   saveNewWallet = () => this.props.saveAndContinue(this.state.mnemonic);
 
@@ -96,14 +102,9 @@ export default class Generate extends Component {
     if (step === 2) {
       if (__DEV__) {
         //eslint-disable-next-line no-console
-        console.log(
-          'Generated List:',
-          mnemonic.split(' ')
-        );
+        console.log('Generated List:', mnemonic.split(' '));
       }
-      const mnemonicList = mnemonic
-        .split(' ')
-        .slice(0, 6);
+      const mnemonicList = mnemonic.split(' ').slice(0, 6);
       return (
         <WordList
           key="a"
@@ -117,9 +118,7 @@ export default class Generate extends Component {
       );
     }
     if (step === 3) {
-      const mnemonicList = mnemonic
-        .split(' ')
-        .slice(6, 12);
+      const mnemonicList = mnemonic.split(' ').slice(6, 12);
 
       return (
         <WordList

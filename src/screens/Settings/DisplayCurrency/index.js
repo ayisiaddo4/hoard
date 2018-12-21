@@ -6,15 +6,18 @@ import { tradingPairSelector } from '../selectors';
 
 import DisplayCurrency from './DisplayCurrency';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     tradingPairs: SUPPORTED_TRADING_PAIRS,
-    selectedTradingPair: tradingPairSelector(state)
+    selectedTradingPair: tradingPairSelector(state),
   };
 };
 
 const mapDispatchToProps = {
-  updateTradingPair
+  updateTradingPair,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DisplayCurrency);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DisplayCurrency);

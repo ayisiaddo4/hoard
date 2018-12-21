@@ -11,26 +11,24 @@ import PersonalInfoReview from './PersonalInfoReview';
 export const KYCNavigator = createStackNavigator(
   {
     KYCStatus: {
-      screen: KYCStatus
+      screen: KYCStatus,
     },
     PersonalInfoReview: {
-      screen: PersonalInfoReview
+      screen: PersonalInfoReview,
     },
     DocumentVerification: {
-      screen: DocumentVerification
-    }
+      screen: DocumentVerification,
+    },
   },
   {
-    initialRouteName: 'KYCStatus'
+    initialRouteName: 'KYCStatus',
   }
 );
 
-export const KYCRouter = createStackNavigator(
-  {
-    KYC: {
-      screen: KYCNavigator
-    }
-  }
-);
+export const KYCRouter = createStackNavigator({
+  KYC: {
+    screen: KYCNavigator,
+  },
+});
 
 export default KYCRouter;

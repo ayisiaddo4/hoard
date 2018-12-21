@@ -15,7 +15,10 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  initializeMnemonic
+  initializeMnemonic,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Mnemonic);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Mnemonic);

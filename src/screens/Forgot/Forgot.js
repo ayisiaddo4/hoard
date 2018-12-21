@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet,Image } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 
 import { FORGOT_PASSWORD, FORGOT_USERNAME } from 'screens/Forgot/constants';
 import NavigatorService from 'lib/navigator';
@@ -11,7 +11,6 @@ import { t } from 'translations/i18n';
 import Button from 'components/Button';
 
 export default class Forgot extends Component {
-
   static propTypes = {
     navigation: PropTypes.shape({
       setParams: PropTypes.func.isRequired,
@@ -24,10 +23,10 @@ export default class Forgot extends Component {
   };
 
   handleForgotPasswordModal = () => {
-    NavigatorService.navigate('ForgotModal', {type: FORGOT_PASSWORD});
+    NavigatorService.navigate('ForgotModal', { type: FORGOT_PASSWORD });
   };
   handleForgotUsernameModal = () => {
-    NavigatorService.navigate('ForgotModal', {type: FORGOT_USERNAME});
+    NavigatorService.navigate('ForgotModal', { type: FORGOT_USERNAME });
   };
 
   render() {
@@ -35,32 +34,26 @@ export default class Forgot extends Component {
 
     return (
       <Layout preload={false} style={styles.container} keyboard>
-
-          <Header style={{ alignItems: 'center', marginBottom: 20}}>
-            <Image style={styles.icon} source={imgSrc} />
-            <T.Heading style={styles.heading}>{t('login.cant_log_in')}</T.Heading>
-            <T.Heading style={styles.subheading}>
-              {t('forgot.instructions')}
-            </T.Heading>
-          </Header>
+        <Header style={{ alignItems: 'center', marginBottom: 20 }}>
+          <Image style={styles.icon} source={imgSrc} />
+          <T.Heading style={styles.heading}>{t('login.cant_log_in')}</T.Heading>
+          <T.Heading style={styles.subheading}>
+            {t('forgot.instructions')}
+          </T.Heading>
+        </Header>
 
         <Footer>
-          <Button
-            type="base"
-            onPress={this.handleForgotUsernameModal}
-          >
+          <Button type="base" onPress={this.handleForgotUsernameModal}>
             {t('forgot.forgot_username')}
           </Button>
           <Button
             type="base"
             onPress={this.handleForgotPasswordModal}
             style={styles.button}
-            >
+          >
             {t('forgot.forgot_password')}
-            </Button>
-
+          </Button>
         </Footer>
-
       </Layout>
     );
   }
@@ -79,7 +72,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginRight: 10,
   },
-  button: {marginVertical: 40},
+  button: { marginVertical: 40 },
   heading: {
     marginTop: 20,
     color: 'white',
@@ -91,6 +84,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: 'white',
     fontWeight: '200',
-    letterSpacing: 0.75
+    letterSpacing: 0.75,
   },
 });

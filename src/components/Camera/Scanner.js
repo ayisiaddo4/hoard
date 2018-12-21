@@ -86,7 +86,7 @@ export default class QRScanner extends PureComponent {
     );
   }
 
-  barCodeSize = () => {} // noop
+  barCodeSize = () => {}; // noop
 }
 
 QRScanner.propTypes = {

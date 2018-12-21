@@ -46,7 +46,7 @@ const rootReducer = combineReducers({
   transactionStatus,
   kyc,
   loadingReducer,
-  notifications
+  notifications,
 });
 
 export default rootReducer;

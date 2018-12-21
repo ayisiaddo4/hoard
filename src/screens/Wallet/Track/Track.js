@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { StyleSheet, View } from "react-native";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { StyleSheet, View } from 'react-native';
 
 import LoadingSpinner from 'components/LoadingSpinner';
-import SelectCoin from "../components/SelectCoin";
-import NavigatorService from "lib/navigator";
-import Modal from "../Modal";
+import SelectCoin from '../components/SelectCoin';
+import NavigatorService from 'lib/navigator';
+import Modal from '../Modal';
 
 import { t } from 'translations/i18n';
 export default class Track extends Component {
@@ -13,7 +13,7 @@ export default class Track extends Component {
     availableCoins: PropTypes.arrayOf(PropTypes.string).isRequired,
     trackSymbol: PropTypes.func.isRequired,
     track_requesting: PropTypes.bool.isRequired,
-    track_successful: PropTypes.bool.isRequired
+    track_successful: PropTypes.bool.isRequired,
   };
 
   state = {
@@ -21,21 +21,18 @@ export default class Track extends Component {
   };
 
   selectCoin = coin => {
-    this.setState(
-      {coin},
-      () => this.props.trackSymbol(coin)
-    );
+    this.setState({ coin }, () => this.props.trackSymbol(coin));
   };
 
   openModal = () => {
     this.setState({
-      modalOpen: true
+      modalOpen: true,
     });
   };
 
   cancelModal = () => {
     this.setState({
-      modalOpen: false
+      modalOpen: false,
     });
   };
 
@@ -48,7 +45,12 @@ export default class Track extends Component {
       return <LoadingSpinner />;
     }
 
-    return <SelectCoin coins={this.props.availableCoins} saveAndContinue={this.selectCoin} />;
+    return (
+      <SelectCoin
+        coins={this.props.availableCoins}
+        saveAndContinue={this.selectCoin}
+      />
+    );
   }
 
   render() {
@@ -60,8 +62,7 @@ export default class Track extends Component {
           title={`${this.state.coin} ${t('wallet.track_added')}`}
           onCancel={this.handleRedirect}
           onDone={this.handleRedirect}
-        >
-        </Modal>
+        />
       </View>
     );
   }

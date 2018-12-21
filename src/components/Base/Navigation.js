@@ -80,7 +80,7 @@ export const Header = props => {
     : [createStyles().header, styles.titleBold];
 
   return (
-    <SafeAreaView forceInset={{ top: 'always' }} >
+    <SafeAreaView forceInset={{ top: 'always' }}>
       <View style={styles.container}>
         <LeftActionComponent type={props.leftAction} />
         <View style={styles.headerContainer}>

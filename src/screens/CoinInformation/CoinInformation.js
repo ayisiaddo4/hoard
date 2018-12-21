@@ -14,7 +14,7 @@ import TradeItem from 'components/TradeItem';
 import { getCoinMetadata, getInfoUrl } from 'lib/currency-metadata';
 import { Intervals } from 'components/GetCurrencyHistory';
 import NavigatorService from 'lib/navigator';
-import { Try } from "components/Conditional";
+import { Try } from 'components/Conditional';
 import Card from 'components/Card';
 import T from 'components/Typography';
 import Scene from 'components/Scene';
@@ -31,10 +31,7 @@ const commonTransactionProps = {
   symbol: PropTypes.string.isRequired,
   to: PropTypes.string.isRequired,
   from: PropTypes.string.isRequired,
-  amount: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]),
+  amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   price: PropTypes.number,
 };
 
@@ -108,12 +105,14 @@ export default class CoinInformation extends React.Component {
   handleFulfillContactTransaction = transaction => () => {
     this.props.startNotificationFlow({
       flowType: NOTIFICATION_FLOW_TYPE_CONTACT_FULFILLMENT,
-      transaction
+      transaction,
     });
-  }
+  };
 
-  handleSelect = (selectedHash) => () => {
-    const selectedTx = this.props.transactions.find(tx => tx.details.hash === selectedHash);
+  handleSelect = selectedHash => () => {
+    const selectedTx = this.props.transactions.find(
+      tx => tx.details.hash === selectedHash
+    );
     const to = getInfoUrl(selectedTx.symbol, selectedTx.details.hash);
 
     if (to) {
@@ -124,7 +123,7 @@ export default class CoinInformation extends React.Component {
         }
       });
     }
-  }
+  };
 
   handleView = () => {
     NavigatorService.navigate('ViewAddress', {
@@ -179,7 +178,10 @@ export default class CoinInformation extends React.Component {
               style={styles.actionButton}
             >
               <View style={styles.actionButtonView}>
-                <Image style={styles.image} source={require('assets/request.png')} />
+                <Image
+                  style={styles.image}
+                  source={require('assets/request.png')}
+                />
                 <T.Small style={styles.actionButtonText}>
                   {t('actions.request')}
                 </T.Small>
@@ -204,7 +206,7 @@ export default class CoinInformation extends React.Component {
               {t('coin_informtion.pending_transactions')}
             </SectionHeader>
             <View style={styles.contactTransactionsContainer}>
-              {contactTransactions.map((item) => (
+              {contactTransactions.map(item => (
                 <Swipeable
                   key={item.details.uid}
                   rightButtons={[
@@ -214,41 +216,48 @@ export default class CoinInformation extends React.Component {
                       key={'actionCancel'}
                     >
                       <View style={styles.walletActionContainer}>
-                        <Image style={styles.walletActionImage} source={require('assets/cancel.png')} />
+                        <Image
+                          style={styles.walletActionImage}
+                          source={require('assets/cancel.png')}
+                        />
                         <Text style={styles.walletActionText}>
                           {t('actions.cancel')}
                         </Text>
                       </View>
                     </TouchableOpacity>,
-                    item.type === TYPE_REQUEST
-                      ? (
-                        <TouchableOpacity
-                          onPress={this.handleFulfillContactTransaction(item)}
-                          style={styles.walletAction}
-                          key={'actionRequest'}
-                        >
-                          <View style={styles.walletActionContainer}>
-                            <Image style={styles.walletActionImage} source={require('assets/request.png')} />
-                            <Text style={styles.walletActionText}>
-                              {t('actions.request')}
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                      )
-                      : (
-                        <TouchableOpacity
-                          onPress={this.handleFulfillContactTransaction(item)}
-                          style={styles.walletAction}
-                          key={'actionSend'}
-                        >
-                          <View style={styles.walletActionContainer}>
-                            <Image style={styles.walletActionImage} source={require('assets/send.png')} />
-                            <Text style={styles.walletActionText}>
-                              {t('actions.send')}
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                      )
+                    item.type === TYPE_REQUEST ? (
+                      <TouchableOpacity
+                        onPress={this.handleFulfillContactTransaction(item)}
+                        style={styles.walletAction}
+                        key={'actionRequest'}
+                      >
+                        <View style={styles.walletActionContainer}>
+                          <Image
+                            style={styles.walletActionImage}
+                            source={require('assets/request.png')}
+                          />
+                          <Text style={styles.walletActionText}>
+                            {t('actions.request')}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity
+                        onPress={this.handleFulfillContactTransaction(item)}
+                        style={styles.walletAction}
+                        key={'actionSend'}
+                      >
+                        <View style={styles.walletActionContainer}>
+                          <Image
+                            style={styles.walletActionImage}
+                            source={require('assets/send.png')}
+                          />
+                          <Text style={styles.walletActionText}>
+                            {t('actions.send')}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    ),
                   ]}
                   rightButtonWidth={95}
                 >
@@ -269,7 +278,7 @@ export default class CoinInformation extends React.Component {
         </SectionHeader>
       </View>
     );
-  }
+  };
 
   render() {
     const { transactions, wallet } = this.props;
@@ -281,10 +290,8 @@ export default class CoinInformation extends React.Component {
           ListHeaderComponent={this.renderHeader}
           data={transactions}
           keyExtractor={t => t.details.hash}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              onPress={this.handleSelect(item.details.hash)}
-            >
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={this.handleSelect(item.details.hash)}>
               <TradeItem
                 wallet={wallet}
                 transaction={item}

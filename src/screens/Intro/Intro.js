@@ -33,30 +33,30 @@ const Intro = props => (
 );
 
 Intro.propTypes = {
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
 };
 
 export default Intro;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   slide: {
     flex: 1, // Take up all screen
     justifyContent: 'center', // Center vertically
     alignItems: 'center', // Center horizontally
     backgroundColor: '#1B273F',
-    padding: 20
+    padding: 20,
   },
   heading: {
     color: '#ffffff',
     fontWeight: '200',
     padding: 20,
-    lineHeight: 10
+    lineHeight: 10,
   },
   small: {
     color: '#ffffff',
-    lineHeight: 26
-  }
+    lineHeight: 26,
+  },
 });

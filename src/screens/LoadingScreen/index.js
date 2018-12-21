@@ -1,13 +1,13 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import LoadingScreen from './LoadingScreen';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     appInitialized: state.app.hasPreviouslyInitialized,
     walletHydrated: state.wallet.hydrationCompleted,
     transactionsHydrated: state.transactions.hydrationCompleted,
     pricingInitialized: state.pricing.initialized,
-    to: state.loadingReducer.postLoadRedirect
+    to: state.loadingReducer.postLoadRedirect,
   };
 };
 

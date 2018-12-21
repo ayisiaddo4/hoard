@@ -20,21 +20,21 @@ export default class Fetch extends React.Component {
     queries: PropTypes.arrayOf(
       PropTypes.shape({
         name: PropTypes.string,
-        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       })
     ),
     url: PropTypes.string.isRequired,
-    formatter: PropTypes.func.isRequired
+    formatter: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
-    formatter: json => json
+    formatter: json => json,
   };
 
   state = {
     loaded: false,
     data: '',
-    requestNumber: 0
+    requestNumber: 0,
   };
 
   componentWillMount() {
@@ -56,7 +56,7 @@ export default class Fetch extends React.Component {
       if (this.state.requestNumber === requestNumber) {
         this.setState({
           loaded: true,
-          data: this.props.formatter(json)
+          data: this.props.formatter(json),
         });
       }
     } catch (error) {

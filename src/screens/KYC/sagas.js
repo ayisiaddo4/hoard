@@ -15,7 +15,7 @@ import Config from 'react-native-config';
 import {
   DOCUMENT_VERIFICATION_REQUESTING,
   DOCUMENT_VERIFICATION_SUCCESS,
-  DOCUMENT_VERIFICATION_RETRY
+  DOCUMENT_VERIFICATION_RETRY,
 } from './constants';
 //
 // // TODO: abstract these into dev/prod files
@@ -30,7 +30,7 @@ const mockKYCcheckAPI = user_information => {
       user: 1,
       authorized: 'authorized',
       body: 'user is all cleared.',
-      user_information
+      user_information,
     };
     // setKYCKey(key, value) {
     // const user = await AsyncStorage.getItem('kyc/user');
@@ -40,7 +40,7 @@ const mockKYCcheckAPI = user_information => {
     return {
       user: 1,
       authorized: 'rejected',
-      body: 'user was on a list.'
+      body: 'user was on a list.',
     };
   } else {
     throw { success: false, body: 'kyc is still waiting....' };
@@ -83,7 +83,7 @@ function* peridociallyCheckKycStatus(user_credentials) {
     } catch (error) {
       yield put({
         type: DOCUMENT_VERIFICATION_RETRY,
-        error
+        error,
       });
       yield call(delay, 2000);
     }
@@ -97,7 +97,7 @@ function* kycCheck({ user_credentials }) {
   yield put({
     type: DOCUMENT_VERIFICATION_SUCCESS,
     authorized: kycStatus.authorized,
-    user_information: kycStatus.user_information
+    user_information: kycStatus.user_information,
   });
 }
 

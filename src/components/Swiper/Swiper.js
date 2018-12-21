@@ -11,7 +11,7 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  View
+  View,
 } from 'react-native';
 
 // Detect screen width and height
@@ -36,9 +36,9 @@ export default class Swiper extends Component {
     children: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.node,
-      PropTypes.arrayOf(PropTypes.node)
+      PropTypes.arrayOf(PropTypes.node),
     ]).isRequired,
-    style: PropTypes.object
+    style: PropTypes.object,
   };
 
   // Props for ScrollView component
@@ -62,7 +62,7 @@ export default class Swiper extends Component {
     index: 0,
     nextText: 'Continue...',
     finishText: 'All Done!',
-    style: {}
+    style: {},
   };
 
   state = this.initState(this.props);
@@ -86,14 +86,14 @@ export default class Swiper extends Component {
       index,
       offset,
       width,
-      height
+      height,
     };
 
     // Component internals as a class property,
     // and not state to avoid component re-renders when updated
     this.internals = {
       isScrolling: false,
-      offset
+      offset,
     };
 
     return state;
@@ -136,11 +136,13 @@ export default class Swiper extends Component {
   };
 
   /*
-       * Drag end handler
-       * @param {object} e native event
-       */
+   * Drag end handler
+   * @param {object} e native event
+   */
   onScrollEndDrag = e => {
-    const { contentOffset: { x: newOffset } } = e.nativeEvent,
+    const {
+        contentOffset: { x: newOffset },
+      } = e.nativeEvent,
       { children } = this.props,
       { index } = this.state,
       { offset } = this.internals;
@@ -185,7 +187,7 @@ export default class Swiper extends Component {
     this.internals.offset = offset;
     // Update index in the state
     this.setState({
-      index
+      index,
     });
   };
 
@@ -222,8 +224,8 @@ export default class Swiper extends Component {
       setImmediate(() => {
         this.onScrollEnd({
           nativeEvent: {
-            position: diff
-          }
+            position: diff,
+          },
         });
       });
     }
@@ -340,16 +342,16 @@ const styles = StyleSheet.create({
   // Set width and height to the screen size
   fullScreen: {
     width: width,
-    height: height
+    height: height,
   },
   // Main container
   container: {
     backgroundColor: 'transparent',
-    position: 'relative'
+    position: 'relative',
   },
   // Slide
   slide: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   // Pagination indicators
   pagination: {
@@ -361,7 +363,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'flex-end',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   // Pagination dot
   dot: {
@@ -372,11 +374,11 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     marginRight: 3,
     marginTop: 3,
-    marginBottom: 3
+    marginBottom: 3,
   },
   // Active dot
   activeDot: {
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
   },
   // Button wrapper
   buttonWrapper: {
@@ -389,13 +391,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 40,
     justifyContent: 'flex-end',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   button: {
     borderRadius: 50, // Rounded border
     borderWidth: 2, // 2 point border widht
     borderColor: '#FFFFFF', // White colored border
     paddingHorizontal: 50, // Horizontal padding
-    paddingVertical: 10 // Vertical padding
-  }
+    paddingVertical: 10, // Vertical padding
+  },
 });

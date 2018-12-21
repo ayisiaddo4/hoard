@@ -80,8 +80,8 @@ class TradeItem extends Component {
     const transactionType = transaction.details.creates
       ? creation
       : transaction.type === TYPE_SEND
-        ? send
-        : receive;
+      ? send
+      : receive;
 
     const tradeTitle = transaction.fiatTrade
       ? isTradeTitle[transactionType]

@@ -1,36 +1,27 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  ImageBackground,
-  View
-} from 'react-native';
+import { StyleSheet, ImageBackground, View } from 'react-native';
 
 import Conditional, { Try, Otherwise } from 'components/Conditional';
 import NavigatorService from 'lib/navigator';
 import Button from 'components/Button';
 import T from 'components/Typography';
 
-
 export default class KYCStatus extends Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
 
   static propTypes = {
     kyc: PropTypes.shape({
       requesting: PropTypes.bool.isRequired,
-      authorized: PropTypes.oneOf([
-        false,
-        'authorized',
-        'rejected'
-      ]),
+      authorized: PropTypes.oneOf([false, 'authorized', 'rejected']),
       successful: PropTypes.bool.isRequired,
       documentVerificationCompleted: PropTypes.bool.isRequired,
       infoVerificationCompleted: PropTypes.bool.isRequired,
-      amlCompleted: PropTypes.bool.isRequired
-    }).isRequired
-  }
+      amlCompleted: PropTypes.bool.isRequired,
+    }).isRequired,
+  };
 
   renderButton = () => {
     const {
@@ -38,7 +29,7 @@ export default class KYCStatus extends Component {
       successful,
       documentVerificationCompleted,
       infoVerificationCompleted,
-      amlCompleted
+      amlCompleted,
     } = this.props.kyc;
 
     let text, next;
@@ -49,40 +40,32 @@ export default class KYCStatus extends Component {
 
     if (requesting) {
       return (
-        <Button
-          type="primary"
-          disabled={true}
-          onPress={() => {}}
-        >
+        <Button type="primary" disabled={true} onPress={() => {}}>
           Processing...
         </Button>
       );
     }
 
     if (!documentVerificationCompleted) {
-      text="Let's get started!";
+      text = "Let's get started!";
       next = 'DocumentVerification';
     } else if (!infoVerificationCompleted) {
-
-      text='Verify your information';
+      text = 'Verify your information';
       next = 'PersonalInfoReview';
     } else if (!amlCompleted) {
-      text="Not sure what's supposed to happen now";
+      text = "Not sure what's supposed to happen now";
       next = 'KYCStatus';
     } else {
-      text='TO THE MOON!';
+      text = 'TO THE MOON!';
       next = 'ICO';
     }
 
     return (
-      <Button
-        type="primary"
-        onPress={() => NavigatorService.navigate(next)}
-      >
+      <Button type="primary" onPress={() => NavigatorService.navigate(next)}>
         {text}
       </Button>
     );
-  }
+  };
 
   getStatus(preconditionsPassed, itemCompleted, requesting) {
     if (!preconditionsPassed) return '';
@@ -100,9 +83,8 @@ export default class KYCStatus extends Component {
       successful,
       documentVerificationCompleted,
       infoVerificationCompleted,
-      amlCompleted
+      amlCompleted,
     } = this.props.kyc;
-
 
     const documentVerificationStatus = this.getStatus(
       true,
@@ -130,26 +112,34 @@ export default class KYCStatus extends Component {
       >
         <View style={styles.container}>
           <T.Heading style={styles.text}>Welcome to the ICO signup.</T.Heading>
-          <T.SubHeading style={styles.text}>We’re going to need a few things:</T.SubHeading>
-          <T.Light style={styles.text}>1. Scan your documentation {documentVerificationStatus}</T.Light>
+          <T.SubHeading style={styles.text}>
+            We’re going to need a few things:
+          </T.SubHeading>
+          <T.Light style={styles.text}>
+            1. Scan your documentation {documentVerificationStatus}
+          </T.Light>
           <Conditional>
             <Try condition={successful && authorized === 'rejected'}>
-              <T.SubHeading style={[styles.error]}>We were unable to verify your documentation. Please contact support.</T.SubHeading>
+              <T.SubHeading style={[styles.error]}>
+                We were unable to verify your documentation. Please contact
+                support.
+              </T.SubHeading>
             </Try>
             <Otherwise>
               <View>
-                <T.Light style={styles.text}>1. Verify who you are {infoVerificationStatus}</T.Light>
-                <T.Light style={styles.text}>2. Make sure you’re able to invest safely {amlStatus}.</T.Light>
+                <T.Light style={styles.text}>
+                  1. Verify who you are {infoVerificationStatus}
+                </T.Light>
+                <T.Light style={styles.text}>
+                  2. Make sure you’re able to invest safely {amlStatus}.
+                </T.Light>
                 <T.Light style={styles.text}>3. ... </T.Light>
                 <T.Light style={styles.text}>4. Success! </T.Light>
                 {this.renderButton()}
               </View>
             </Otherwise>
           </Conditional>
-          <Button
-            type="text"
-            onPress={() => NavigatorService.navigate('Menu')}
-          >
+          <Button type="text" onPress={() => NavigatorService.navigate('Menu')}>
             Nah, not right now.
           </Button>
         </View>
@@ -163,21 +153,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flexDirection: 'column',
     height: 100,
-    padding: 20
+    padding: 20,
   },
   image: {
     width: null,
     height: null,
-    resizeMode: 'cover'
+    resizeMode: 'cover',
   },
   imageView: {
-    flex: 1
+    flex: 1,
   },
   error: {
-    color: 'red'
+    color: 'red',
   },
   text: {
     color: 'white',
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });

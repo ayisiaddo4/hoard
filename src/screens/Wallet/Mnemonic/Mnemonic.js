@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 
-import SuccessFailureScreen, {TYPE_SUCCESS} from 'components/SuccessFailureScreen';
+import SuccessFailureScreen, {
+  TYPE_SUCCESS,
+} from 'components/SuccessFailureScreen';
 import Scene from 'components/Scene';
 import { Layout } from 'components/Base';
 import { t } from 'translations/i18n';
@@ -17,15 +19,15 @@ const RECOVER = 'RECOVER';
 export default class Mnemonic extends Component {
   static propTypes = {
     initializeMnemonic: PropTypes.func.isRequired,
-    hasMnemonic: PropTypes.bool.isRequired
+    hasMnemonic: PropTypes.bool.isRequired,
   };
 
   state = {
     step: 1,
-    type: null
+    type: null,
   };
 
-  selectType = type => () => this.setState({type, step: 2});
+  selectType = type => () => this.setState({ type, step: 2 });
 
   goBack = () => this.setState({ step: 1 });
 

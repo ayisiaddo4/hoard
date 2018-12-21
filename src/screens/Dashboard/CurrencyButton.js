@@ -1,14 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-} from 'react-native';
-import {getColors} from 'styles';
+import { StyleSheet, Text, TouchableHighlight } from 'react-native';
+import { getColors } from 'styles';
 
-
-const CurrencyButton = ({children, selected, onPress}) => {
+const CurrencyButton = ({ children, selected, onPress }) => {
   const themedStyles = getThemedStyles(getColors());
 
   const containerStyles = [styles.container];
@@ -44,7 +39,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const getThemedStyles = (colors) => {
+const getThemedStyles = colors => {
   return {
     containerSelected: {
       backgroundColor: colors.interactivePrimary,

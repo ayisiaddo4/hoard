@@ -5,7 +5,7 @@ import Fetch, { makeRequest } from 'components/Fetch';
 
 const url = `${Config.EREBOR_ENDPOINT}/pricing_data/pricemulti`;
 
-const constructQueries = ( currencies, tradingPair ) => [
+const constructQueries = (currencies, tradingPair) => [
   { name: 'fsyms', value: currencies.join(',') },
   { name: 'tsyms', value: tradingPair },
 ];

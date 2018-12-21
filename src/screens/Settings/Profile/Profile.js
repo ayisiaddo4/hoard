@@ -14,8 +14,8 @@ import { colors, calculateHitSlop } from 'styles';
 import Input from 'components/Input';
 import T from 'components/Typography';
 import Config from 'react-native-config';
-import {setUser} from 'sagas/authentication';
-import {t} from 'translations/i18n';
+import { setUser } from 'sagas/authentication';
+import { t } from 'translations/i18n';
 
 import api from 'lib/api';
 
@@ -28,7 +28,6 @@ const initialState = {
   errorMessage: '',
   loading: false,
 };
-
 
 export default class Profile extends Component {
   static propTypes = {
@@ -47,11 +46,7 @@ export default class Profile extends Component {
   constructor(props) {
     super(props);
 
-    const {
-      first_name,
-      last_name,
-      phone_number,
-    } = props.user;
+    const { first_name, last_name, phone_number } = props.user;
 
     this.state = {
       ...initialState,
@@ -64,35 +59,49 @@ export default class Profile extends Component {
     };
   }
 
-  updateUser = (newUser) => {
-    api.put(`${Config.EREBOR_ENDPOINT}/users/${this.props.user.user_uid}`, newUser).then(
-      async () => {
-        await this.props.updateUser(newUser);
-        await setUser({...this.props.user, ...newUser});
-        this.setState({loading: false, errorMessage: ''}, this.checkSavedState);
-      },
-      (error) => {
-        this.setState(
-          {
-            loading: false,
-            errorMessage: error && error.errors && error.errors[0] && error.errors[0].message
-          },
-          this.checkSavedState
-        );
-      }
-    );
-  }
+  updateUser = newUser => {
+    api
+      .put(
+        `${Config.EREBOR_ENDPOINT}/users/${this.props.user.user_uid}`,
+        newUser
+      )
+      .then(
+        async () => {
+          await this.props.updateUser(newUser);
+          await setUser({ ...this.props.user, ...newUser });
+          this.setState(
+            { loading: false, errorMessage: '' },
+            this.checkSavedState
+          );
+        },
+        error => {
+          this.setState(
+            {
+              loading: false,
+              errorMessage:
+                error &&
+                error.errors &&
+                error.errors[0] &&
+                error.errors[0].message,
+            },
+            this.checkSavedState
+          );
+        }
+      );
+  };
 
   handleFormSubmit = () => {
-    this.props.navigation.setParams({rightAction: this.makeSaveButton(true)});
+    this.props.navigation.setParams({ rightAction: this.makeSaveButton(true) });
 
-    this.setState({ loading: true }, () => this.updateUser({
-      username: this.props.user.username,
-      email_address: this.props.user.email_address,
-      first_name: this.state.answers.first_name,
-      last_name: this.state.answers.last_name,
-      phone_number: this.state.answers.phone_number,
-    }));
+    this.setState({ loading: true }, () =>
+      this.updateUser({
+        username: this.props.user.username,
+        email_address: this.props.user.email_address,
+        first_name: this.state.answers.first_name,
+        last_name: this.state.answers.last_name,
+        phone_number: this.state.answers.phone_number,
+      })
+    );
   };
 
   updateFormField = fieldName => text => {
@@ -101,10 +110,10 @@ export default class Profile extends Component {
       [fieldName]: text,
     };
 
-    this.setState({answers}, this.checkSavedState);
+    this.setState({ answers }, this.checkSavedState);
   };
 
-  makeSaveButton = (loading) => (
+  makeSaveButton = loading => (
     <Button
       type="text"
       style={styles.saveButton}
@@ -113,22 +122,24 @@ export default class Profile extends Component {
     >
       {t('actions.save')}
     </Button>
-  )
+  );
 
   checkSavedState = () => {
     if (this.isChanged(this.props.user, this.state.answers)) {
-      this.props.navigation.setParams({rightAction: this.makeSaveButton(false)});
+      this.props.navigation.setParams({
+        rightAction: this.makeSaveButton(false),
+      });
     } else {
-      this.props.navigation.setParams({rightAction: null});
+      this.props.navigation.setParams({ rightAction: null });
     }
-  }
+  };
 
   isChanged = (oldUser, newUser) => {
     const firstNameChanged = oldUser.first_name !== newUser.first_name;
     const lastNameChanged = oldUser.last_name !== newUser.last_name;
     const phoneNumberChanged = oldUser.phone_number !== newUser.phone_number;
     return firstNameChanged || lastNameChanged || phoneNumberChanged;
-  }
+  };
 
   safeFocus = memoize(element => () => invoke(element, 'inputRef.focus'));
 
@@ -140,7 +151,9 @@ export default class Profile extends Component {
       <Layout preload={false} keyboard>
         <Body scrollable style={styles.body}>
           <Header>
-            <T.Heading style={styles.headingText}>{t('profile.title')}</T.Heading>
+            <T.Heading style={styles.headingText}>
+              {t('profile.title')}
+            </T.Heading>
           </Header>
           <Body>
             <Try condition={!!this.state.errorMessage}>
@@ -255,6 +268,6 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     flex: 1,
-    justifyContent: 'flex-start'
-  }
+    justifyContent: 'flex-start',
+  },
 });

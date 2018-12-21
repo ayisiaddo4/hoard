@@ -20,4 +20,7 @@ const mapDispatchToProps = {
   sendFunds,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SendModal);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SendModal);

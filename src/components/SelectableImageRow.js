@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 5,
     borderWidth: 1,
-    backgroundColor: "#202934",
+    backgroundColor: '#202934',
   },
   image: {
     width: 30,
@@ -55,11 +55,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '500',
-    color: "#8cbcbd"
+    color: '#8cbcbd',
   },
   subtitle: {
     fontSize: 12,
     fontWeight: '100',
-    color: "#8cbcbd"
+    color: '#8cbcbd',
   },
 });

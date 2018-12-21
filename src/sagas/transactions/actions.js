@@ -13,41 +13,40 @@ export function triggerSearchForInterestingBlocks(publicAddress, symbol) {
   return {
     type: SEARCH_FOR_INTERESTING_BLOCKS,
     publicAddress,
-    symbol
+    symbol,
   };
 }
 
 export function recordContactTransaction(transaction) {
   return {
     type: RECORD_CONTACT_TRANSACTION,
-    transaction
+    transaction,
   };
 }
 
 export function cancelContactTransaction(transaction) {
   return {
     type: CANCEL_CONTACT_TRANSACTION_REQUESTING,
-    transaction
+    transaction,
   };
 }
 
 export function transactionFound(transaction, doNotSave = false) {
-  return {type: TRANSACTION_FOUND, transaction, doNotSave};
+  return { type: TRANSACTION_FOUND, transaction, doNotSave };
 }
 
 export function updateTransaction(transaction) {
-  return {type: TRANSACTION_UPDATE, transaction};
+  return { type: TRANSACTION_UPDATE, transaction };
 }
 
 export function blockUpdated() {
-  return {type: BLOCK_UPDATED};
+  return { type: BLOCK_UPDATED };
 }
 
-
 export function blockAddedToQueue() {
-  return {type: BLOCK_ADDED_TO_QUEUE};
+  return { type: BLOCK_ADDED_TO_QUEUE };
 }
 
 export function interestingBlockFound(block) {
-  return {type: INTERESTING_BLOCK_FOUND, block};
+  return { type: INTERESTING_BLOCK_FOUND, block };
 }

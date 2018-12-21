@@ -1,5 +1,4 @@
-import React, { Component }
-from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import T from 'components/Typography';
@@ -16,35 +15,35 @@ export default class AddressModal extends Component {
     navigation: PropTypes.shape({
       state: PropTypes.shape({
         params: PropTypes.shape({
-          onChangeRecipient: PropTypes.func.isRequired
+          onChangeRecipient: PropTypes.func.isRequired,
         }),
       }),
     }),
   };
 
   state = {
-    value: ''
-  }
+    value: '',
+  };
 
-  changeText = value => this.setState({value});
+  changeText = value => this.setState({ value });
 
-  clear = () => this.setState({value: ''});
+  clear = () => this.setState({ value: '' });
 
   handleSubmit = () => {
     this.props.navigation.state.params.onChangeRecipient({
       recipientType: RECIPIENT_TYPE_ADDRESS,
-      recipient: this.state.value
+      recipient: this.state.value,
     });
     NavigatorService.navigate('SendRequest');
-  }
+  };
 
   render() {
     const clearButton = (
-      <TouchableOpacity
-        style={styles.action}
-        onPress={this.clear}
-      >
-        <Icon icon="ios-close-circle" style={{ size: 20, color: 'rgba(255,255,255,0.5)' }} />
+      <TouchableOpacity style={styles.action} onPress={this.clear}>
+        <Icon
+          icon="ios-close-circle"
+          style={{ size: 20, color: 'rgba(255,255,255,0.5)' }}
+        />
       </TouchableOpacity>
     );
 
@@ -52,10 +51,7 @@ export default class AddressModal extends Component {
       <Modal
         title="Address"
         footer={
-          <Button
-            style={styles.nextButton}
-            onPress={this.handleSubmit}
-            >
+          <Button style={styles.nextButton} onPress={this.handleSubmit}>
             {t('actions.next')}
           </Button>
         }
@@ -79,10 +75,10 @@ const styles = StyleSheet.create({
   nextButton: {
     borderRadius: 0,
     marginHorizontal: -20,
-    marginBottom: -40
+    marginBottom: -40,
   },
   subtitle: {
     color: 'white',
-    marginBottom: 40
+    marginBottom: 40,
   },
 });

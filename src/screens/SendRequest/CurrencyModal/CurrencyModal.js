@@ -30,15 +30,15 @@ export default class CurrencyModal extends Component {
     mostUsedWallet: WalletType,
   };
 
-  handleSelectCoin = memoize(value => () => this.handleSubmit(value))
+  handleSelectCoin = memoize(value => () => this.handleSubmit(value));
 
   handleSubmit = value => {
     this.props.navigation.state.params.onChangeCurrency(value);
     NavigatorService.navigate('SendRequest');
-  }
+  };
 
   render() {
-    const {wallets, mostUsedWallet} = this.props;
+    const { wallets, mostUsedWallet } = this.props;
 
     return (
       <Modal title={t('send_request.modals.currency_title')}>
@@ -51,11 +51,25 @@ export default class CurrencyModal extends Component {
               {t('send_request.modals.currency_subheading_most_used')}
             </T.SubHeading>
             <SelectableImageRow
-              image={mostUsedWallet && getCoinMetadata(mostUsedWallet.symbol).image}
-              onPress={mostUsedWallet && this.handleSelectCoin(mostUsedWallet.id)}
-              selected={mostUsedWallet && this.props.navigation.state.params.selectedId === mostUsedWallet.id}
-              subtitle={mostUsedWallet && `${mostUsedWallet.symbol}    ${mostUsedWallet.balance}`}
-              title={mostUsedWallet && getCoinMetadata(mostUsedWallet.symbol).fullName}
+              image={
+                mostUsedWallet && getCoinMetadata(mostUsedWallet.symbol).image
+              }
+              onPress={
+                mostUsedWallet && this.handleSelectCoin(mostUsedWallet.id)
+              }
+              selected={
+                mostUsedWallet &&
+                this.props.navigation.state.params.selectedId ===
+                  mostUsedWallet.id
+              }
+              subtitle={
+                mostUsedWallet &&
+                `${mostUsedWallet.symbol}    ${mostUsedWallet.balance}`
+              }
+              title={
+                mostUsedWallet &&
+                getCoinMetadata(mostUsedWallet.symbol).fullName
+              }
             />
           </Fragment>
         </Try>
@@ -70,7 +84,9 @@ export default class CurrencyModal extends Component {
                 key={wallet.id}
                 image={metadata.image}
                 onPress={this.handleSelectCoin(wallet.id)}
-                selected={this.props.navigation.state.params.selectedId === wallet.id}
+                selected={
+                  this.props.navigation.state.params.selectedId === wallet.id
+                }
                 subtitle={`${wallet.symbol}    ${wallet.balance}`}
                 title={metadata.fullName}
               />

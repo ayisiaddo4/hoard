@@ -79,8 +79,8 @@ export default class Input extends Component {
         ? styles.input_active_light
         : styles.input_active
       : this.props.light
-        ? styles.input_inactive_light
-        : styles.input_inactive;
+      ? styles.input_inactive_light
+      : styles.input_inactive;
 
     const inputColors = this.props.light
       ? styles.input_light
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   input_active: {
-    borderBottomColor: "#00c1ff",
+    borderBottomColor: '#00c1ff',
     borderBottomWidth: 2.5,
     color: '#fff',
   },

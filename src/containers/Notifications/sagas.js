@@ -429,7 +429,7 @@ function handleUrbanAirshipListeners(action) {
                   StoreRegistry.getStore().dispatch(
                     notificationDismissed(notification)
                   ),
-              }
+              },
             ],
           })
         );

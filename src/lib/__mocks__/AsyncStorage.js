@@ -5,21 +5,21 @@ export default class MockStorage {
 
   setItem = jest.fn((key, value) => {
     return new Promise((resolve, reject) => {
-      return (typeof key !== 'string' || typeof value !== 'string')
+      return typeof key !== 'string' || typeof value !== 'string'
         ? reject(new Error('key and value must be string'))
-        : resolve(this.storageCache[key] = value);
+        : resolve((this.storageCache[key] = value));
     });
   });
 
-  getItem = jest.fn((key) => {
-    return new Promise((resolve) => {
+  getItem = jest.fn(key => {
+    return new Promise(resolve => {
       return this.storageCache.hasOwnProperty(key)
         ? resolve(this.storageCache[key])
         : resolve(null);
     });
   });
 
-  removeItem = jest.fn((key) => {
+  removeItem = jest.fn(key => {
     return new Promise((resolve, reject) => {
       return this.storageCache.hasOwnProperty(key)
         ? resolve(delete this.storageCache[key])
@@ -27,11 +27,13 @@ export default class MockStorage {
     });
   });
 
-  clear = jest.fn((key) => {
-    return new Promise((resolve, reject) =>  resolve(this.storageCache = {}));
+  clear = jest.fn(key => {
+    return new Promise((resolve, reject) => resolve((this.storageCache = {})));
   });
 
-  getAllKeys = jest.fn((key) => {
-    return new Promise((resolve, reject) => resolve(Object.keys(this.storageCache)));
+  getAllKeys = jest.fn(key => {
+    return new Promise((resolve, reject) =>
+      resolve(Object.keys(this.storageCache))
+    );
   });
 }

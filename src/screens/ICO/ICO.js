@@ -29,8 +29,8 @@ export default class ICO extends Component {
     getCurrencyPrice: PropTypes.func.isRequired,
     prices: PropTypes.shape({
       BTC: PropTypes.number,
-      ETH: PropTypes.number
-    })
+      ETH: PropTypes.number,
+    }),
   };
 
   state = {
@@ -40,7 +40,7 @@ export default class ICO extends Component {
     selectedCurrency: SUPPORTED_COINS_ICO[0],
     pickerSelection: SUPPORTED_COINS_ICO[0],
     amountPaid: '',
-    priceTotal: 0
+    priceTotal: 0,
   };
 
   componentDidMount() {
@@ -50,7 +50,7 @@ export default class ICO extends Component {
   openModal = () => {
     this.setState({
       modalOpen: true,
-      pickerSelection: this.state.selectedCurrency
+      pickerSelection: this.state.selectedCurrency,
     });
   };
 
@@ -59,7 +59,7 @@ export default class ICO extends Component {
 
   cancelModal = () => {
     this.setState({
-      modalOpen: false
+      modalOpen: false,
     });
   };
 
@@ -67,7 +67,7 @@ export default class ICO extends Component {
     this.setState(
       {
         modalOpen: false,
-        selectedCurrency: this.state.pickerSelection
+        selectedCurrency: this.state.pickerSelection,
       },
       () => {
         const { prices } = this.props;
@@ -76,13 +76,13 @@ export default class ICO extends Component {
           source: {
             pair: 'USD',
             price: prices[selectedCurrency],
-            amount: SOLVE_FOR
+            amount: SOLVE_FOR,
           },
           destination: {
             pair: 'USD',
             price: oarPrice,
-            amount: oarTotal
-          }
+            amount: oarTotal,
+          },
         });
 
         this.handleChangePaid(source.amount.toString());
@@ -101,20 +101,20 @@ export default class ICO extends Component {
       source: {
         pair: 'USD',
         price: prices[selectedCurrency],
-        amount: valueAsNumber
+        amount: valueAsNumber,
       },
       destination: {
         pair: 'USD',
         price: oarPrice,
-        amount: SOLVE_FOR
-      }
+        amount: SOLVE_FOR,
+      },
     });
 
     this.setState({
       // TODO: address rounding issues
       oarTotal: numberLimiter(destination.amount),
       priceTotal: totalCost,
-      amountPaid: formattedValue
+      amountPaid: formattedValue,
     });
   };
 
@@ -125,13 +125,13 @@ export default class ICO extends Component {
       source: {
         pair: 'USD',
         price: prices[selectedCurrency],
-        amount: SOLVE_FOR
+        amount: SOLVE_FOR,
       },
       destination: {
         pair: 'USD',
         price: oarPrice,
-        amount: OAR_LIMIT
-      }
+        amount: OAR_LIMIT,
+      },
     });
 
     this.handleChangePaid(source.amount.toString());
@@ -144,13 +144,13 @@ export default class ICO extends Component {
       source: {
         pair: 'USD',
         price: prices[selectedCurrency],
-        amount: SOLVE_FOR
+        amount: SOLVE_FOR,
       },
       destination: {
         pair: 'USD',
         price: 1,
-        amount: FIAT_LIMIT
-      }
+        amount: FIAT_LIMIT,
+      },
     });
 
     this.handleChangePaid(source.amount.toString());
@@ -195,7 +195,7 @@ export default class ICO extends Component {
       oarTotal,
       selectedCurrency,
       pickerSelection,
-      priceTotal
+      priceTotal,
     } = this.state;
 
     const loaded = Boolean(prices.BTC && prices.ETH);
@@ -245,11 +245,11 @@ export default class ICO extends Component {
           onCancel={this.cancelModal}
           actionButtons={[
             { text: 'Done', type: 'primary', onPress: this.confirmSelection },
-            { text: 'Cancel', type: 'text', onPress: this.cancelModal }
+            { text: 'Cancel', type: 'text', onPress: this.cancelModal },
           ]}
         >
-          <SelectableImageList items={
-            SUPPORTED_COINS_ICO.map(currency => {
+          <SelectableImageList
+            items={SUPPORTED_COINS_ICO.map(currency => {
               const metadata = getCoinMetadata(currency);
 
               return {
@@ -257,10 +257,10 @@ export default class ICO extends Component {
                 onPress: this.handleChangeCurrency(currency),
                 selected: pickerSelection === currency,
                 subtitle: currency,
-                title: metadata.fullName
+                title: metadata.fullName,
               };
-            })
-          } />
+            })}
+          />
         </Modal>
       </DismissableView>
     );
@@ -271,29 +271,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1B273F',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   heading: {
     marginTop: 50,
     textAlign: 'center',
     fontSize: 24,
     color: '#FFF',
-    fontWeight: '900'
+    fontWeight: '900',
   },
   form: {
     justifyContent: 'center',
-    flex: 1
+    flex: 1,
   },
   formItem: {
-    margin: 10
+    margin: 10,
   },
   infoText: {
     textAlign: 'center',
     color: '#FFF',
-    fontWeight: '700'
+    fontWeight: '700',
   },
   confirm: {
     marginVertical: 50,
-    marginHorizontal: 10
-  }
+    marginHorizontal: 10,
+  },
 });

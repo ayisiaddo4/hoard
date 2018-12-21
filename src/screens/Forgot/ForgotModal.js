@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { StyleSheet, Image, Alert} from 'react-native';
+import { StyleSheet, Image, Alert } from 'react-native';
 import Config from 'react-native-config';
 
 import api from 'lib/api';
-import {validateEmail} from 'lib/string-helpers';
+import { validateEmail } from 'lib/string-helpers';
 import NavigatorService from 'lib/navigator';
 import { Try } from 'components/Conditional';
 
@@ -54,7 +54,9 @@ export default class ForgotModal extends Component {
   handleChangeEmail = value => this.setState({ email_address: value });
 
   handleForgotRequest = async () => {
-    const valid = await validateEmail({email_address: this.state.email_address});
+    const valid = await validateEmail({
+      email_address: this.state.email_address,
+    });
     if (valid !== true) {
       Alert.alert(
         t('forgot.error_title'),
@@ -76,15 +78,15 @@ export default class ForgotModal extends Component {
       } else {
         // eslint-disable-next-line no-console
         if (__DEV__) console.log('response', response);
-
       }
     } catch (e) {
-
       // eslint-disable-next-line no-console
       if (__DEV__) console.log(e);
 
       Alert.alert(
-        `${t('forgot.apologetic_interjection_of_mild_dismay')} ${e.message}: ${e.errors && e.errors[0] && e.errors[0].message}`
+        `${t('forgot.apologetic_interjection_of_mild_dismay')} ${
+          e.message
+        }: ${e.errors && e.errors[0] && e.errors[0].message}`
       );
     }
     this.setState({
@@ -92,51 +94,48 @@ export default class ForgotModal extends Component {
     });
   };
 
-
   render() {
-
     return (
       <Modal>
         <Layout preload={false} keyboard>
-        <Body scrollable>
-          <Header style={{ alignItems: 'center' }}>
-            <Image style={styles.icon} source={icon[this.state.forgotType]} />
-            <Try condition={this.state.forgotType === FORGOT_PASSWORD}>
-              <T.Heading style={styles.heading}>
-                {t('forgot.reset_password')}
+          <Body scrollable>
+            <Header style={{ alignItems: 'center' }}>
+              <Image style={styles.icon} source={icon[this.state.forgotType]} />
+              <Try condition={this.state.forgotType === FORGOT_PASSWORD}>
+                <T.Heading style={styles.heading}>
+                  {t('forgot.reset_password')}
+                </T.Heading>
+              </Try>
+              <Try condition={this.state.forgotType === FORGOT_USERNAME}>
+                <T.Heading style={styles.heading}>
+                  {t('forgot.reset_username')}
+                </T.Heading>
+              </Try>
+              <T.Heading style={styles.subheading}>
+                {t('forgot.help_text')}
               </T.Heading>
-            </Try>
-            <Try condition={this.state.forgotType === FORGOT_USERNAME}>
-              <T.Heading style={styles.heading}>
-                {t('forgot.reset_username')}
-              </T.Heading>
-            </Try>
-            <T.Heading style={styles.subheading}>
-              {t('forgot.help_text')}
-            </T.Heading>
-          </Header>
-          <Body style={styles.body}>
-            <UnderlineInput
-              style={styles.input}
-              keyboardType="email-address"
-              label={t('forgot.input_email')}
-              onChangeText={this.handleChangeEmail}
-              value={this.state.email_address}
-              autoCorrect={false}
-              onSubmitEditing={this.handleForgotRequest}
-            />
-
+            </Header>
+            <Body style={styles.body}>
+              <UnderlineInput
+                style={styles.input}
+                keyboardType="email-address"
+                label={t('forgot.input_email')}
+                onChangeText={this.handleChangeEmail}
+                value={this.state.email_address}
+                autoCorrect={false}
+                onSubmitEditing={this.handleForgotRequest}
+              />
+            </Body>
           </Body>
-        </Body>
-      </Layout>
+        </Layout>
       </Modal>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  body:{
-    marginTop: 20
+  body: {
+    marginTop: 20,
   },
   heading: {
     marginTop: 20,
@@ -148,7 +147,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: 'white',
     fontWeight: '200',
-    letterSpacing: 0.75
+    letterSpacing: 0.75,
   },
   icon: {
     width: 150,

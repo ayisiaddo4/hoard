@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ActivityIndicator, StyleSheet, View, ViewPropTypes } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  View,
+  ViewPropTypes,
+} from 'react-native';
 
-const LoadingSpinner = (props) => {
+const LoadingSpinner = props => {
   return (
-    <View style={[ styles.loader, props.style ]}>
-      <ActivityIndicator size={props.size || "large"} />
+    <View style={[styles.loader, props.style]}>
+      <ActivityIndicator size={props.size || 'large'} />
     </View>
   );
 };

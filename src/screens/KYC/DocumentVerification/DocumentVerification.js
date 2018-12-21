@@ -30,7 +30,7 @@ import { keyMapper } from 'lib/object-helpers';
  *     documentTypes: ['DRIVER_LICENSE', 'PASSPORT', 'IDENTITY_CARD', 'VISA']
  *   }
  * ];
- * 
+ *
  * if (Platform.OS === 'ios') {
  *   JumioMobileSDKNetverify.initNetverifyWithCustomization(...JumioArgs, {
  *     backgroundColor: '#223252',
@@ -39,7 +39,7 @@ import { keyMapper } from 'lib/object-helpers';
  * } else {
  *   JumioMobileSDKNetverify.initNetverify(...JumioArgs);
  * }
- * 
+ *
  * const emitterNetverify = new NativeEventEmitter(JumioMobileSDKNetverify);
  * */
 /*

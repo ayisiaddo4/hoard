@@ -2,10 +2,19 @@ import {
   INIT_REQUESTING,
   SYMBOL_BTC,
   SYMBOL_ETH,
-  SYMBOL_BOAR
-} from "containers/App/constants";
+  SYMBOL_BOAR,
+} from 'containers/App/constants';
 import { AsyncStorage } from 'react-native';
-import { throttle, fork, all, put, takeLatest, select, takeEvery, call } from "redux-saga/effects";
+import {
+  throttle,
+  fork,
+  all,
+  put,
+  takeLatest,
+  select,
+  takeEvery,
+  call,
+} from 'redux-saga/effects';
 import {
   HYDRATE_TRANSACTIONS,
   TRANSACTION_FOUND,
@@ -13,15 +22,14 @@ import {
   TRANSACTION_UPDATE,
   RECORD_CONTACT_TRANSACTION,
   CANCEL_CONTACT_TRANSACTION_SUCCESS,
-  TRANSACTIONS_STORAGE_KEY
+  TRANSACTIONS_STORAGE_KEY,
 } from './constants';
-import {transactionFound} from './actions';
-import ethSagas, {fetchHistoryEth} from './ethsagas';
-import btcSagas, {fetchHistoryBTC} from './btcsagas';
+import { transactionFound } from './actions';
+import ethSagas, { fetchHistoryEth } from './ethsagas';
+import btcSagas, { fetchHistoryBTC } from './btcsagas';
 import contactSagas from './contactsagas';
-import {fetchHistoryBoar, LAST_BOAR_BLOCK_STORAGE_KEY} from './boarsagas';
+import { fetchHistoryBoar, LAST_BOAR_BLOCK_STORAGE_KEY } from './boarsagas';
 import { walletSelector } from 'screens/Wallet/selectors';
-
 
 export default function* transactionSagaWatcher() {
   yield all([
@@ -29,8 +37,12 @@ export default function* transactionSagaWatcher() {
     takeEvery(SEARCH_FOR_TRANSACTIONS, fetchHistory),
     throttle(1000, TRANSACTION_FOUND, forwardActionToSaveTransactions),
     throttle(1000, RECORD_CONTACT_TRANSACTION, forwardActionToSaveTransactions),
-    throttle(1000, CANCEL_CONTACT_TRANSACTION_SUCCESS, forwardActionToSaveTransactions),
-    throttle(1000, TRANSACTION_UPDATE, forwardActionToSaveTransactions)
+    throttle(
+      1000,
+      CANCEL_CONTACT_TRANSACTION_SUCCESS,
+      forwardActionToSaveTransactions
+    ),
+    throttle(1000, TRANSACTION_UPDATE, forwardActionToSaveTransactions),
   ]);
 }
 
@@ -47,10 +59,9 @@ export function* hydrate() {
 
   let state;
   if (savedState) {
-
     try {
       state = JSON.parse(savedState);
-    } catch(e) {
+    } catch (e) {
       state = null;
     }
   }
@@ -65,7 +76,7 @@ export function* hydrate() {
 
   yield put({
     type: HYDRATE_TRANSACTIONS,
-    state
+    state,
   });
 }
 
@@ -86,28 +97,33 @@ export function* saveTransactions() {
 }
 
 export function* fetchHistory(action) {
-  const receivedWallet = yield select(state => walletSelector(state, action.id));
+  const receivedWallet = yield select(state =>
+    walletSelector(state, action.id)
+  );
   const wallet = receivedWallet ? receivedWallet : {};
 
-  switch(wallet.symbol) {
-  case SYMBOL_ETH: {
-    yield call(fetchHistoryEth, action);
-    return;
-  }
-  case SYMBOL_BTC: {
-    yield call(fetchHistoryBTC, action);
-    return;
-  }
-  case SYMBOL_BOAR: {
-    yield call(fetchHistoryBoar, action);
-    return;
-  }
-  default: {
-    if (__DEV__) {
-      // eslint-disable-next-line no-console
-      console.log('unable to fetch transaction history for wallet: ', action.address);
+  switch (wallet.symbol) {
+    case SYMBOL_ETH: {
+      yield call(fetchHistoryEth, action);
+      return;
     }
-    return;
-  }
+    case SYMBOL_BTC: {
+      yield call(fetchHistoryBTC, action);
+      return;
+    }
+    case SYMBOL_BOAR: {
+      yield call(fetchHistoryBoar, action);
+      return;
+    }
+    default: {
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log(
+          'unable to fetch transaction history for wallet: ',
+          action.address
+        );
+      }
+      return;
+    }
   }
 }

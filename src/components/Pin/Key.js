@@ -33,7 +33,9 @@ export default class Key extends Component {
           />
         </Try>
         <Text style={{ fontSize: 26, color: 'white' }}>{this.props.label}</Text>
-        <Text style={{ fontSize: 12, color: 'white' }}>{this.props.label2}</Text>
+        <Text style={{ fontSize: 12, color: 'white' }}>
+          {this.props.label2}
+        </Text>
       </TouchableOpacity>
     );
   }

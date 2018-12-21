@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
-import SuccessFailureScreen, {TYPE_FAILURE} from 'components/SuccessFailureScreen';
+import SuccessFailureScreen, {
+  TYPE_FAILURE,
+} from 'components/SuccessFailureScreen';
 
 import Button from 'components/Button';
 import T from 'components/Typography';
@@ -12,24 +14,24 @@ export default class Confirm extends Component {
     answers: PropTypes.arrayOf(PropTypes.string).isRequired,
     testWallet: PropTypes.func.isRequired,
     saveWallet: PropTypes.func.isRequired,
-    goBack: PropTypes.func.isRequired
+    goBack: PropTypes.func.isRequired,
   };
 
   state = {
-    error: false
+    error: false,
   };
 
   checkWallet = () => {
     try {
       this.props.testWallet(this.props.answers);
-    } catch(e) {
+    } catch (e) {
       return this.setState({
-        error: true
+        error: true,
       });
     }
 
     this.props.saveWallet(this.props.answers);
-  }
+  };
 
   handleGoBack = () => {
     this.props.goBack();
@@ -58,9 +60,7 @@ export default class Confirm extends Component {
           <T.Light>{t('wallet.confirm_word_list_description')}</T.Light>
           {this.props.answers.map((answer, i) => (
             <T.Light style={styles.answer} key={i}>
-              <T.SemiBold>
-                {answer}
-              </T.SemiBold>
+              <T.SemiBold>{answer}</T.SemiBold>
             </T.Light>
           ))}
           <Button

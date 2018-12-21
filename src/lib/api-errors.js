@@ -36,5 +36,8 @@ export async function handleApiErrors(response) {
 }
 
 export function getErrorMessage(error) {
-  return (error.errors && error.errors[0] && error.errors[0].message) || error.message;
+  return (
+    (error.errors && error.errors[0] && error.errors[0].message) ||
+    error.message
+  );
 }

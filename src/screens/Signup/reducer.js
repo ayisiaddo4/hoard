@@ -1,10 +1,10 @@
-import { SIGNUP_REQUESTING, SIGNUP_SUCCESS, SIGNUP_ERROR } from "./constants";
+import { SIGNUP_REQUESTING, SIGNUP_SUCCESS, SIGNUP_ERROR } from './constants';
 
 const initialState = {
   requesting: false,
   successful: false,
   messages: [],
-  error: null
+  error: null,
 };
 
 export default function SignupReducer(state = initialState, action) {
@@ -14,7 +14,7 @@ export default function SignupReducer(state = initialState, action) {
         requesting: true,
         successful: false,
         messages: [],
-        error: null
+        error: null,
       };
 
     case SIGNUP_SUCCESS:
@@ -22,7 +22,7 @@ export default function SignupReducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: [],
-        error: null
+        error: null,
       };
 
     // Append any errors to the current state, if any.
@@ -31,7 +31,7 @@ export default function SignupReducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: [],
-        error: action.error
+        error: action.error,
       };
     }
 

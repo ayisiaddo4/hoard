@@ -112,7 +112,8 @@ class SwipableItem extends React.Component {
   }
 }
 
-const HAS_DISMISSED_TESTNET_MODAL_STORAGE_KEY = 'HAS_DISMISSED_TESTNET_MODAL_STORAGE_KEY';
+const HAS_DISMISSED_TESTNET_MODAL_STORAGE_KEY =
+  'HAS_DISMISSED_TESTNET_MODAL_STORAGE_KEY';
 
 class Wallet extends React.Component {
   static propTypes = {
@@ -138,34 +139,34 @@ class Wallet extends React.Component {
   state = {
     swipedWallet: null,
     hasDismissedModal: Config.CURRENCY_NETWORK_TYPE === 'main',
-    testnetWarning: null
+    testnetWarning: null,
   };
 
   componentDidMount() {
     if (Config.CURRENCY_NETWORK_TYPE !== 'main') {
-      Storage.get(HAS_DISMISSED_TESTNET_MODAL_STORAGE_KEY).then(
-        value => {
-          if (value) { return; }
-
-          setTimeout(() => {
-            const { notification } = this.props.notificationRecieved({
-              type: 'error',
-              title: t('testnet.warning_title'),
-              content: t('testnet.warning_description'),
-              icon: require('assets/exclamation-circle.png'),
-              onDismiss: this.handleDismissTestnetWarning,
-              actions: [
-                {
-                  title: t('testnet.warning_dismiss'),
-                  onPress: this.handleDismissTestnetWarning,
-                }
-              ]
-            });
-
-            this.setState({ testnetWarning: notification });
-          }, 1000);
+      Storage.get(HAS_DISMISSED_TESTNET_MODAL_STORAGE_KEY).then(value => {
+        if (value) {
+          return;
         }
-      );
+
+        setTimeout(() => {
+          const { notification } = this.props.notificationRecieved({
+            type: 'error',
+            title: t('testnet.warning_title'),
+            content: t('testnet.warning_description'),
+            icon: require('assets/exclamation-circle.png'),
+            onDismiss: this.handleDismissTestnetWarning,
+            actions: [
+              {
+                title: t('testnet.warning_dismiss'),
+                onPress: this.handleDismissTestnetWarning,
+              },
+            ],
+          });
+
+          this.setState({ testnetWarning: notification });
+        }, 1000);
+      });
     }
 
     SUPPORTED_COINS_WALLET.map(symbol => this.props.getCurrencyPrice(symbol));
@@ -208,7 +209,7 @@ class Wallet extends React.Component {
     await Storage.set(HAS_DISMISSED_TESTNET_MODAL_STORAGE_KEY, true);
 
     this.props.notificationDismissed(this.state.testnetWarning);
-  }
+  };
 
   renderActionButtons() {
     const buttons = [];
@@ -295,13 +296,13 @@ class Wallet extends React.Component {
             const balanceStatus = balance_requesting
               ? ENTRY_STATUS.LOADING
               : balance_successful
-                ? ENTRY_STATUS.SUCCESSFUL
-                : ENTRY_STATUS.ERROR;
+              ? ENTRY_STATUS.SUCCESSFUL
+              : ENTRY_STATUS.ERROR;
             const priceStatus = price_requesting
               ? ENTRY_STATUS.LOADING
               : price_successful
-                ? ENTRY_STATUS.SUCCESSFUL
-                : ENTRY_STATUS.ERROR;
+              ? ENTRY_STATUS.SUCCESSFUL
+              : ENTRY_STATUS.ERROR;
 
             return (
               <SwipableItem

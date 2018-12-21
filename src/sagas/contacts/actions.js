@@ -2,14 +2,14 @@ import {
   CONTACT_ADDRESS_SELECTION,
   CONTACT_ADDRESS_REQUESTING,
   CONTACT_ADDRESS_SUCCESS,
-  CONTACT_ADDRESS_FAILURE
+  CONTACT_ADDRESS_FAILURE,
 } from './constants';
 
 export function selectContact(email, symbol) {
   return {
     type: CONTACT_ADDRESS_SELECTION,
     email,
-    symbol
+    symbol,
   };
 }
 
@@ -17,7 +17,7 @@ export function contactAddressRequest(email, symbol) {
   return {
     type: CONTACT_ADDRESS_REQUESTING,
     email,
-    symbol
+    symbol,
   };
 }
 
@@ -26,7 +26,7 @@ export function contactAddressRequestSuccess(email, symbol, address) {
     type: CONTACT_ADDRESS_SUCCESS,
     email,
     symbol,
-    address
+    address,
   };
 }
 
@@ -35,6 +35,6 @@ export function contactAddressRequestFailure(email, symbol, errors) {
     type: CONTACT_ADDRESS_FAILURE,
     email,
     symbol,
-    errors
+    errors,
   };
 }

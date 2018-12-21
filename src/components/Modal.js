@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import { Layout, Body, Header, Footer } from 'components/Base';
 import { Header as NavHeader } from 'components/Base/Navigation';
 import T from 'components/Typography';
-import {colors} from 'styles';
+import { colors } from 'styles';
 
 export default function Modal({ children, footer, title }) {
   return (

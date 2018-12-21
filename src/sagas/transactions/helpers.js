@@ -32,11 +32,11 @@ export class Queue {
   makeQueueItem(data) {
     return {
       next: null,
-      data
+      data,
     };
   }
 
-  push = (data) => {
+  push = data => {
     const item = this.makeQueueItem(data);
 
     if (this._tail) {
@@ -51,9 +51,9 @@ export class Queue {
     this.length = this.length + 1;
 
     return this.length;
-  }
+  };
 
-  pop = () =>{
+  pop = () => {
     const item = this._head;
 
     if (item) {
@@ -64,11 +64,11 @@ export class Queue {
       this._tail = null;
       return null;
     }
-  }
+  };
 }
 
 export class RequestLimiter {
-  constructor(baseUrl, {numRequests, perTimestamp}, retryOnCondition) {
+  constructor(baseUrl, { numRequests, perTimestamp }, retryOnCondition) {
     this.baseUrl = baseUrl;
     this.numRequests = numRequests;
     this.perTimestamp = perTimestamp;
@@ -82,19 +82,21 @@ export class RequestLimiter {
   processItem = async ({
     additionalUrlSpecifications,
     fetchOptions,
-    resolve
+    resolve,
   }) => {
     try {
-      const results = await fetch(this.baseUrl + additionalUrlSpecifications, fetchOptions);
+      const results = await fetch(
+        this.baseUrl + additionalUrlSpecifications,
+        fetchOptions
+      );
       resolve(results);
-    } catch(e) {
+    } catch (e) {
       resolve(e);
     }
   };
 
   processTotalQueue = () => {
     this.currentlyProcessing = true;
-
 
     const item = this.requestQueue.pop();
     if (item) {
@@ -108,11 +110,16 @@ export class RequestLimiter {
         this.currentlyProcessing = false;
       }
     }, this.perTimestamp / this.numRequests);
-
   };
 
   makeRequest = async (additionalUrlSpecifications = '', fetchOptions = {}) => {
-    const promise = new Promise((resolve) => this.requestQueue.push({additionalUrlSpecifications, fetchOptions, resolve}));
+    const promise = new Promise(resolve =>
+      this.requestQueue.push({
+        additionalUrlSpecifications,
+        fetchOptions,
+        resolve,
+      })
+    );
 
     if (!this.currentlyProcessing) {
       this.processTotalQueue();
@@ -130,6 +137,5 @@ export class RequestLimiter {
     } else {
       return request;
     }
-
-  }
+  };
 }

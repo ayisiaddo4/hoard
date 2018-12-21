@@ -1,11 +1,11 @@
-import ethers from "ethers";
+import ethers from 'ethers';
 import Config from 'react-native-config';
 
-import { SYMBOL_ETH } from "containers/App/constants";
+import { SYMBOL_ETH } from 'containers/App/constants';
 import { bigNumberToEther } from 'lib/formatters';
 import { getNetworkForCoin } from 'lib/currency-metadata';
 
-const network = getNetworkForCoin(SYMBOL_ETH);  // Ex: <Project Root>/.env.test
+const network = getNetworkForCoin(SYMBOL_ETH); // Ex: <Project Root>/.env.test
 const provider = ethers.providers.getDefaultProvider(network);
 
 if (__DEV__) {
@@ -27,10 +27,9 @@ export default class EthWallet {
 
   symbol = SYMBOL_ETH;
 
-  listenForBalanceChange = (callback) =>
-    this._wallet.provider.on(
-      this._wallet.address,
-      (balance) => callback(bigNumberToEther(balance))
+  listenForBalanceChange = callback =>
+    this._wallet.provider.on(this._wallet.address, balance =>
+      callback(bigNumberToEther(balance))
     );
 
   getBalance = async () => {

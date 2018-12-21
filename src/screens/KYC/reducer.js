@@ -3,7 +3,7 @@ import {
   DOCUMENT_VERIFICATION_SUCCESS,
   DOCUMENT_VERIFICATION_ERROR,
   DOCUMENT_VERIFICATION_RETRY,
-  INFO_VERIFICATION_CONFIRMATION
+  INFO_VERIFICATION_CONFIRMATION,
 } from './constants';
 
 const initialState = {
@@ -15,7 +15,7 @@ const initialState = {
   authorized: false,
   user_information: {},
   messages: [],
-  errors: []
+  errors: [],
 };
 
 export default function kycStatusReducer(state = initialState, action) {
@@ -30,7 +30,7 @@ export default function kycStatusReducer(state = initialState, action) {
         authorized: false,
         user_information: {},
         messages: [],
-        errors: []
+        errors: [],
       };
 
     case DOCUMENT_VERIFICATION_SUCCESS:
@@ -44,7 +44,7 @@ export default function kycStatusReducer(state = initialState, action) {
         authorized: action.authorized,
         user_information: action.user_information,
         messages: [],
-        errors: []
+        errors: [],
       };
 
     // Append any errors to the current state, if any.
@@ -59,7 +59,7 @@ export default function kycStatusReducer(state = initialState, action) {
         authorized: false,
         user_information: {},
         messages: [],
-        errors: [...state.errors, ...action.errors]
+        errors: [...state.errors, ...action.errors],
       };
 
     // Append any errors to the current state, if any.
@@ -74,12 +74,12 @@ export default function kycStatusReducer(state = initialState, action) {
         authorized: false,
         user_information: {},
         messages: [],
-        errors: []
+        errors: [],
       };
     case INFO_VERIFICATION_CONFIRMATION:
       return {
         ...state,
-        infoVerificationCompleted: true
+        infoVerificationCompleted: true,
       };
     default:
       return state;

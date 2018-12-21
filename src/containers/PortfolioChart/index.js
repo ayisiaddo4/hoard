@@ -1,27 +1,36 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import PortfolioChart from './PortfolioChart';
 import { SYMBOL_BTC, SYMBOL_ETH, SYMBOL_BOAR } from 'containers/App/constants';
 import { walletsForSymbolSelector } from 'screens/Wallet/selectors';
-import { sortedTransactionsForWalletSelector, sortedFiatTradesForWalletsSelector } from 'sagas/transactions/selectors';
+import {
+  sortedTransactionsForWalletSelector,
+  sortedFiatTradesForWalletsSelector,
+} from 'sagas/transactions/selectors';
 
 const mapStateToProps = (state, ownProps) => {
   const { wallets } = ownProps;
   let transactionsToCoalesce;
-  if ( wallets && wallets.length ) {
-    transactionsToCoalesce = wallets.map(({symbol, publicAddress}) => ({
+  if (wallets && wallets.length) {
+    transactionsToCoalesce = wallets.map(({ symbol, publicAddress }) => ({
       symbol,
       address: publicAddress,
-      transactions: sortedTransactionsForWalletSelector(state, symbol, publicAddress)
+      transactions: sortedTransactionsForWalletSelector(
+        state,
+        symbol,
+        publicAddress
+      ),
     }));
   }
 
   return {
     transactionsToCoalesce: transactionsToCoalesce,
-    fiatTrades: sortedFiatTradesForWalletsSelector(state, wallets, 'ASC')
+    fiatTrades: sortedFiatTradesForWalletsSelector(state, wallets, 'ASC'),
   };
 };
 
-const mapDispatchToProps = {
-};
+const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(PortfolioChart);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PortfolioChart);

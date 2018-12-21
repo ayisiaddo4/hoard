@@ -17,11 +17,11 @@ export default class ProgressBar extends Component {
     percentage: PropTypes.number.isRequired,
     style: ViewPropTypes.style,
     onComplete: PropTypes.func,
-  }
+  };
 
   state = {
-    progressWidth: 0
-  }
+    progressWidth: 0,
+  };
 
   componentWillMount() {
     this.widthValue = new Animated.Value(0);
@@ -34,39 +34,41 @@ export default class ProgressBar extends Component {
     }
   }
 
-  updatePercentage = (percentage) => {
-    Animated.timing(
-      this.widthValue,
-      {
-        toValue: percentage,
-        duration: 500,
-        easing: Easing.linear,
-        useNativeDriver: true,
-        isInteraction: false,
-      }
-    ).start(() => {
+  updatePercentage = percentage => {
+    Animated.timing(this.widthValue, {
+      toValue: percentage,
+      duration: 500,
+      easing: Easing.linear,
+      useNativeDriver: true,
+      isInteraction: false,
+    }).start(() => {
       if (this.props.onComplete && percentage === 1) {
         this.props.onComplete();
       }
     });
-  }
-
-  handleLayout = ({ nativeEvent: { layout: { width} } }) => {
-    this.setState({progressWidth: width});
   };
 
+  handleLayout = ({
+    nativeEvent: {
+      layout: { width },
+    },
+  }) => {
+    this.setState({ progressWidth: width });
+  };
 
   render() {
-    const {style, description} = this.props;
+    const { style, description } = this.props;
     const translateX = this.widthValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [-this.state.progressWidth, 0]
+      outputRange: [-this.state.progressWidth, 0],
     });
 
     return (
       <View style={[style, styles.container]}>
         <View style={styles.progressContainer} onLayout={this.handleLayout}>
-          <Animated.View style={[styles.progressAnimation, {transform: [{translateX}]}]}>
+          <Animated.View
+            style={[styles.progressAnimation, { transform: [{ translateX }] }]}
+          >
             <LinearGradient
               start={gradients.horizontal.start}
               end={gradients.horizontal.end}
@@ -76,18 +78,17 @@ export default class ProgressBar extends Component {
           </Animated.View>
         </View>
         {description && (
-           <View style={styles.descriptionContainer}>
-             <View style={styles.bump} />
-             <View style={styles.textContainer}>
-               <Text style={styles.description}>{description}</Text>
-             </View>
-           </View>
+          <View style={styles.descriptionContainer}>
+            <View style={styles.bump} />
+            <View style={styles.textContainer}>
+              <Text style={styles.description}>{description}</Text>
+            </View>
+          </View>
         )}
       </View>
     );
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -123,10 +124,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 5,
     paddingHorizontal: 20,
-    backgroundColor: '#3C434B'
+    backgroundColor: '#3C434B',
   },
   description: {
-    color: 'white'
+    color: 'white',
   },
   bump: {
     height: 5,
@@ -134,5 +135,5 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 5,
     borderTopLeftRadius: 5,
     backgroundColor: '#3C434B',
-  }
+  },
 });

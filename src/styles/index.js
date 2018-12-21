@@ -1,13 +1,13 @@
 /*
-*
-*  Style
-*
-* Usage:
-*
-* // in some component
-* import styles from 'styles/index.js'
-* <View style={styles.container} />
-*/
+ *
+ *  Style
+ *
+ * Usage:
+ *
+ * // in some component
+ * import styles from 'styles/index.js'
+ * <View style={styles.container} />
+ */
 
 import { StyleSheet, Dimensions } from 'react-native';
 
@@ -94,7 +94,10 @@ export const adjustRGBAOpacity = (rgba, opacity) =>
 export const gradients = {
   green: [colors.greenLight, colors.greenBlue],
   blue: [colors.grayDark, colors.grayDarker],
-  transparentBlueGray: [adjustRGBAOpacity(colorsRGBA.blueGray, 0), colorsRGBA.blueGray],
+  transparentBlueGray: [
+    adjustRGBAOpacity(colorsRGBA.blueGray, 0),
+    colorsRGBA.blueGray,
+  ],
   pink: [colors.pinkDark, colors.violet],
   light: [colors.grayLighter, colors.grayLight],
   horizontal: {
@@ -175,7 +178,7 @@ export const breakpoints = {
     TABLET_M: 768,
     TABLET_L: 800,
     TABLET_XL: 1024,
-  }
+  },
 };
 
 export const padding = {

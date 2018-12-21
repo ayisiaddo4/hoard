@@ -1,13 +1,13 @@
-import ethers from "ethers";
-import EthWallet from "./EthWallet";
+import ethers from 'ethers';
+import EthWallet from './EthWallet';
 import { bigNumberToEther } from 'lib/formatters';
-import { SYMBOL_BOAR } from "containers/App/constants";
+import { SYMBOL_BOAR } from 'containers/App/constants';
 
 export default class BoarWallet extends EthWallet {
   constructor(isMnemonic, mnemonicOrPrivateKey) {
     super(isMnemonic, mnemonicOrPrivateKey);
     this._contract = new ethers.Contract(
-      "0xcba0b17f1afA724D2A19c040d7F90f0468b662ea",
+      '0xcba0b17f1afA724D2A19c040d7F90f0468b662ea',
       abi,
       this._wallet
     );
@@ -35,268 +35,268 @@ const abi = [
   {
     constant: true,
     inputs: [],
-    name: "name",
+    name: 'name',
     outputs: [
       {
-        name: "",
-        type: "string"
-      }
+        name: '',
+        type: 'string',
+      },
     ],
     payable: false,
-    type: "function"
+    type: 'function',
   },
   {
     constant: true,
     inputs: [],
-    name: "symbol",
+    name: 'symbol',
     outputs: [
       {
-        name: "",
-        type: "string"
-      }
+        name: '',
+        type: 'string',
+      },
     ],
     payable: false,
-    type: "function"
+    type: 'function',
   },
   {
     constant: true,
     inputs: [],
-    name: "decimals",
+    name: 'decimals',
     outputs: [
       {
-        name: "",
-        type: "uint8"
-      }
+        name: '',
+        type: 'uint8',
+      },
     ],
     payable: false,
-    type: "function"
+    type: 'function',
   },
   {
     constant: true,
     inputs: [],
-    name: "totalSupply",
+    name: 'totalSupply',
     outputs: [
       {
-        name: "",
-        type: "uint256"
-      }
+        name: '',
+        type: 'uint256',
+      },
     ],
     payable: false,
-    type: "function"
+    type: 'function',
   },
   {
     constant: true,
     inputs: [
       {
-        name: "_owner",
-        type: "address"
-      }
+        name: '_owner',
+        type: 'address',
+      },
     ],
-    name: "balanceOf",
+    name: 'balanceOf',
     outputs: [
       {
-        name: "balance",
-        type: "uint256"
-      }
+        name: 'balance',
+        type: 'uint256',
+      },
     ],
     payable: false,
-    type: "function"
+    type: 'function',
   },
   {
     constant: false,
     inputs: [
       {
-        name: "_to",
-        type: "address"
+        name: '_to',
+        type: 'address',
       },
       {
-        name: "_value",
-        type: "uint256"
-      }
+        name: '_value',
+        type: 'uint256',
+      },
     ],
-    name: "transfer",
+    name: 'transfer',
     outputs: [
       {
-        name: "success",
-        type: "bool"
-      }
+        name: 'success',
+        type: 'bool',
+      },
     ],
     payable: false,
-    type: "function"
+    type: 'function',
   },
   {
     constant: false,
     inputs: [
       {
-        name: "_from",
-        type: "address"
+        name: '_from',
+        type: 'address',
       },
       {
-        name: "_to",
-        type: "address"
+        name: '_to',
+        type: 'address',
       },
       {
-        name: "_value",
-        type: "uint256"
-      }
+        name: '_value',
+        type: 'uint256',
+      },
     ],
-    name: "transferFrom",
+    name: 'transferFrom',
     outputs: [
       {
-        name: "success",
-        type: "bool"
-      }
+        name: 'success',
+        type: 'bool',
+      },
     ],
     payable: false,
-    type: "function"
+    type: 'function',
   },
   {
     constant: false,
     inputs: [
       {
-        name: "_spender",
-        type: "address"
+        name: '_spender',
+        type: 'address',
       },
       {
-        name: "_value",
-        type: "uint256"
-      }
+        name: '_value',
+        type: 'uint256',
+      },
     ],
-    name: "approve",
+    name: 'approve',
     outputs: [
       {
-        name: "success",
-        type: "bool"
-      }
+        name: 'success',
+        type: 'bool',
+      },
     ],
     payable: false,
-    type: "function"
+    type: 'function',
   },
   {
     constant: true,
     inputs: [
       {
-        name: "_owner",
-        type: "address"
+        name: '_owner',
+        type: 'address',
       },
       {
-        name: "_spender",
-        type: "address"
-      }
+        name: '_spender',
+        type: 'address',
+      },
     ],
-    name: "allowance",
+    name: 'allowance',
     outputs: [
       {
-        name: "remaining",
-        type: "uint256"
-      }
+        name: 'remaining',
+        type: 'uint256',
+      },
     ],
     payable: false,
-    type: "function"
+    type: 'function',
   },
   {
     anonymous: false,
     inputs: [
       {
         indexed: true,
-        name: "_from",
-        type: "address"
+        name: '_from',
+        type: 'address',
       },
       {
         indexed: true,
-        name: "_to",
-        type: "address"
+        name: '_to',
+        type: 'address',
       },
       {
         indexed: false,
-        name: "_value",
-        type: "uint256"
-      }
+        name: '_value',
+        type: 'uint256',
+      },
     ],
-    name: "Transfer",
-    type: "event"
+    name: 'Transfer',
+    type: 'event',
   },
   {
     anonymous: false,
     inputs: [
       {
         indexed: true,
-        name: "_owner",
-        type: "address"
+        name: '_owner',
+        type: 'address',
       },
       {
         indexed: true,
-        name: "_spender",
-        type: "address"
+        name: '_spender',
+        type: 'address',
       },
       {
         indexed: false,
-        name: "_value",
-        type: "uint256"
-      }
+        name: '_value',
+        type: 'uint256',
+      },
     ],
-    name: "Approval",
-    type: "event"
+    name: 'Approval',
+    type: 'event',
   },
   {
     inputs: [
       {
-        name: "_initialAmount",
-        type: "uint256"
+        name: '_initialAmount',
+        type: 'uint256',
       },
       {
-        name: "_tokenName",
-        type: "string"
+        name: '_tokenName',
+        type: 'string',
       },
       {
-        name: "_decimalUnits",
-        type: "uint8"
+        name: '_decimalUnits',
+        type: 'uint8',
       },
       {
-        name: "_tokenSymbol",
-        type: "string"
-      }
+        name: '_tokenSymbol',
+        type: 'string',
+      },
     ],
     payable: false,
-    type: "constructor"
+    type: 'constructor',
   },
   {
     constant: false,
     inputs: [
       {
-        name: "_spender",
-        type: "address"
+        name: '_spender',
+        type: 'address',
       },
       {
-        name: "_value",
-        type: "uint256"
+        name: '_value',
+        type: 'uint256',
       },
       {
-        name: "_extraData",
-        type: "bytes"
-      }
+        name: '_extraData',
+        type: 'bytes',
+      },
     ],
-    name: "approveAndCall",
+    name: 'approveAndCall',
     outputs: [
       {
-        name: "success",
-        type: "bool"
-      }
+        name: 'success',
+        type: 'bool',
+      },
     ],
     payable: false,
-    type: "function"
+    type: 'function',
   },
   {
     constant: true,
     inputs: [],
-    name: "version",
+    name: 'version',
     outputs: [
       {
-        name: "",
-        type: "string"
-      }
+        name: '',
+        type: 'string',
+      },
     ],
     payable: false,
-    type: "function"
-  }
+    type: 'function',
+  },
 ];

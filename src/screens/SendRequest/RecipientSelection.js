@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import T from 'components/Typography';
 import { Layout, Body, Header } from 'components/Base';
 import NavigatorService from 'lib/navigator';
@@ -16,18 +16,20 @@ export default class RecipientSelection extends Component {
       state: PropTypes.shape({
         params: PropTypes.shape({
           isSignedIn: PropTypes.bool,
-          transactionType: PropTypes.oneOf([TYPE_REQUEST, TYPE_SEND])
+          transactionType: PropTypes.oneOf([TYPE_REQUEST, TYPE_SEND]),
         }),
       }),
     }),
   };
 
   makeSelection = memoize(selection => () =>
-    NavigatorService.navigate(selection, {...this.props.navigation.state.params})
+    NavigatorService.navigate(selection, {
+      ...this.props.navigation.state.params,
+    })
   );
 
   render() {
-    const {isSignedIn, transactionType} = this.props.navigation.state.params;
+    const { isSignedIn, transactionType } = this.props.navigation.state.params;
 
     return (
       <Layout preload={false}>

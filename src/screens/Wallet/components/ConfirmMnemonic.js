@@ -15,11 +15,11 @@ export default class Confirm extends Component {
     answers: PropTypes.arrayOf(PropTypes.string).isRequired,
     testWallet: PropTypes.func.isRequired,
     saveWallet: PropTypes.func.isRequired,
-    goBack: PropTypes.func.isRequired
+    goBack: PropTypes.func.isRequired,
   };
 
   state = {
-    error: false
+    error: false,
   };
 
   checkWallet = () => {
@@ -29,14 +29,14 @@ export default class Confirm extends Component {
 
     try {
       this.props.testWallet(formattedAnswers);
-    } catch(e) {
+    } catch (e) {
       return this.setState({
-        error: true
+        error: true,
       });
     }
 
     this.props.saveWallet(formattedAnswers);
-  }
+  };
 
   handleGoBack = () => {
     this.props.goBack();
@@ -86,65 +86,65 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: 'black'
+    borderBottomColor: 'black',
   },
   inputWrapper: {
     flexGrow: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   animationWrapper: {},
   animation: {
     width: 70,
-    height: 50
+    height: 50,
   },
   input: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   answer: {
     color: 'lightgrey',
   },
   container: {
-    flex: 1
+    flex: 1,
   },
   heading: {
     padding: 20,
     paddingTop: 40,
-    color: '#fff'
+    color: '#fff',
   },
   bodyContainer: {
     flexGrow: 1,
     padding: 20,
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   description: {
     color: 'white',
     paddingBottom: 20,
   },
   statusCheck: {
-    marginTop: 40
+    marginTop: 40,
   },
   footerContainer: {
-    padding: 20
+    padding: 20,
   },
   mnemonicChoice: {
     padding: 10,
     borderRadius: 8,
     backgroundColor: '#223252',
     marginBottom: 20,
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   mnemonicChoiceNumner: {
     textAlign: 'center',
     color: '#ffffff',
-    fontSize: 12
+    fontSize: 12,
   },
   mnemonicChoiceText: {
     textAlign: 'center',
     color: '#ffffff',
-    fontSize: 14
+    fontSize: 14,
   },
   textButton: {
     marginTop: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });

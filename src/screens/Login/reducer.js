@@ -1,10 +1,10 @@
-import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from "./constants";
+import { LOGIN_REQUESTING, LOGIN_SUCCESS, LOGIN_ERROR } from './constants';
 
 const initialState = {
   requesting: false,
   successful: false,
   messages: [],
-  error: null
+  error: null,
 };
 
 export default function loginReducer(state = initialState, action) {
@@ -18,7 +18,7 @@ export default function loginReducer(state = initialState, action) {
         requesting: false,
         successful: true,
         messages: [],
-        error: null
+        error: null,
       };
 
     // Append any errors to the current state, if any.
@@ -28,7 +28,7 @@ export default function loginReducer(state = initialState, action) {
         requesting: false,
         successful: false,
         messages: [],
-        error: action.error
+        error: action.error,
       };
 
     default:

@@ -5,10 +5,13 @@ import { isSignedInSelector, emailSelector } from 'containers/User/selectors';
 const mapStateToProps = state => {
   return {
     emailAddress: emailSelector(state),
-    isSignedIn: isSignedInSelector(state)
+    isSignedIn: isSignedInSelector(state),
   };
 };
 
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateSupportTicket);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateSupportTicket);

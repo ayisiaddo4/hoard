@@ -1,19 +1,11 @@
-import {
-  all,
-  takeEvery,
-  call,
-  select,
-  put
-} from 'redux-saga/effects';
+import { all, takeEvery, call, select, put } from 'redux-saga/effects';
 
-import {getCurrencyPrice} from 'components/GetCurrencyPrice';
-import {getCurrencyHistory} from 'components/GetCurrencyHistory';
+import { getCurrencyPrice } from 'components/GetCurrencyPrice';
+import { getCurrencyHistory } from 'components/GetCurrencyHistory';
 
-import {
-  SYMBOL_BOAR,
-} from 'containers/App/constants';
+import { SYMBOL_BOAR } from 'containers/App/constants';
 
-import {tradingPairSelector} from 'screens/Settings/selectors';
+import { tradingPairSelector } from 'screens/Settings/selectors';
 
 import {
   GET_CURRENCY_HISTORY_REQUEST,
@@ -25,7 +17,6 @@ import {
   getCurrencyPriceFailure,
   getCurrencyPriceSuccess,
 } from './actions';
-
 
 function* getCurrencyPriceFlow(action) {
   const { symbol } = action;
@@ -39,22 +30,16 @@ function* getCurrencyPriceFlow(action) {
       price = payload[symbol][tradingPair];
     }
 
-    yield put(getCurrencyPriceSuccess(
-      symbol,
-      price
-    ));
+    yield put(getCurrencyPriceSuccess(symbol, price));
   } catch (error) {
-    yield put(getCurrencyPriceFailure(
-      symbol,
-      [error]
-    ));
+    yield put(getCurrencyPriceFailure(symbol, [error]));
   }
 }
 
 function* getCurrencyHistoryFlow(action) {
   const { symbol } = action;
   try {
-    const {limit, interval} = action;
+    const { limit, interval } = action;
 
     let data;
     let positive;
@@ -66,7 +51,13 @@ function* getCurrencyHistoryFlow(action) {
       change = '+0 (0%)';
     } else {
       const tradingPair = yield select(tradingPairSelector);
-      data = yield call(getCurrencyHistory, symbol, tradingPair, limit, interval);
+      data = yield call(
+        getCurrencyHistory,
+        symbol,
+        tradingPair,
+        limit,
+        interval
+      );
       const firstPrice = data[0];
       const firstNonZeroPrice = data[data.findIndex(v => v !== 0)];
       const lastPrice = data[data.length - 1];
@@ -74,29 +65,17 @@ function* getCurrencyHistoryFlow(action) {
       positive = firstPrice <= lastPrice;
 
       const changeAmount = lastPrice - firstPrice;
-      const changePercentage = changeAmount / firstNonZeroPrice * 100;
-      change = `${
-        positive ? '+' : '-'
-      }$${
-        changeAmount.toFixed(2)
-      }${
+      const changePercentage = (changeAmount / firstNonZeroPrice) * 100;
+      change = `${positive ? '+' : '-'}$${changeAmount.toFixed(2)}${
         changePercentage !== Infinity
-        ? ` (${changePercentage.toFixed(2)}%)` : ''
+          ? ` (${changePercentage.toFixed(2)}%)`
+          : ''
       }`;
     }
 
-
-    yield put(getCurrencyHistorySuccess(
-      symbol,
-      data,
-      positive,
-      change
-    ));
+    yield put(getCurrencyHistorySuccess(symbol, data, positive, change));
   } catch (error) {
-    yield put(getCurrencyHistoryFailure(
-      symbol,
-      [error]
-    ));
+    yield put(getCurrencyHistoryFailure(symbol, [error]));
   }
 }
 

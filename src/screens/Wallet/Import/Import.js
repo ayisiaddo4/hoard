@@ -1,24 +1,26 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { StyleSheet, View } from "react-native";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { StyleSheet, View } from 'react-native';
 
-import SuccessFailureScreen, {TYPE_SUCCESS} from 'components/SuccessFailureScreen';
+import SuccessFailureScreen, {
+  TYPE_SUCCESS,
+} from 'components/SuccessFailureScreen';
 
-import { initializeWallet } from "../WalletInstances";
-import SelectType from "./Type";
-import SelectCoin from "../components/SelectCoin";
-import InputList from "../components/InputList";
-import PrivateKey from "./PrivateKey";
-import Confirm from "./Confirm";
-import NavigatorService from "lib/navigator";
+import { initializeWallet } from '../WalletInstances';
+import SelectType from './Type';
+import SelectCoin from '../components/SelectCoin';
+import InputList from '../components/InputList';
+import PrivateKey from './PrivateKey';
+import Confirm from './Confirm';
+import NavigatorService from 'lib/navigator';
 import { t } from 'translations/i18n';
 
 export default class Import extends Component {
   static propTypes = {
     importWallet: PropTypes.func.isRequired,
     wallet: PropTypes.shape({
-      import_successful: PropTypes.bool.isRequired
-    }).isRequired
+      import_successful: PropTypes.bool.isRequired,
+    }).isRequired,
   };
 
   state = {
@@ -27,9 +29,9 @@ export default class Import extends Component {
     isMnemonicPhrase: false,
     modalOpen: false,
     answers: {
-      step1: Array.from({ length: 6 }, () => ""),
-      step2: Array.from({ length: 6 }, () => "")
-    }
+      step1: Array.from({ length: 6 }, () => ''),
+      step2: Array.from({ length: 6 }, () => ''),
+    },
   };
 
   componentWillReceiveProps(nextProps) {
@@ -46,19 +48,19 @@ export default class Import extends Component {
     if (__DEV__) {
       // eslint-disable-next-line
       console.log(
-        "Test Recovery Phrase:",
+        'Test Recovery Phrase:',
         initializeWallet(coin)._wallet.mnemonic
       );
 
       // eslint-disable-next-line
       console.log(
-        "Test Private Key:",
+        'Test Private Key:',
         initializeWallet(coin)._wallet.privateKey
       );
     }
     this.setState(
       {
-        coin
+        coin,
       },
       this.goForward
     );
@@ -68,8 +70,8 @@ export default class Import extends Component {
     this.setState({
       answers: {
         ...this.state.answers,
-        [step]: stepAnswers
-      }
+        [step]: stepAnswers,
+      },
     });
   };
 
@@ -79,47 +81,45 @@ export default class Import extends Component {
 
     this.setState({
       ...this.state,
-      step: nextStep
+      step: nextStep,
     });
   };
 
   goBack = () => {
     this.setState({
       ...this.state,
-      step: 2
+      step: 2,
     });
   };
 
   openModal = () => {
     this.setState({
-      modalOpen: true
+      modalOpen: true,
     });
   };
 
   cancelModal = () => {
     this.setState({
-      modalOpen: false
+      modalOpen: false,
     });
   };
 
   testWallet = answers => {
-    initializeWallet(this.state.coin, true, answers.join(" "));
+    initializeWallet(this.state.coin, true, answers.join(' '));
   };
 
   importWallet = type => seed => {
     this.props.importWallet(
       this.state.coin,
       type,
-      type === 'privateKey'
-        ? seed
-        : seed.join(' ')
+      type === 'privateKey' ? seed : seed.join(' ')
     );
 
     this.openModal();
   };
 
   handleRedirect = () => {
-    NavigatorService.navigate("Wallet");
+    NavigatorService.navigate('Wallet');
   };
 
   getMnemonicComponentForStep = step => {
@@ -128,7 +128,7 @@ export default class Import extends Component {
         <InputList
           offset={1}
           answers={this.state.answers.step1}
-          updateAnswers={this.saveAnswers("step1")}
+          updateAnswers={this.saveAnswers('step1')}
           saveAndContinue={this.goForward}
           onCancel={this.handleRedirect}
         />
@@ -139,7 +139,7 @@ export default class Import extends Component {
         <InputList
           offset={this.state.answers.step1.length + 1}
           answers={this.state.answers.step2}
-          updateAnswers={this.saveAnswers("step2")}
+          updateAnswers={this.saveAnswers('step2')}
           saveAndContinue={this.goForward}
           onCancel={this.handleRedirect}
         />
@@ -203,9 +203,7 @@ export default class Import extends Component {
     const { step } = this.state;
 
     return (
-      <View style={styles.container}>
-        {this.getComponentForStep(step)}
-      </View>
+      <View style={styles.container}>{this.getComponentForStep(step)}</View>
     );
   }
 }
