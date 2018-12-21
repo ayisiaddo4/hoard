@@ -33,13 +33,15 @@ export default class Settings extends Component {
               <Switch
                 trackColor="#00DC40"
                 onValueChange={this.togglePushNotifications}
-                value={props.enablePushNotifications}
+                value={this.props.enablePushNotifications}
               />
             }
           />
 
           <Link title={t('settings.security')} to="Security" />
-          {props.isSignedIn && <Link title={t('profile.title')} to="Profile" />}
+          {this.props.isSignedIn && (
+            <Link title={t('profile.title')} to="Profile" />
+          )}
         </Body>
       </Layout>
     );
