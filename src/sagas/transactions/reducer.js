@@ -4,16 +4,18 @@ import {
   CONFIRM_CONTACT_TRANSACTION,
   CANCEL_CONTACT_TRANSACTION_SUCCESS,
   TRANSACTION_FOUND,
-  TRANSACTION_UPDATE
-} from "./constants";
-
-
+  TRANSACTION_UPDATE,
+} from './constants';
 
 // needed_transaction_keys => {type, date, symbol, to, from, amount, price, details}
 
 const initialState = {
   version: 2,
   hydrationCompleted: false,
+  hasDelvedTheDepths: {
+    // <symbol>
+    //   bool
+  },
   contactTransactionsBySymbol: {
     // <symbol>
     //   [uid]
@@ -31,7 +33,7 @@ const initialState = {
     // <symbol>
     //   <hash>
     //     { ... needed_transaction_keys, fiatTrade?, details: { hash } }
-  }
+  },
 };
 
 export default function reducer(state = initialState, action) {
@@ -40,7 +42,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         ...action.state,
-        hydrationCompleted: true
+        hydrationCompleted: true,
       };
     }
     case CANCEL_CONTACT_TRANSACTION_SUCCESS: {
@@ -52,10 +54,10 @@ export default function reducer(state = initialState, action) {
             ...action.transaction,
             details: {
               ...action.transaction.details,
-              status: 'denied'
-            }
-          }
-        }
+              status: 'denied',
+            },
+          },
+        },
       };
     }
     case CONFIRM_CONTACT_TRANSACTION: {
@@ -68,15 +70,18 @@ export default function reducer(state = initialState, action) {
             details: {
               ...state.contactTransactions[action.transaction_uid].details,
               transaction_hash: action.transaction_hash,
-              status: 'confirmed'
-            }
-          }
-        }
+              status: 'confirmed',
+            },
+          },
+        },
       };
     }
     case RECORD_CONTACT_TRANSACTION: {
-      const { symbol, details: { uid } } = action.transaction;
-      const { contactTransactionsBySymbol={}, contactTransactions } = state;
+      const {
+        symbol,
+        details: { uid },
+      } = action.transaction;
+      const { contactTransactionsBySymbol = {}, contactTransactions } = state;
 
       let newSymbolState = contactTransactionsBySymbol[symbol] || [];
       if (!contactTransactions[uid]) {
@@ -87,19 +92,25 @@ export default function reducer(state = initialState, action) {
         ...state,
         contactTransactions: {
           ...contactTransactions,
-          [uid]: action.transaction
+          [uid]: action.transaction,
         },
         contactTransactionsBySymbol: {
           ...contactTransactionsBySymbol,
-          [symbol]: newSymbolState
-        }
+          [symbol]: newSymbolState,
+        },
       };
     }
     case TRANSACTION_FOUND: {
-      const { symbol, to, from, details: { hash } } = action.transaction;
+      const {
+        symbol,
+        to,
+        from,
+        details: { hash },
+      } = action.transaction;
       const { blockchainTransactions, transactionsByWallet } = state;
 
-      const blockchainTransactionsForSymbol = blockchainTransactions[symbol] || {};
+      const blockchainTransactionsForSymbol =
+        blockchainTransactions[symbol] || {};
 
       if (blockchainTransactionsForSymbol[hash]) {
         return state;
@@ -115,30 +126,28 @@ export default function reducer(state = initialState, action) {
           ...blockchainTransactions,
           [symbol]: {
             ...blockchainTransactionsForSymbol,
-            [hash]: action.transaction
-          }
+            [hash]: action.transaction,
+          },
         },
         transactionsByWallet: {
           ...transactionsByWallet,
           [symbol]: {
             ...transactionsByWalletForSymbol,
-            [to]: [
-              ...toTransactions,
-              hash
-            ],
-            [from]: [
-              ...fromTransactions,
-              hash
-            ]
-          }
-        }
+            [to]: [...toTransactions, hash],
+            [from]: [...fromTransactions, hash],
+          },
+        },
       };
     }
     case TRANSACTION_UPDATE: {
-      const { symbol, details: { hash } } = action.transaction;
+      const {
+        symbol,
+        details: { hash },
+      } = action.transaction;
       const { blockchainTransactions } = state;
 
-      const blockchainTransactionsForSymbol = blockchainTransactions[symbol] || {};
+      const blockchainTransactionsForSymbol =
+        blockchainTransactions[symbol] || {};
 
       return {
         ...state,
@@ -146,9 +155,9 @@ export default function reducer(state = initialState, action) {
           ...blockchainTransactions,
           [symbol]: {
             ...blockchainTransactionsForSymbol,
-            [hash]: action.transaction
-          }
-        }
+            [hash]: action.transaction,
+          },
+        },
       };
     }
     default: {

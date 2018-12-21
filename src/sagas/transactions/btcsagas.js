@@ -24,13 +24,17 @@ export default function* btcTransactionsSagaWatcher() {
   yield all([takeEvery(WALLET_TRACK_SYMBOL_SUCCESS, fetchTransactions)]);
 }
 
+export function* haveIFetchedYou(symbol, hash) {
+  const hasBeenFetched = yield select(state =>
+    blockchainTransactionSelector(state, symbol, hash)
+  );
+  return hasBeenFetched;
+}
+
 export function* fetchTransaction(action, transaction) {
-  const txFound = yield select(state =>
-    blockchainTransactionSelector(
-      state,
-      action.payload.symbol,
-      transaction.txid
-    )
+  const txFound = yield haveIFetchedYou(
+    action.payload.symbol,
+    transaction.txid
   );
 
   if (txFound) {
@@ -118,7 +122,17 @@ export function* fetchPage(action, pageNum) {
 
     const nextPage = pageNum + 1;
     if (nextPage < response.pagesTotal) {
-      yield fork(fetchPage, action, nextPage);
+      if (
+        iHaveDelvedTheDepths(action.payload.symbol) &&
+        !haveIFetchedYou(
+          action.payload.symbol,
+          response.txs[response.txs.length - 1].txid
+        )
+      ) {
+        yield fork(fetchPage, action, nextPage);
+      }
+    } else {
+      yield put(iHaveDelvedTheDepths(action.payload.symbol));
     }
 
     yield all(
