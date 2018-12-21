@@ -117,13 +117,13 @@ export default class QRScannerView extends Component {
   };
 
   //测量整个扫描组件的大小
-  measureTotalSize = e => {
+  measureTotalSize = ({ nativeEvent: e }) => {
     let totalSize = e.layout;
     this.setState({ topWidth: totalSize.width });
   };
 
   //测量扫描框的位置
-  measureRectPosition = e => {
+  measureRectPosition = ({ nativeEvent: e }) => {
     let rectSize = e.layout;
     rectSize.x += this.props.finderX;
     rectSize.y += this.props.finderY;
@@ -228,7 +228,7 @@ export default class QRScannerView extends Component {
     };
     return (
       <View
-        onLayout={({ nativeEvent: e }) => this.measureTotalSize(e)}
+        onLayout={this.measureTotalSize}
         style={[styles.container, this.getBottomHeight()]}
       >
         {/* <View style={{flex:1}}></View> */}
@@ -238,7 +238,7 @@ export default class QRScannerView extends Component {
             this.getRectSize(),
             { top: this.props.finderY, left: this.props.finderX },
           ]}
-          onLayout={({ nativeEvent: e }) => this.measureRectPosition(e)}
+          onLayout={this.measureRectPosition}
         >
           <View
             style={[

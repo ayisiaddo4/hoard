@@ -53,7 +53,7 @@ export default function withHeader(title, WrappedComponent) {
             paddingVertical: 10,
             paddingHorizontal: 20,
           }}
-          onPress={() => NavigatorService.openDrawer()}
+          onPress={NavigatorService.openDrawer}
         >
           <Icon icon="ios-menu-outline" style={{ size: 25 }} />
         </TouchableOpacity>

@@ -309,11 +309,7 @@ export default class Swiper extends Component {
           </Button>
         ) : (
           // Or this one otherwise
-          <Button
-            type="secondary"
-            style={styles.button}
-            onPress={() => this.swipe()}
-          >
+          <Button type="secondary" style={styles.button} onPress={this.swipe}>
             {this.props.nextText}
           </Button>
         )}

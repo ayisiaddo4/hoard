@@ -217,6 +217,17 @@ export default class ContactModal extends Component {
     NavigatorService.navigate('SendRequest');
   });
 
+  keyExtractor = contact => contact.recordID;
+
+  renderContactRow = ({ item: contact }) => (
+    <Contact
+      key={contact.recordID}
+      style={styles.contact}
+      contact={contact}
+      onPress={this.handleSelectContact(contact)}
+    />
+  );
+
   render() {
     const { permission, value, contacts, shownContacts } = this.state;
 
@@ -288,15 +299,8 @@ export default class ContactModal extends Component {
               </T.SubHeading>
               <FlatList
                 data={shownContacts}
-                keyExtractor={contact => contact.recordID}
-                renderItem={({ item: contact }) => (
-                  <Contact
-                    key={contact.recordID}
-                    style={styles.contact}
-                    contact={contact}
-                    onPress={this.handleSelectContact(contact)}
-                  />
-                )}
+                keyExtractor={this.keyExtractor}
+                renderItem={this.renderContactRow}
               />
               <LinearGradient
                 end={gradients.vertical.start}

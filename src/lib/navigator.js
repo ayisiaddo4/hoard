@@ -14,7 +14,7 @@ In /src/App.js, we've added a ref in <RoutingStack>.
 Usage:
 // from some/other/component.js
 import NavigatorService from "lib/navigator";
- 
+
 // Navigate to a route defined in App.js's RoutingStack:
 NavigatorService.navigate("Menu");
 

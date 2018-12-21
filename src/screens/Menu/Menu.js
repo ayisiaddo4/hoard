@@ -29,6 +29,7 @@ import Conditional, { Try, Otherwise } from 'components/Conditional';
 import Config from 'react-native-config';
 import { SafeAreaView } from 'react-navigation';
 import { t } from 'translations/i18n';
+import memoize from 'lodash/memoize';
 
 const menuHitSlop = calculateHitSlop(40, 20);
 const linkHitSlop = calculateHitSlop(15, Infinity);
@@ -43,9 +44,9 @@ class Menu extends Component {
     signOut: PropTypes.func.isRequired,
   };
 
-  navigateTo = route => {
+  navigateTo = memoize(route => () => {
     NavigatorService.navigate(route);
-  };
+  });
 
   render() {
     return (
@@ -66,7 +67,7 @@ class Menu extends Component {
                 paddingVertical: 10,
                 paddingHorizontal: 0,
               }}
-              onPress={() => NavigatorService.closeDrawer()}
+              onPress={NavigatorService.closeDrawer}
             >
               <Icon icon="ios-close-outline" />
             </TouchableOpacity>
@@ -107,7 +108,7 @@ class Menu extends Component {
               <TouchableOpacity
                 hitSlop={linkHitSlop}
                 style={styles.linkWrapper}
-                onPress={() => this.navigateTo('Wallet')}
+                onPress={this.navigateTo('Wallet')}
               >
                 <Text style={styles.linkContent}>{t('menu.wallet')}</Text>
               </TouchableOpacity>
@@ -118,14 +119,14 @@ class Menu extends Component {
               <TouchableOpacity
                 hitSlop={linkHitSlop}
                 style={[styles.linkWrapper, styles.divider]}
-                onPress={() => this.navigateTo('GetHelp')}
+                onPress={this.navigateTo('GetHelp')}
               >
                 <Text style={styles.linkContent}>{t('menu.help')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 hitSlop={linkHitSlop}
                 style={styles.linkWrapper}
-                onPress={() => this.navigateTo('Settings')}
+                onPress={this.navigateTo('Settings')}
               >
                 <Text style={styles.linkContent}>{t('menu.settings')}</Text>
               </TouchableOpacity>
@@ -135,7 +136,7 @@ class Menu extends Component {
               </View>
               <TouchableOpacity
                 style={[styles.linkWrapper, styles.divider]}
-                onPress={() => this.navigateTo('About')}
+                onPress={this.navigateTo('About')}
                 hitSlop={linkHitSlop}
               >
                 <Text style={styles.linkContent}>{t('menu.about')}</Text>
@@ -143,7 +144,7 @@ class Menu extends Component {
               <TouchableOpacity
                 hitSlop={linkHitSlop}
                 style={styles.linkWrapper}
-                onPress={() => this.navigateTo('Legal')}
+                onPress={this.navigateTo('Legal')}
               >
                 <Text style={styles.linkContent}>{t('menu.legal')}</Text>
               </TouchableOpacity>
@@ -152,12 +153,12 @@ class Menu extends Component {
           <View style={styles.footerContainer}>
             <Conditional>
               <Try condition={this.props.isSignedIn}>
-                <Button type="base" onPress={() => this.props.signOut()}>
+                <Button type="base" onPress={this.props.signOut}>
                   {t('actions.log_out')}
                 </Button>
               </Try>
               <Otherwise>
-                <Button type="base" onPress={() => this.navigateTo('Login')}>
+                <Button type="base" onPress={this.navigateTo('Login')}>
                   {t('menu.signup_login')}
                 </Button>
               </Otherwise>

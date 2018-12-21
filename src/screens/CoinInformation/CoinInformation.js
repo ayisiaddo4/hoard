@@ -280,6 +280,19 @@ export default class CoinInformation extends React.Component {
     );
   };
 
+  keyExtractor = t => t.details.hash;
+
+  renderTradeItem = ({ item }) => (
+    <TouchableOpacity onPress={this.handleSelect(item.details.hash)}>
+      <TradeItem
+        wallet={wallet}
+        transaction={item}
+        onUpdate={this.props.updateTransaction}
+        selected={this.state.selected === item.details.hash}
+      />
+    </TouchableOpacity>
+  );
+
   render() {
     const { transactions, wallet } = this.props;
 
@@ -289,17 +302,8 @@ export default class CoinInformation extends React.Component {
           style={[styles.flex, styles.scrollView]}
           ListHeaderComponent={this.renderHeader}
           data={transactions}
-          keyExtractor={t => t.details.hash}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={this.handleSelect(item.details.hash)}>
-              <TradeItem
-                wallet={wallet}
-                transaction={item}
-                onUpdate={this.props.updateTransaction}
-                selected={this.state.selected === item.details.hash}
-              />
-            </TouchableOpacity>
-          )}
+          keyExtractor={this.keyExractor}
+          renderItem={this.renderTradeItem}
         />
       </Scene>
     );
