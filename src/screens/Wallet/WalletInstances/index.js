@@ -1,7 +1,13 @@
-import { SYMBOL_ETH, SYMBOL_BOAR, SYMBOL_BTC } from 'containers/App/constants';
+import {
+  SYMBOL_ETH,
+  SYMBOL_BOAR,
+  SYMBOL_BTC,
+  SYMBOL_RVN,
+} from 'containers/App/constants';
 import EthWallet from './EthWallet';
 import BoarWallet from './BoarWallet';
 import BtcWallet from './BtcWallet';
+import RvnWallet from './RvnWallet';
 
 /*
   class Wallet {
@@ -24,6 +30,9 @@ export function initializeWallet(symbol, isMnemonic, mnemonicOrPrivateKey) {
     }
     case SYMBOL_BTC: {
       return new BtcWallet(isMnemonic, mnemonicOrPrivateKey);
+    }
+    case SYMBOL_RVN: {
+      return new RvnWallet(isMnemonic, mnemonicOrPrivateKey);
     }
     default:
       throw Error(`there is no wallet generation method for ${symbol}`);

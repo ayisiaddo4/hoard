@@ -11,7 +11,6 @@ import {
   updateTransaction,
   cancelContactTransaction,
 } from 'sagas/transactions/actions';
-import { SYMBOL_ETH, SYMBOL_BTC } from 'containers/App/constants';
 import { showReceiveModal } from 'containers/ReceiveModal/actions';
 import { showSendModal } from 'containers/SendModal/actions';
 import { startNotificationFlow } from 'containers/Notifications/actions';
