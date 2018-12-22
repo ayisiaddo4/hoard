@@ -4,7 +4,7 @@ import {
   SYMBOL_ETH,
   SYMBOL_BOAR,
   SYMBOL_RVN,
-} from "containers/App/constants";
+} from 'containers/App/constants';
 import { AsyncStorage } from 'react-native';
 import {
   throttle,
@@ -103,24 +103,28 @@ export function* fetchHistory(action) {
   );
   const wallet = receivedWallet ? receivedWallet : {};
 
-  switch(wallet.symbol) {
-  case SYMBOL_ETH: {
-    yield call(fetchHistoryEth, action);
-    return;
-  }
-  case SYMBOL_RVN:
-  case SYMBOL_BTC: {
-    yield call(fetchHistoryBTC, action);
-    return;
-  }
-  case SYMBOL_BOAR: {
-    yield call(fetchHistoryBoar, action);
-    return;
-  }
-  default: {
-    if (__DEV__) {
-      // eslint-disable-next-line no-console
-      console.log('unable to fetch transaction history for wallet: ', action.address);
+  switch (wallet.symbol) {
+    case SYMBOL_ETH: {
+      yield call(fetchHistoryEth, action);
+      return;
+    }
+    case SYMBOL_RVN:
+    case SYMBOL_BTC: {
+      yield call(fetchHistoryBTC, action);
+      return;
+    }
+    case SYMBOL_BOAR: {
+      yield call(fetchHistoryBoar, action);
+      return;
+    }
+    default: {
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log(
+          'unable to fetch transaction history for wallet: ',
+          action.address
+        );
+      }
     }
   }
 }
