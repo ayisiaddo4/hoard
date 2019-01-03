@@ -27,8 +27,9 @@ import { createStackNavigator } from 'react-navigation';
 import { INIT_REQUESTING } from './containers/App/constants';
 import { gradients } from 'styles';
 import LinearGradient from 'react-native-linear-gradient';
+import CONFIG from 'src/config';
 
-if (__DEV__) {
+if (CONFIG.USE_REACTOTRON) {
   var Reactotron = require('./ReactotronConfig').default;
 }
 
@@ -211,7 +212,7 @@ const mapStateToProps = state => {
   };
 };
 
-const ReactotronApp = __DEV__ ? Reactotron.overlay(App) : App;
+const ReactotronApp = CONFIG.USE_REACTOTRON ? Reactotron.overlay(App) : App;
 
 const ConnectedApp = connect(mapStateToProps)(ReactotronApp);
 

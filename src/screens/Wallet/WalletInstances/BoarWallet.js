@@ -2,12 +2,13 @@ import ethers from 'ethers';
 import EthWallet from './EthWallet';
 import { bigNumberToEther } from 'lib/formatters';
 import { SYMBOL_BOAR } from 'containers/App/constants';
+import Config from 'react-native-config';
 
 export default class BoarWallet extends EthWallet {
   constructor(isMnemonic, mnemonicOrPrivateKey) {
     super(isMnemonic, mnemonicOrPrivateKey);
     this._contract = new ethers.Contract(
-      '0xcba0b17f1afA724D2A19c040d7F90f0468b662ea',
+      Config.HOARD_CONTRACT_ADDRESS,
       abi,
       this._wallet
     );

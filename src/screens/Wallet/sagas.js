@@ -45,6 +45,7 @@ import { userUidSelector } from 'containers/User/selectors';
 import { allWalletsSelector, mnemonicPhraseSelector } from './selectors';
 
 import api from 'lib/api';
+import Config from 'react-native-config';
 
 const WALLET_STORAGE_KEY = 'wallets/storage/wallets';
 const MNEMONIC_STORAGE_KEY = 'wallets/storage/mnemonic';
@@ -296,7 +297,7 @@ function* setUpWallets(action) {
 export async function registerWallet({ user_uid, address, currency }) {
   try {
     const response = await api.post(
-      `https://erebor-staging.hoardinvest.com/users/${user_uid}/register_address`,
+      `${Config.EREBOR_ENDPOINT}/users/${user_uid}/register_address`,
       { currency, address }
     );
     return true;
