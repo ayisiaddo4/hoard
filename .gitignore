@@ -71,6 +71,7 @@ fastlane/Matchfile
 # Bundle artifact
 *.jsbundle
 .env
+.env.dev
 .env.prod
 .env.staging
 .env.test
