@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Provider, connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
-import { StyleSheet, YellowBox } from 'react-native';
+import { AsyncStorage, StyleSheet, YellowBox } from 'react-native';
 
 import NavigatorService from 'lib/navigator';
 import configureStore from './configureStore';
@@ -27,6 +27,7 @@ import { createStackNavigator } from 'react-navigation';
 import { INIT_REQUESTING } from './containers/App/constants';
 import { gradients } from 'styles';
 import LinearGradient from 'react-native-linear-gradient';
+import RNConfig from 'react-native-config';
 import CONFIG from 'src/config';
 
 if (CONFIG.USE_REACTOTRON) {
@@ -158,10 +159,14 @@ class App extends Component {
     }
   }
 
-  refDidLoad = navigatorRef => {
+  refDidLoad = async navigatorRef => {
     NavigatorService.setContainer(navigatorRef);
-
     if (!this.props.hasPreviouslyInitialized) {
+      const previousNetworkType = await AsyncStorage.getItem('CURRENCY_NETWORK_TYPE');
+      if (previousNetworkType !== RNConfig.CURRENCY_NETWORK_TYPE) {
+        await AsyncStorage.clear();
+        await AsyncStorage.setItem('CURRENCY_NETWORK_TYPE', RNConfig.CURRENCY_NETWORK_TYPE);
+      }
       this.props.store.dispatch({ type: INIT_REQUESTING });
     }
   };
