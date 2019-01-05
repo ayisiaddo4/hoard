@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.8</string>
+	<string>1.11</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -37,7 +37,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>36</string>
+	<string>48</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -71,6 +71,8 @@
 	<string>Allow access to camera to enable QR scanning support.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>This app requires contacts access to send and recieve payments.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Enabling Face ID allows you quick and secure access to your account.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UIAppFonts</key>
@@ -131,7 +133,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-  <key>NSFaceIDUsageDescription</key>
-  <string>Enabling Face ID allows you quick and secure access to your account.</string>
 </dict>
 </plist>

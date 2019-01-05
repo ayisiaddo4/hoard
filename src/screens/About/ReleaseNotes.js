@@ -4,6 +4,7 @@ import T from 'components/Typography';
 import { Layout, Body } from 'components/Base';
 import Config from 'react-native-config';
 import { t } from 'translations/i18n';
+import releaseNotesArray from '../../release_notes.json';
 
 export default function ReleaseNotes() {
   return (
@@ -47,10 +48,14 @@ export default function ReleaseNotes() {
               </View>
             </Fragment>
           )}
-          <T.SubHeading style={styles.subheading}>
-            {t('about.release_notes.release')} 1.0
-          </T.SubHeading>
-          <T.Light style={styles.type}>&bull; 🎉 🎉 🎉 🎉 🎉</T.Light>
+          {releaseNotesArray.map(({ release_notes, version_code }) => (
+            <Fragment key={version_code}>
+              <T.SubHeading style={styles.subheading}>
+                {version_code}
+              </T.SubHeading>
+              <T.Light style={styles.type}>{release_notes}</T.Light>
+            </Fragment>
+          ))}
         </Body>
       </Body>
     </Layout>

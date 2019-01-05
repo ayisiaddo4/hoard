@@ -39,6 +39,11 @@ Send an iOS build to Fabric for testing
 fastlane ios internal_beta_itc
 ```
 Send an iOS build to TestFlight for testing
+### ios internal_development_itc
+```
+fastlane ios internal_development_itc
+```
+Test a development build
 
 ----
 
@@ -48,6 +53,11 @@ Send an iOS build to TestFlight for testing
 fastlane android internal_beta_play
 ```
 Send an Android build to the Play Store for testing
+### android internal_development_play
+```
+fastlane android internal_development_play
+```
+Test a development build
 
 ----
 

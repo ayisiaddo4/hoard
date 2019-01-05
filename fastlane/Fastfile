@@ -9,6 +9,7 @@ update_fastlane
 
 ROOT_PATH = `pwd`
 APP_IDENTIFIER = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+GRADLE_PATH = File.absolute_path('../android/app/build.gradle')
 
 IOS_PATH = "ios/"
 XCODE_PROJECT_PATH = IOS_PATH + "Hoard.xcodeproj"
@@ -73,9 +74,12 @@ default_platform :ios
 
     desc "Send an iOS build to TestFlight for testing"
     lane :internal_beta_itc do
-      notes = "added forgot username, password feature, fixed scrollable menu, persistent close icon"
+      itc(scheme: "Testing")
+    end
 
-      itc(scheme: "Testing", notes: notes)
+    desc "Test a development build"
+    lane :internal_development_itc do
+      itc(scheme: "Testing", skip_version_bump: true)
     end
 
   end
@@ -85,6 +89,11 @@ default_platform :ios
     desc "Send an Android build to the Play Store for testing"
     lane :internal_beta_play do
       play(scheme: "Testing")
+    end
+
+    desc "Test a development build"
+    lane :internal_development_play do
+      play(scheme: "Testing", skip_version_bump: true)
     end
 
   end
@@ -131,12 +140,15 @@ default_platform :ios
   #-------------------------- App Stores -------------------------#
   private_lane :itc do |options|
     scheme = options[:scheme]
+    skip_version_bump = options[:skip_version_bump] || false
 
-    build_ios
+    release_notes = compile_release_notes(ios: true, skip_version_bump: skip_version_bump)
+
+    build_ios(release_notes)
 
     upload_to_testflight(
       distribute_external: options[:distribute_external] || false,
-      changelog: options[:notes] || "App Update - minor build update"
+      changelog: release_notes[:release_notes]
     )
 
     notify_slack(scheme: scheme, destination: "TestFlight", platform: 'iOS')
@@ -147,12 +159,18 @@ default_platform :ios
     JSON_KEY_FILE = File.absolute_path('../android/app/' + ENV['GOOGLE_SERVICE_ACCOUNT_JSON'])
 
     scheme = options[:scheme]
+    skip_version_bump = options[:skip_version_bump] || false
 
-    build_android
+    release_notes = compile_release_notes(android: true, skip_version_bump: skip_version_bump)
+
+    build_android(release_notes)
+
+    add_release_notes_to_android_metadata(release_notes)
 
     upload_to_play_store(
       track: 'alpha',
       package_name: APP_IDENTIFIER,
+      metadata_path: File.absolute_path('./metadata/android/'),
       json_key: JSON_KEY_FILE,
       apk: './android/app/build/outputs/apk/release/app-release.apk'
     )
@@ -170,6 +188,13 @@ private_lane :build_ios do |options|
   # match(type: "ad-hoc")
 
   # bump version number
+  if options[:version_code]
+    increment_version_number(
+      version_number: options[:version_code],
+      xcodeproj: XCODE_PROJECT_PATH
+    )
+  end
+
   if options[:build_number]
     increment_build_number(
        build_number: options[:build_number],
@@ -190,21 +215,22 @@ private_lane :build_ios do |options|
 end
 
 private_lane :build_android do |options|
-
   scheme = options[:scheme]
 
   # def increment_version_code(gradle_build: 'android/app/build.gradle')
   #   sh %Q{cd ../ && echo "$(awk '{sub(/versionCode [[:digit:]]+$/,"versionCode "$2+1)}1' #{gradle_build})" > #{gradle_build} && cd -}
   # end
   #
-  GRADLE_PATH = File.absolute_path('../android/app/build.gradle')
 
-  def bump_android_version
-    re = /versionCode\s+(\d+)/
+  def bump_android_version(version_name)
+    versionNameRegex = /versionName\s+"(\d+.\d+)"/
+    versionCodeRegex = /versionCode\s+(\d+)/
 
     s = File.read(GRADLE_PATH)
-    versionCode = s[re, 1].to_i
-    s[re, 1] = (versionCode + 1).to_s
+    s[versionNameRegex, 1] = version_name.to_s
+
+    versionCode = s[versionCodeRegex, 1].to_i
+    s[versionCodeRegex, 1] = (versionCode + 1).to_s
 
     f = File.new(GRADLE_PATH, 'w')
     f.write(s)
@@ -214,7 +240,8 @@ private_lane :build_android do |options|
   # gradle runs from a different context and adds '/android/app' unnecessarily.
   KEYSTORE_PATH = File.absolute_path('../android/app/keystores/my-release-key.keystore')
 
-  bump_android_version
+
+  bump_android_version(options[:version_code])
 
   gradle(task: 'clean', project_dir: './android/',)
 
@@ -245,7 +272,6 @@ private_lane :notify_slack do |options|
   end
 
   if platform === 'Android'
-    GRADLE_PATH = File.absolute_path('../android/app/build.gradle')
 
       VC = /versionCode\s+(\d+)/
       VN = /versionName\s+"([^"]*)"/
@@ -266,4 +292,88 @@ private_lane :notify_slack do |options|
     message: message,
   )
 
+end
+
+private_lane :compile_release_notes do |options|
+  RELEASE_NOTES_PATH = '../src/release_notes.json';
+
+  if options[:ios]
+    version = get_version_number(xcodeproj: XCODE_PROJECT_PATH, target: 'Hoard')
+  elsif options[:android]
+    version = read_android_version
+  end
+
+  major_version = version.split('.').first
+  minor_version = version.split('.').last
+  bumped_minor_version = minor_version.to_i + 1
+  bumped_version = "#{major_version}.#{bumped_minor_version}"
+
+  release_notes = ""
+  version_code = ""
+
+  # read release notes file and find the most recent object written
+  release_notes_array = JSON.parse(File.read(File.absolute_path(RELEASE_NOTES_PATH)))
+  most_recent_release_notes = release_notes_array.first
+
+  versions_aligned = true
+
+  if not most_recent_release_notes.nil?
+    versions_aligned = most_recent_release_notes["version_number"] == version or bumped_version == most_recent_release_notes["version_number"]
+  end
+
+  if versions_aligned and not options[:skip_version_bump]
+    release_notes = UI.input("Please enter notes for this version");
+    version_code = bumped_version
+    release_notes_array.unshift(release_notes: release_notes, version_code: version_code)
+    f = File.open(File.absolute_path(RELEASE_NOTES_PATH), 'w')
+    f.write(JSON.generate(release_notes_array))
+  else
+    release_notes = most_recent_release_notes["release_notes"]
+    version_code = most_recent_release_notes["version_code"]
+  end
+
+  { :release_notes => release_notes, :version_code => version_code }
+end
+
+private_lane :add_release_notes_to_android_metadata do |options|
+  CHANGELOG_PATH = './metadata/android/en-US/changelogs/'
+
+  make_metadata_directory_as_needed(path: CHANGELOG_PATH)
+
+  versionCode = read_android_version_code
+
+  f = File.open(File.absolute_path("#{CHANGELOG_PATH}#{versionCode}.txt"), 'w')
+  f.write(options[:release_notes])
+
+  true
+end
+
+private_lane :make_metadata_directory_as_needed do |options|
+  path_sections = options[:path].split("/")
+  path_sections.map!.with_index {
+    |path, i|
+      if i === 0
+        path
+      else
+        prev_path = path_sections[i - 1]
+        "#{prev_path}/#{path}"
+      end
+  }
+  path_sections.map {|path|
+    if not File.exists? path
+      Dir.mkdir path
+    end
+  }
+end
+
+def read_android_version
+  re = /versionName\s+"(\d+.\d+)"/
+  s = File.read(GRADLE_PATH)
+  s[re, 1]
+end
+
+def read_android_version_code
+  re = /versionCode\s+(\d+)/
+  s = File.read(GRADLE_PATH)
+  s[re, 1]
 end

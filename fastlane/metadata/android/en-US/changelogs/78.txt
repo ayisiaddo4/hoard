@@ -1,0 +1,6 @@
+Add progress bar to loading screen
+Add in-app messaging
+Add preliminary support for internationalization
+Adjust loading screen and app icons
+Pull release notes into to release notes page Allow fulfillment of contact transactions from transaction history
+Give support ticket description a minimum height

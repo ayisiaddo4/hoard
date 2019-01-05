@@ -1,0 +1,14 @@
+[
+  {
+    "release_notes": "Mainnet build setup and related bugfixes",
+    "version_code": "1.11"
+  },
+  {
+    "release_notes": "Performance Improvements\nAdd Ravencoin wallet\nAdd Push Notifications Support\nAdd Security Settings Screen\nAdd additional authentication options\nAdd change password form\nAdd profile update form\nAllow fulfillment of contact transactions\nAllow updating of PIN\nFix some btc send errors\nUse phone-pad keyboard for Signup phone input",
+    "version_code": "1.10"
+  },
+  {
+    "release_notes": "Add progress bar to loading screen\nAdd in-app messaging\nAdd preliminary support for internationalization\nAdjust loading screen and app icons\nPull release notes into to release notes page\nAllow fulfillment of contact transactions from transaction history\nGive support ticket description a minimum height",
+    "version_code": "1.9"
+  }
+]
