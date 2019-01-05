@@ -12,6 +12,7 @@ import {
 import * as Animatable from 'react-native-animatable';
 import T from 'components/Typography';
 import InputList from 'components/Pin/InputList';
+import { breakpoints, dimensions } from 'styles';
 
 export default class PinScreen extends Component {
   static propTypes = {
@@ -88,6 +89,12 @@ export default class PinScreen extends Component {
     const { showKeyboard, title, subtitle, pinLength, children } = this.props;
 
     const { attempts, currentInputValue } = this.state;
+
+    const shieldStyle =
+      dimensions.height < breakpoints.height.S
+        ? styles.shieldSmall
+        : styles.shield;
+
     return (
       <Animatable.View animation="fadeInUp" style={styles.container}>
         <KeyboardAvoidingView
@@ -97,7 +104,7 @@ export default class PinScreen extends Component {
         >
           <View style={styles.shieldContainer}>
             <Image
-              style={styles.shield}
+              style={shieldStyle}
               resizeMode="contain"
               source={require('assets/pin-shield.png')}
             />
@@ -157,6 +164,10 @@ const styles = StyleSheet.create({
   shield: {
     height: 100,
     width: 100,
+  },
+  shieldSmall: {
+    height: 75,
+    width: 75,
   },
   pinView: {
     flex: 1,
