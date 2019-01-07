@@ -73,6 +73,8 @@ export default class Input extends Component {
     }).start();
   }
 
+  fallbackRef = React.createRef();
+
   handleFocus = () => {
     this.setState(
       {
@@ -81,10 +83,19 @@ export default class Input extends Component {
       this.props.onFocus && this.props.onFocus()
     );
   };
+
   handleBlur = () =>
     this.setState({
       active: false,
     });
+
+  handleErrorTap = () => {
+    if (this.props.inputRef) {
+      this.props.inputRef.current.focus();
+    } else {
+      this.fallbackRef.current.focus();
+    }
+  }
 
   render() {
     const baseInputStyle =
@@ -137,10 +148,6 @@ export default class Input extends Component {
       <View
         style={[
           styles.input_wrapper,
-          inputWrapperStyle,
-          activeStyle,
-          errorBorder,
-          successBorder,
           this.props.containerStyle,
         ]}
         accessible={true}
@@ -155,9 +162,12 @@ export default class Input extends Component {
             editable={this.props.editable}
             style={[
               baseInputStyle,
+              inputWrapperStyle,
               inputColors,
               activeStyle,
               editableStyle,
+              errorBorder,
+              successBorder,
               styles.wrap_input,
               this.props.style,
             ]}
@@ -174,7 +184,7 @@ export default class Input extends Component {
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
             underlineColorAndroid="transparent"
-            ref={this.props.inputRef || null}
+            ref={this.props.inputRef || this.fallbackRef}
             secureTextEntry={this.props.secureTextEntry}
             selectionColor={colors.active}
           />
@@ -199,7 +209,7 @@ export default class Input extends Component {
         <Try
           condition={this.props.error && typeof this.props.error === 'string'}
         >
-          <View>
+          <TouchableOpacity onPress={this.handleErrorTap}>
             <View style={styles.errorContainer}>
               <View style={styles.errorIconContainer}>
                 <View style={styles.errorIconUnderlay} />
@@ -207,7 +217,7 @@ export default class Input extends Component {
               </View>
               <T.Small style={styles.errorText}>{this.props.error}</T.Small>
             </View>
-          </View>
+          </TouchableOpacity>
         </Try>
       </View>
     );
