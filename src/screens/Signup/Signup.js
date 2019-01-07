@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import find from 'lodash/find';
 import memoize from 'lodash/memoize';
 
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
 import { Try } from 'components/Conditional';
 
 import { Layout, Body, Header, Footer } from 'components/Base';
@@ -132,6 +132,9 @@ export default class Signup extends Component {
 
   safeFocus = memoize(element => () => {
     this[element].current.focus();
+
+    const currentlyFocusedField = TextInput.State.currentlyFocusedField();
+    this.setState({ focusedInput: currentlyFocusedField });
   });
 
   render() {
@@ -145,7 +148,7 @@ export default class Signup extends Component {
     const placeholderTextColor = '#808388';
 
     return (
-      <Layout preload={false} keyboard>
+      <Layout preload={false} keyboard focusedInput={this.state.focusedInput}>
         <Body scrollable style={styles.body}>
           <Header>
             <T.Heading style={styles.headingText}>
@@ -177,6 +180,7 @@ export default class Signup extends Component {
               error={showErrors && errors.first_name}
               type="underline"
               style={styles.input}
+              onFocus={this.safeFocus('signupFirstNameInput')}
               blurOnSubmit={false}
             />
             <Input
@@ -194,6 +198,7 @@ export default class Signup extends Component {
               type="underline"
               style={styles.input}
               blurOnSubmit={false}
+              onFocus={this.safeFocus('signupLastNameInput')}
             />
             <Input
               inputRef={this.signupEmailAddressInput}
@@ -211,6 +216,7 @@ export default class Signup extends Component {
               type="underline"
               style={styles.input}
               blurOnSubmit={false}
+              onFocus={this.safeFocus('signupEmailAddressInput')}
             />
             <Input
               inputRef={this.signupPhoneInput}
@@ -228,6 +234,7 @@ export default class Signup extends Component {
               type="underline"
               style={styles.input}
               blurOnSubmit={false}
+              onFocus={this.safeFocus('signupPhoneInput')}
             />
             <Input
               inputRef={this.signupUsernameInput}
@@ -244,6 +251,7 @@ export default class Signup extends Component {
               type="underline"
               style={styles.input}
               blurOnSubmit={false}
+              onFocus={this.safeFocus('signupUsernameInput')}
             />
             <Input
               inputRef={this.signupPasswordInput}
@@ -263,6 +271,7 @@ export default class Signup extends Component {
               type="underline"
               style={styles.input}
               blurOnSubmit={false}
+              onFocus={this.safeFocus('signupPasswordInput')}
             />
             <Input
               style={
@@ -287,6 +296,7 @@ export default class Signup extends Component {
                 errors.passwordConfirmation
               }
               type="underline"
+              onFocus={this.safeFocus('signupPasswordConfirmationInput')}
             />
           </Body>
           <Footer style={styles.footer}>

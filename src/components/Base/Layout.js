@@ -44,6 +44,7 @@ import invoke from 'lodash/invoke';
 import has from 'lodash/has';
 import Icon from 'components/Icon';
 import { Try } from 'components/Conditional';
+import KeyboardShift from './KeyboardShift';
 
 import {
   Animated,
@@ -181,12 +182,12 @@ class Layout extends Component {
   renderContent = () => {
     if (this.props.keyboard) {
       return (
-        <KeyboardAvoidingView behavior={'padding'} style={styles.keyboardView}>
+        <KeyboardShift {...this.props}>
           <StatusBar barStyle="light-content" />
           <View style={[styles.layout, this.props.style]} {...this.props}>
             {this.props.children}
           </View>
-        </KeyboardAvoidingView>
+        </KeyboardShift>
       );
     } else {
       return (

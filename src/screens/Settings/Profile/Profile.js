@@ -193,7 +193,8 @@ export default class Profile extends Component {
               placeholder={t('profile.last_name')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus('signupPhoneInput')}
+              onSubmitEditing={this.safeFocus('signupUsernameInput')}
+              onFocus={this.safeFocus('signupUsernameInput')}
               onChangeText={this.updateFormField('last_name')}
               value={answers.last_name}
               type="underline"
@@ -201,19 +202,22 @@ export default class Profile extends Component {
               blurOnSubmit={false}
             />
             <Input
+              inputRef={this.signupUsernameInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={false}
               placeholder={t('profile.username')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus('signupPhoneInput')}
+              onSubmitEditing={this.safeFocus('signupEmailAddressInput')}
+              onFocus={this.safeFocus('signupEmailAddressInput')}
               onChangeText={this.updateFormField('username')}
               value={this.props.user.username}
               type="underline"
               style={styles.input}
             />
             <Input
+              inputRef={this.signupEmailAddressInput}
               autoCapitalize="none"
               autoCorrect={false}
               editable={false}
@@ -235,7 +239,8 @@ export default class Profile extends Component {
               placeholder={t('profile.phone_number')}
               placeholderTextColor={placeholderTextColor}
               returnKeyType="next"
-              onSubmitEditing={this.safeFocus('signupUsernameInput')}
+              onSubmitEditing={this.safeFocus('signupPhoneInput')}
+              onFocus={this.safeFocus('signupPhoneInput')}
               onChangeText={this.updateFormField('phone_number')}
               value={answers.phone_number}
               type="underline"

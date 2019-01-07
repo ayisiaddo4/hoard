@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Config from 'react-native-config';
-import { Alert, Keyboard, StyleSheet, View } from 'react-native';
+import { Alert, Keyboard, StyleSheet, View, TextInput } from 'react-native';
 import { Layout, Header, Body } from 'components/Base';
 import { Try } from 'components/Conditional';
 import { t } from 'translations/i18n';
@@ -10,6 +10,7 @@ import Button from 'components/Button';
 import NavigatorService from 'lib/navigator';
 import withDismissableKeyboard from 'hocs/withDismissableKeyboard';
 import api from 'lib/api';
+import memoize from 'lodash/memoize';
 
 const DismissableView = withDismissableKeyboard(View);
 
@@ -18,6 +19,11 @@ export default class CreateSupportTicket extends Component {
     isSignedIn: PropTypes.bool,
     emailAddress: PropTypes.string,
   };
+
+  input_description = React.createRef();
+  input_subject = React.createRef();
+  input_name = React.createRef();
+  input_email = React.createRef();
 
   state = {
     largeInputHeight: 40,
@@ -66,6 +72,12 @@ export default class CreateSupportTicket extends Component {
     description:
       !description && t('get_help.submit_request.description_required'),
     name: !name && t('get_help.submit_request.name_required'),
+  });
+
+  safeFocus = memoize(element => () => {
+    this[element].current.focus();
+    const currentlyFocusedField = TextInput.State.currentlyFocusedField();
+    this.setState({ focusedInput: currentlyFocusedField });
   });
 
   submit = () => {
@@ -123,41 +135,54 @@ export default class CreateSupportTicket extends Component {
 
   render() {
     return (
-      <Layout keyboard>
+      <Layout keyboard focusedInput={this.state.focusedInput}>
         <Body style={styles.content} dismissKeyboard scrollable>
           <DismissableView style={styles.container}>
             <Try condition={!this.props.isSignedIn}>
               <Input
+                inputRef={this.input_email}
                 placeholder={t('get_help.submit_request.input_email')}
                 keyboardType="email-address"
                 returnKeyType="next"
                 error={this.state.showErrors && this.state.errors.email_address}
                 onChangeText={this.handleChange('email_address')}
+                onSubmitEditing={this.safeFocus('input_name')}
                 value={this.state.answers.email_address}
                 type="underline"
+                onFocus={this.safeFocus('input_email')}
+                blurOnSubmit={false}
               />
             </Try>
             <Input
+              inputRef={this.input_name}
               placeholder={t('get_help.submit_request.input_name')}
               returnKeyType="next"
               error={this.state.showErrors && this.state.errors.name}
               onChangeText={this.handleChange('name')}
+              onSubmitEditing={this.safeFocus('input_subject')}
               value={this.state.answers.name}
               type="underline"
+              onFocus={this.safeFocus('input_name')}
+              blurOnSubmit={false}
             />
             <Input
+              inputRef={this.input_subject}
               placeholder={t('get_help.submit_request.input_subject')}
               returnKeyType="next"
               error={this.state.showErrors && this.state.errors.subject}
               onChangeText={this.handleChange('subject')}
+              onSubmitEditing={this.safeFocus('input_description')}
               value={this.state.answers.subject}
               type="underline"
+              onFocus={this.safeFocus('input_subject')}
+              blurOnSubmit={false}
             />
             <View
               onLayout={this.measureLargeInput}
               style={styles.largeInputContainer}
             >
               <Input
+                inputRef={this.input_description}
                 placeholder={t('get_help.submit_request.input_description')}
                 multiline={true}
                 onChangeText={this.handleChange('description')}
@@ -167,6 +192,8 @@ export default class CreateSupportTicket extends Component {
                   { height: this.state.largeInputHeight },
                   styles.largeInput,
                 ]}
+                onFocus={this.safeFocus('input_description')}
+                blurOnSubmit={false}
               />
             </View>
             <Button

@@ -6,7 +6,10 @@ import {
   View,
   Image,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
+import { Layout, Body, Header, Footer } from 'components/Base';
+import memoize from 'lodash/memoize';
 
 import Button from 'components/Button';
 import Input from 'components/Input';
@@ -55,8 +58,13 @@ export default class InputList extends Component {
     this.props.updateAnswers(answers);
   };
 
+  safeFocus = memoize(element => () => {
+    const currentlyFocusedField = TextInput.State.currentlyFocusedField();
+    this.setState({ focusedInput: currentlyFocusedField });
+    this[element].current.focus();
+  });
+
   handleNextButton = () => {
-    this.scrollView.scrollTo({ x: 0, y: 0, animated: true });
     this.props.saveAndContinue();
   };
 
@@ -64,32 +72,49 @@ export default class InputList extends Component {
     const { answers, offset, onCancel } = this.props;
     const { completed } = this.state;
 
+    const RENDER_INPUTS = [];
+
+    answers.forEach((answer, i) => {
+      const nextInput =
+        i === 5
+          ? `input${i + offset}`
+          : i < answers.length - 1
+          ? `input${i + offset + 1}`
+          : `input${i + offset}`;
+
+      this[`input${i + offset}`] = React.createRef();
+
+      RENDER_INPUTS.push(
+        <Input
+          inputRef={this[`input${i + offset}`]}
+          key={i + offset + 'key'}
+          style={styles.input}
+          autoCapitalize="none"
+          returnKeyType="next"
+          placeholder={t('wallet.input_seed_phrase_word', {
+            word_number: i + offset,
+          })}
+          value={answer}
+          onSubmitEditing={
+            i === answers.length - 1
+              ? this.handleNextButton
+              : this.safeFocus(nextInput)
+          }
+          onChangeText={this.updateAnswer(i)}
+          type="underline"
+          blurOnSubmit={false}
+          onFocus={this.safeFocus(`input${i + offset}`)}
+        />
+      );
+    });
+
     return (
-      <View style={styles.container}>
+      <Layout preload={false} keyboard focusedInput={this.state.focusedInput}>
         <T.Heading style={styles.headingStyle}>
           {t('wallet.input_seed_phrase_heading')}
         </T.Heading>
-        <ScrollView
-          bounces={false}
-          style={styles.bodyContainer}
-          ref={this.getRef}
-        >
-          {answers.map((answer, i) => {
-            return (
-              <Input
-                key={i}
-                style={styles.input}
-                autoCapitalize="none"
-                returnKeyType="next"
-                placeholder={t('wallet.input_seed_phrase_word', {
-                  word_number: i + offset,
-                })}
-                value={answer}
-                onChangeText={this.updateAnswer(i)}
-                type="underline"
-              />
-            );
-          })}
+        <Body scrollable style={styles.bodyContainer} navigationOffset={80}>
+          {RENDER_INPUTS}
           <View style={styles.footerContainer}>
             <T.Light
               style={{
@@ -110,16 +135,13 @@ export default class InputList extends Component {
               {t('actions.next')}
             </Button>
           </View>
-        </ScrollView>
-      </View>
+        </Body>
+      </Layout>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   headingStyle: {
     padding: 20,
     paddingTop: 40,

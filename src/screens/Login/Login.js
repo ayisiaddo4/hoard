@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, Image, View } from 'react-native';
+import { StyleSheet, Text, Image, View, TextInput } from 'react-native';
 import { getNetworkForCoin } from 'lib/currency-metadata';
 import T from 'components/Typography';
 import { t } from 'translations/i18n';
@@ -91,12 +91,15 @@ export default class Login extends Component {
   };
 
   safeFocus = memoize(element => () => {
+    const currentlyFocusedField = TextInput.State.currentlyFocusedField();
+    this.setState({ focusedInput: currentlyFocusedField });
+
     this[element].current.focus();
   });
 
   render() {
     return (
-      <Layout preload={false} keyboard>
+      <Layout preload={false} keyboard focusedInput={this.state.focusedInput}>
         <Body scrollable style={styles.body} navigationOffset={80}>
           <Header style={{ alignItems: 'center', marginTop: -40 }}>
             <Image

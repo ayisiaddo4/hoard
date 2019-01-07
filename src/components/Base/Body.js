@@ -25,7 +25,7 @@ const Body = ({ style, children, navigationOffset, ...otherProps }) => {
         <ScrollView
           contentOffset={{ x: 0, y: 0 }}
           bounces={otherProps.bounces}
-          keyboardShouldPersistTaps={dismissKeyboard}
+          keyboardShouldPersistTaps={dismissKeyboard ? 'always' : 'handled'}
           keyboardDismissMode={dismissMode}
           contentContainerStyle={[
             style,

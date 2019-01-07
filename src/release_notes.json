@@ -1,5 +1,13 @@
 [
   {
+    "release_notes": "Mainnet build\nFixed Pin Input Screens styles\nFixed bug persisting old network transactions\nFixed recovery screen styles, next buttons",
+    "version_code": "1.13"
+  },
+  {
+    "release_notes": "Mainnet build\nFixed inconsistent Pin Input Screens\nFixed auto-selecting next input field\nFixed keyboard covering inputs",
+    "version_code": "1.12"
+  },
+  {
     "release_notes": "Mainnet build setup and related bugfixes",
     "version_code": "1.11"
   },

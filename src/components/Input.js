@@ -73,11 +73,14 @@ export default class Input extends Component {
     }).start();
   }
 
-  handleFocus = () =>
-    this.setState({
-      active: true,
-    });
-
+  handleFocus = () => {
+    this.setState(
+      {
+        active: true,
+      },
+      this.props.onFocus && this.props.onFocus()
+    );
+  };
   handleBlur = () =>
     this.setState({
       active: false,
