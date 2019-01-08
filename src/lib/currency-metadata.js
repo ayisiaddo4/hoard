@@ -41,12 +41,12 @@ export function getCoinMetadata(symbol) {
         colors: ['#C99D66', '#99774D'],
         fullName: 'Ethereum',
       };
-    case 'BOAR':
+    case 'HOARD':
       return {
         image: require('assets/boar_logo.png'),
         icon: require('assets/boar_icon.png'),
         colors: ['#E5129A', '#AA0D72'],
-        fullName: 'BefOAR',
+        fullName: 'HOARD',
       };
     default:
       return {
@@ -60,7 +60,7 @@ export function getNetworkForCoin(symbol) {
   if (Config.CURRENCY_NETWORK_TYPE === 'main') {
     switch (symbol) {
       case 'ETH':
-      case 'BOAR': {
+      case 'HOARD': {
         return 'homestead';
       }
       case 'BTC':
@@ -74,7 +74,7 @@ export function getNetworkForCoin(symbol) {
   } else {
     switch (symbol) {
       case 'ETH':
-      case 'BOAR': {
+      case 'HOARD': {
         return 'rinkeby';
       }
       case 'BTC':
@@ -92,7 +92,7 @@ export function getInfoUrl(symbol, hash) {
   if (Config.CURRENCY_NETWORK_TYPE === 'main') {
     switch (symbol) {
       case 'ETH':
-      case 'BOAR': {
+      case 'HOARD': {
         return `https://etherscan.io/tx/${hash}`;
       }
       case 'BTC':
@@ -106,7 +106,7 @@ export function getInfoUrl(symbol, hash) {
   } else {
     switch (symbol) {
       case 'ETH':
-      case 'BOAR': {
+      case 'HOARD': {
         return `https://rinkeby.etherscan.io/tx/${hash}`;
       }
       case 'BTC': {
@@ -125,7 +125,7 @@ export function validateAddress(symbol, address) {
   const network = Config.CURRENCY_NETWORK_TYPE === 'main' ? 'prod' : 'testnet';
 
   switch (symbol) {
-    case 'BOAR': {
+    case 'HOARD': {
       return Validator.validate(address, 'ETH', network);
     }
     default: {

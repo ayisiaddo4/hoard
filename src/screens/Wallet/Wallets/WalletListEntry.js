@@ -28,6 +28,9 @@ const WalletListEntry = ({
       true
     ) && (Number(price) * Number(balance)).toFixed(2);
 
+  const formattedPrice = Number(price)
+    .toFixed(5)
+    .replace(/0{0,3}$/, '');
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
@@ -55,7 +58,7 @@ const WalletListEntry = ({
             <T.SmallAlternate style={{ color: '#777' }}>
               <Conditional>
                 <Try condition={priceStatus === ENTRY_STATUS.SUCCESSFUL}>
-                  ${price} / {symbol}
+                  ${formattedPrice} / {symbol}
                 </Try>
                 <Otherwise>...</Otherwise>
               </Conditional>

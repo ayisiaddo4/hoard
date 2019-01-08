@@ -1,7 +1,7 @@
 import ethers from 'ethers';
 import EthWallet from './EthWallet';
 import { bigNumberToEther } from 'lib/formatters';
-import { SYMBOL_BOAR } from 'containers/App/constants';
+import { SYMBOL_HOARD } from 'containers/App/constants';
 import Config from 'react-native-config';
 
 export default class BoarWallet extends EthWallet {
@@ -14,7 +14,7 @@ export default class BoarWallet extends EthWallet {
     );
   }
 
-  symbol = SYMBOL_BOAR;
+  symbol = SYMBOL_HOARD;
 
   getBalance = async () => {
     const address = await this.getPublicAddress();

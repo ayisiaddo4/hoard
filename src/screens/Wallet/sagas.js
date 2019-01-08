@@ -12,7 +12,7 @@ import { initializeWallet } from './WalletInstances';
 import {
   INIT_REQUESTING,
   SUPPORTED_COINS_WALLET,
-  SYMBOL_BOAR,
+  SYMBOL_HOARD,
 } from 'containers/App/constants';
 import StoreRegistry from 'lib/store-registry';
 import {
@@ -158,7 +158,7 @@ async function commonWalletInitializationActions(wallet) {
         },
       });
     });
-  } else if (symbol === SYMBOL_BOAR) {
+  } else if (symbol === SYMBOL_HOARD) {
     setTimeout(
       () =>
         StoreRegistry.getStore().dispatch({

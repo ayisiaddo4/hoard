@@ -1,6 +1,6 @@
 import {
   SYMBOL_ETH,
-  SYMBOL_BOAR,
+  SYMBOL_HOARD,
   SYMBOL_BTC,
   SYMBOL_RVN,
 } from 'containers/App/constants';
@@ -25,7 +25,7 @@ export function initializeWallet(symbol, isMnemonic, mnemonicOrPrivateKey) {
     case SYMBOL_ETH: {
       return new EthWallet(isMnemonic, mnemonicOrPrivateKey);
     }
-    case SYMBOL_BOAR: {
+    case SYMBOL_HOARD: {
       return new BoarWallet(isMnemonic, mnemonicOrPrivateKey);
     }
     case SYMBOL_BTC: {

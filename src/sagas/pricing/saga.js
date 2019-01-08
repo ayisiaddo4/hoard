@@ -3,7 +3,7 @@ import { all, takeEvery, call, select, put } from 'redux-saga/effects';
 import { getCurrencyPrice } from 'components/GetCurrencyPrice';
 import { getCurrencyHistory } from 'components/GetCurrencyHistory';
 
-import { SYMBOL_BOAR } from 'containers/App/constants';
+import { SYMBOL_HOARD } from 'containers/App/constants';
 
 import { tradingPairSelector } from 'screens/Settings/selectors';
 
@@ -18,13 +18,15 @@ import {
   getCurrencyPriceSuccess,
 } from './actions';
 
+const HOARD_BASE_PRICE = 0.035;
+
 function* getCurrencyPriceFlow(action) {
   const { symbol } = action;
   try {
     const tradingPair = yield select(tradingPairSelector);
     let price;
-    if (symbol === SYMBOL_BOAR) {
-      price = 0.46;
+    if (symbol === SYMBOL_HOARD) {
+      price = HOARD_BASE_PRICE;
     } else {
       const payload = yield call(getCurrencyPrice, [symbol], tradingPair);
       price = payload[symbol][tradingPair];
@@ -45,8 +47,17 @@ function* getCurrencyHistoryFlow(action) {
     let positive;
     let change;
 
-    if (symbol === SYMBOL_BOAR) {
-      data = [0.46, 0.46, 0.46, 0.46, 0.46, 0.46, 0.46, 0.46];
+    if (symbol === SYMBOL_HOARD) {
+      data = [
+        HOARD_BASE_PRICE,
+        HOARD_BASE_PRICE,
+        HOARD_BASE_PRICE,
+        HOARD_BASE_PRICE,
+        HOARD_BASE_PRICE,
+        HOARD_BASE_PRICE,
+        HOARD_BASE_PRICE,
+        HOARD_BASE_PRICE,
+      ];
       positive = true;
       change = '+0 (0%)';
     } else {
