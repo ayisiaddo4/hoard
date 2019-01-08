@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import { saveKey } from './utils';
 import Button from 'components/Button';
 import NavigatorService from 'lib/navigator';
@@ -48,31 +49,36 @@ export default class Store extends Component {
     }
 
     return (
-      <PinScreen
-        title={title}
-        subtitle={
-          pin
-            ? ''
-            : 'Your PIN will be used to unlock your wallet and send or receive.'
-        }
-        pinLength={pinLength}
-        expectedPin={pin}
-        showKeyboard={!confirmPin}
-        onSuccess={pin ? this.handleConfirmPin : this.handleSetPin}
-      >
-        {!!confirmPin && (
-          <View style={styles.buttonContainer}>
-            <Button onPress={this.onSuccessHandler} style={styles.button}>
-              {'Go to dashboard'}
-            </Button>
-          </View>
-        )}
-      </PinScreen>
+      <SafeAreaView forceInset={{ top: 'always' }} style={styles.safeArea}>
+        <PinScreen
+          title={title}
+          subtitle={
+            pin
+              ? ''
+              : 'Your PIN will be used to unlock your wallet and send or receive.'
+          }
+          pinLength={pinLength}
+          expectedPin={pin}
+          showKeyboard={!confirmPin}
+          onSuccess={pin ? this.handleConfirmPin : this.handleSetPin}
+        >
+          {!!confirmPin && (
+            <View style={styles.buttonContainer}>
+              <Button onPress={this.onSuccessHandler} style={styles.button}>
+                {'Go to dashboard'}
+              </Button>
+            </View>
+          )}
+        </PinScreen>
+      </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   buttonContainer: {
     margin: 20,
     padding: 20,
