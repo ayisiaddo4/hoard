@@ -37,7 +37,7 @@ export default class ProgressBar extends Component {
   updatePercentage = percentage => {
     Animated.timing(this.widthValue, {
       toValue: percentage,
-      duration: 500,
+      duration: 1500,
       easing: Easing.linear,
       useNativeDriver: true,
       isInteraction: false,
