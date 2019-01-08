@@ -162,10 +162,17 @@ class App extends Component {
   refDidLoad = async navigatorRef => {
     NavigatorService.setContainer(navigatorRef);
     if (!this.props.hasPreviouslyInitialized) {
-      const previousNetworkType = await AsyncStorage.getItem('CURRENCY_NETWORK_TYPE');
+      const previousNetworkType = await AsyncStorage.getItem(
+        'CURRENCY_NETWORK_TYPE'
+      );
       if (previousNetworkType !== RNConfig.CURRENCY_NETWORK_TYPE) {
-        await AsyncStorage.clear();
-        await AsyncStorage.setItem('CURRENCY_NETWORK_TYPE', RNConfig.CURRENCY_NETWORK_TYPE);
+        if (previousNetworkType) {
+          await AsyncStorage.clear();
+        }
+        await AsyncStorage.setItem(
+          'CURRENCY_NETWORK_TYPE',
+          RNConfig.CURRENCY_NETWORK_TYPE
+        );
       }
       this.props.store.dispatch({ type: INIT_REQUESTING });
     }
