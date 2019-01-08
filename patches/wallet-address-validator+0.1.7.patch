@@ -1,0 +1,14 @@
+patch-package
+--- a/node_modules/wallet-address-validator/src/currencies.js
++++ b/node_modules/wallet-address-validator/src/currencies.js
+@@ -10,6 +10,10 @@ var CURRENCIES = [{
+     name: 'bitcoincash',
+     symbol: 'bch',
+     addressTypes: {prod: ['00', '05'], testnet: ['6f', 'c4']}
++},{
++    name: 'ravencoin',
++    symbol: 'rvn',
++    addressTypes: {prod: ['3c', '7a'], testnet: ['6f', 'c4']}
+ },{
+     name: 'litecoin',
+     symbol: 'ltc',

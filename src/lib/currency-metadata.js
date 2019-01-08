@@ -128,9 +128,6 @@ export function validateAddress(symbol, address) {
     case 'BOAR': {
       return Validator.validate(address, 'ETH', network);
     }
-    case 'RVN': {
-      return Validator.validate(address, 'BTC', network);
-    }
     default: {
       return Validator.validate(address, symbol, network);
     }
