@@ -23,7 +23,7 @@ export default class QRModal extends Component {
   handleRead = value => {
     this.props.navigation.state.params.onChangeRecipient({
       recipientType: RECIPIENT_TYPE_ADDRESS,
-      recipient: value.replace(/(\w+:)?(\w+)([\?\&]\w+=\w+)+/, '$2'),
+      recipient: value.replace(/(\w+:)? ?(\w+)(([\?\&]\w+=\w+)+)?/, '$2'),
     });
     NavigatorService.navigate('SendRequest');
   };
