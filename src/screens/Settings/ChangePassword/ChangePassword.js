@@ -18,8 +18,7 @@ import memoize from 'lodash/memoize';
 export default class ChangePassword extends Component {
   static propTypes = {
     navigation: PropTypes.any,
-    username: PropTypes.string.required,
-    changePassword: PropTypes.func.isRequired,
+    username: PropTypes.string.isRequired,
   };
 
   state = {
