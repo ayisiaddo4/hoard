@@ -21,6 +21,7 @@ export default class Store extends Component {
   };
 
   state = {
+    loading: false,
     pin: null,
     confirmPin: null,
   };
@@ -33,7 +34,11 @@ export default class Store extends Component {
   };
 
   onSuccessHandler = () => {
-    NavigatorService.resetReplace('Login', 'Wallet');
+    this.setState({ loading: true }, () =>
+      requestAnimationFrame(() =>
+        NavigatorService.resetReplace('Login', 'Wallet')
+      )
+    );
   };
 
   render() {
@@ -64,7 +69,11 @@ export default class Store extends Component {
         >
           {!!confirmPin && (
             <View style={styles.buttonContainer}>
-              <Button onPress={this.onSuccessHandler} style={styles.button}>
+              <Button
+                onPress={this.onSuccessHandler}
+                style={styles.button}
+                loading={this.state.loading}
+              >
                 {'Go to dashboard'}
               </Button>
             </View>

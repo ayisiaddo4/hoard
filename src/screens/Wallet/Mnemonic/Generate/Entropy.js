@@ -109,28 +109,30 @@ export default class Entropy extends Component {
   };
 
   handleNextButton = () => {
-    this.setState({ loading: true }, () => {
-      /* here we are grabbing all of the integer values from the movement data
-       * that we are recording in the `onPanResponderMove` callback.
-       *
-       * this should include x/y positions, x/y velocities, and the timestamp
-       * for each of those movements.
-       *
-       * we then strip out all non-integer values, so we can pass all of that
-       * as hex data to our mnemonic phrase generator.
-       */
+    this.setState({ loading: true }, () =>
+      requestAnimationFrame(() => {
+        /* here we are grabbing all of the integer values from the movement data
+         * that we are recording in the `onPanResponderMove` callback.
+         *
+         * this should include x/y positions, x/y velocities, and the timestamp
+         * for each of those movements.
+         *
+         * we then strip out all non-integer values, so we can pass all of that
+         * as hex data to our mnemonic phrase generator.
+         */
 
-      const str = this.state.movement
-        .reduce((accumulator, data, i) => {
-          if (i % SAMPLE_EVERY_X === 0) {
-            return accumulator + Object.values(data).join('');
-          }
-          return accumulator;
-        }, '')
-        .replace(/[^0-9]/g, '');
+        const str = this.state.movement
+          .reduce((accumulator, data, i) => {
+            if (i % SAMPLE_EVERY_X === 0) {
+              return accumulator + Object.values(data).join('');
+            }
+            return accumulator;
+          }, '')
+          .replace(/[^0-9]/g, '');
 
-      this.props.saveAndContinue(`0x${str}`);
-    });
+        this.props.saveAndContinue(`0x${str}`);
+      })
+    );
   };
 
   setViewRef = ref => (this.viewRef = ref);

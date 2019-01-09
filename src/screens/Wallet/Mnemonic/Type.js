@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import createStyles, { dimensions, colors, padding, typography } from 'styles';
+import memoize from 'lodash/memoize';
 
 import Button from 'components/Button';
 import T from 'components/Typography';
@@ -13,6 +14,16 @@ export default class Type extends Component {
     newMnemonicType: PropTypes.string.isRequired,
     existingMnemonicType: PropTypes.string.isRequired,
   };
+
+  state = {
+    loading: false,
+  };
+
+  selectType = memoize(type => () =>
+    this.setState({ loading: true }, () =>
+      requestAnimationFrame(this.props.saveAndContinue(type))
+    )
+  );
 
   render() {
     return (
@@ -31,17 +42,16 @@ export default class Type extends Component {
         </View>
         <View style={styles.buttonsContainer}>
           <Button
+            loading={this.state.loading}
             style={styles.generateButton}
-            onPress={this.props.saveAndContinue(this.props.newMnemonicType)}
+            onPress={this.selectType(this.props.newMnemonicType)}
           >
             {t('wallet.get_started')}
           </Button>
           <Button
             type="text"
             style={styles.recoverButton}
-            onPress={this.props.saveAndContinue(
-              this.props.existingMnemonicType
-            )}
+            onPress={this.selectType(this.props.existingMnemonicType)}
           >
             {t('wallet.existing_mnemonic')}
           </Button>

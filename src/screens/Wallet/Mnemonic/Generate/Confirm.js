@@ -102,10 +102,12 @@ export default class Confirm extends Component {
     });
 
   handleCreate = () =>
-    this.setState({ loading: true }, () => {
-      this.props.navigation.setParams({ header: null });
-      this.props.saveWallet();
-    });
+    this.setState({ loading: true }, () =>
+      requestAnimationFrame(() => {
+        this.props.navigation.setParams({ header: null });
+        this.props.saveWallet();
+      })
+    );
 
   render() {
     return (
