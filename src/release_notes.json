@@ -1,5 +1,9 @@
 [
   {
+    "release_notes": "FIX change password warnings \nFIX Fix broken qr regex to allow for no params and space after \nFIX make sure pin store screen is within safe view\nRename Boar\nFix coin amount display\nFix testnet warnings",
+    "version_code": "1.15"
+  },
+  {
     "release_notes": "Mainnet build\nFixes keyboard \"next\" button and scrolling issues\nAdjusts implementation of input error for better usability\nFixes Ravencoin mainnet address validation\nRemoves testnet warnings from splash screen\nAdjusts loading bar animation",
     "version_code": "1.14"
   },
