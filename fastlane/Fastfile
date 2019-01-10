@@ -151,7 +151,7 @@ default_platform :ios
       changelog: release_notes[:release_notes]
     )
 
-    notify_slack(scheme: scheme, destination: "TestFlight", platform: 'iOS')
+    notify_slack(scheme: scheme, destination: "TestFlight", platform: 'iOS', release_notes: release_notes)
 
   end
 
@@ -175,7 +175,7 @@ default_platform :ios
       apk: './android/app/build/outputs/apk/release/app-release.apk'
     )
 
-    notify_slack(scheme: scheme, destination: "Google Play Store", platform: 'Android')
+    notify_slack(scheme: scheme, destination: "Google Play Store", platform: 'Android', release_notes: release_notes)
 
   end
 
@@ -284,12 +284,27 @@ private_lane :notify_slack do |options|
   message     = "BETA BUILD to #{destination} #{platform}: *#{version}* (#{build})  :rocket:"
 
   UI.success(message)
+  release_notes = 'No release notes specified';
+
+  if options[:release_notes]
+    release_notes = options[:release_notes][:release_notes];
+  end
+
+  attachment_properties = {
+     fields: [
+         {
+             title: "Release Notes",
+             value: release_notes.to_s,
+         },
+     ]
+ }
 
   slack(
     channel: "#dev-updates",
     default_payloads: [],
     slack_url: ENV['SLACK_URL'],
     message: message,
+    attachment_properties: attachment_properties
   )
 
 end
