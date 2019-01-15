@@ -44,6 +44,11 @@ Send an iOS build to TestFlight for testing
 fastlane ios internal_development_itc
 ```
 Test a development build
+### ios internal_slack_itc_test
+```
+fastlane ios internal_slack_itc_test
+```
+TEST SLACK NOTIFICATIONS
 
 ----
 
