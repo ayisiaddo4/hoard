@@ -9,7 +9,7 @@ import { t } from 'translations/i18n';
 
 export default function ManagePin(props) {
   return (
-    <Layout preload={false}>
+    <Layout>
       <Body scrollable style={styles.content}>
         <Link title={t('manage_pin.update_pin')} to="UpdatePin" />
       </Body>

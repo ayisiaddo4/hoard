@@ -18,7 +18,7 @@ export default class SeedWordsSplash extends Component {
       date = new Date(Number(this.props.lastDisplayTime));
     }
     return (
-      <Layout preload={false}>
+      <Layout>
         <Header style={styles.container}>
           <T.Heading style={styles.title}>
             {t('settings.your_seed_words')}

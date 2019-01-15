@@ -140,7 +140,7 @@ export default class StyleGuide extends Component {
 
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <Layout preload={false} keyboard focusedInput={this.state.focusedInput}>
+        <Layout keyboard focusedInput={this.state.focusedInput}>
           <Body
             scrollable
             style={styles.body}

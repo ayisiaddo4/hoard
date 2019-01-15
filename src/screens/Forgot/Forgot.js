@@ -33,7 +33,7 @@ export default class Forgot extends Component {
     const imgSrc = require('assets/forgot-password.png');
 
     return (
-      <Layout preload={false} style={styles.container} keyboard>
+      <Layout style={styles.container} keyboard>
         <Header style={{ alignItems: 'center', marginBottom: 20 }}>
           <Image style={styles.icon} source={imgSrc} />
           <T.Heading style={styles.heading}>{t('login.cant_log_in')}</T.Heading>

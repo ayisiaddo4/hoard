@@ -148,7 +148,7 @@ export default class Signup extends Component {
     const placeholderTextColor = '#808388';
 
     return (
-      <Layout preload={false} keyboard focusedInput={this.state.focusedInput}>
+      <Layout keyboard focusedInput={this.state.focusedInput}>
         <Body scrollable style={styles.body}>
           <Header>
             <T.Heading style={styles.headingText}>

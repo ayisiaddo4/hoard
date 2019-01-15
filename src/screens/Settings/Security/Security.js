@@ -72,7 +72,7 @@ export default class Security extends Component {
       type: this.state.biometrics.type,
     });
     return (
-      <Layout preload={false}>
+      <Layout>
         <Body scrollable style={styles.content}>
           <Link
             title={title}

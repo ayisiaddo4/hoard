@@ -8,7 +8,7 @@ import releaseNotesArray from '../../release_notes.json';
 
 export default function ReleaseNotes() {
   return (
-    <Layout preload={false} keyboard>
+    <Layout keyboard>
       <Body scrollable style={styles.body}>
         <Body>
           <T.Heading style={[styles.type, styles.header]}>

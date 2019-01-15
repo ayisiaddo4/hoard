@@ -97,7 +97,7 @@ export default class ForgotModal extends Component {
   render() {
     return (
       <Modal>
-        <Layout preload={false} keyboard>
+        <Layout keyboard>
           <Body scrollable>
             <Header style={{ alignItems: 'center' }}>
               <Image style={styles.icon} source={icon[this.state.forgotType]} />

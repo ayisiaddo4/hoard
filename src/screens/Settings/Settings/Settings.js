@@ -24,7 +24,7 @@ export default class Settings extends Component {
 
   render() {
     return (
-      <Layout preload={false}>
+      <Layout>
         <Body scrollable style={styles.content}>
           <Link
             title="Push Notifications"

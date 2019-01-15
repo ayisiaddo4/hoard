@@ -6,7 +6,7 @@ import memoize from 'lodash/memoize';
 
 import { colors, calculateHitSlop } from 'styles';
 import Contact from './Contact';
-import Scene from 'components/Scene';
+import { Layout } from 'components/Base';
 import T from 'components/Typography';
 import { t } from 'translations/i18n';
 import UnderlineInput from 'components/UnderlineInput';
@@ -471,7 +471,7 @@ export default class SendRequest extends Component {
     }
 
     return (
-      <Scene preload={false}>
+      <Layout>
         <View style={styles.flex1}>
           <Conditional>
             <Try condition={isLoadingPrice}>
@@ -588,7 +588,7 @@ export default class SendRequest extends Component {
             </Otherwise>
           </Conditional>
         </View>
-      </Scene>
+      </Layout>
     );
   }
 }

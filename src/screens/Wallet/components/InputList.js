@@ -109,7 +109,7 @@ export default class InputList extends Component {
     });
 
     return (
-      <Layout preload={false} keyboard focusedInput={this.state.focusedInput}>
+      <Layout keyboard focusedInput={this.state.focusedInput}>
         <T.Heading style={styles.headingStyle}>
           {t('wallet.input_seed_phrase_heading')}
         </T.Heading>

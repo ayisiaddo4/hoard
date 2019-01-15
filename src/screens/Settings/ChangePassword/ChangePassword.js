@@ -163,7 +163,7 @@ export default class ChangePassword extends Component {
     const placeholderTextColor = 'rgba(255,255,255,0.75)';
 
     return (
-      <Layout preload={false} keyboard>
+      <Layout keyboard>
         <Body scrollable style={styles.body}>
           <Header>
             <T.Heading style={styles.headingText}>

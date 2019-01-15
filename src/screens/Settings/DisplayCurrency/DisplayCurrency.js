@@ -25,7 +25,7 @@ export default class DisplayCurrency extends Component {
   render() {
     const { tradingPairs, selectedTradingPair } = this.props;
     return (
-      <Layout preload={false}>
+      <Layout>
         <Body scrollable>
           <T.Heading style={styles.heading}>
             {t('settings.display_currency')}

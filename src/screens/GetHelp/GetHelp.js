@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Link from 'components/Link';
-import Scene from 'components/Scene';
+import { Layout } from 'components/Base';
 import { t } from 'translations/i18n';
 
 export default function GetHelp() {
   return (
-    <Scene preload={false}>
+    <Layout>
       <View style={styles.container}>
         <View style={styles.content}>
           <Link
@@ -30,7 +30,7 @@ export default function GetHelp() {
           />
         </View>
       </View>
-    </Scene>
+    </Layout>
   );
 }
 

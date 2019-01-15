@@ -7,7 +7,7 @@ import { t } from 'translations/i18n';
 export default class About extends Component {
   render() {
     return (
-      <Layout preload={false}>
+      <Layout>
         <View style={styles.container}>
           <View style={styles.content}>
             <Link

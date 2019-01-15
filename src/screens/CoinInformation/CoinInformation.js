@@ -17,7 +17,7 @@ import NavigatorService from 'lib/navigator';
 import { Try } from 'components/Conditional';
 import Card from 'components/Card';
 import T from 'components/Typography';
-import Scene from 'components/Scene';
+import { Layout } from 'components/Base';
 import Swipeable from 'react-native-swipeable';
 import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
 import { NOTIFICATION_FLOW_TYPE_CONTACT_FULFILLMENT } from 'containers/Notifications/constants';
@@ -295,7 +295,7 @@ export default class CoinInformation extends React.Component {
     const { transactions } = this.props;
 
     return (
-      <Scene>
+      <Layout preload={true}>
         <FlatList
           style={[styles.flex, styles.scrollView]}
           ListHeaderComponent={this.renderHeader}
@@ -303,7 +303,7 @@ export default class CoinInformation extends React.Component {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderTradeItem}
         />
-      </Scene>
+      </Layout>
     );
   }
 }

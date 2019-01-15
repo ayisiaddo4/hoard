@@ -8,7 +8,7 @@ import { colors } from 'styles';
 
 export default function Modal({ children, footer, title }) {
   return (
-    <Layout style={styles.container} preload={false}>
+    <Layout style={styles.container}>
       <Header>
         <NavHeader leftAction="cancel" rightAction={null} />
       </Header>

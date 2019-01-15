@@ -6,7 +6,7 @@ import { t } from 'translations/i18n';
 
 export default function OpenSource() {
   return (
-    <Layout preload={false} keyboard>
+    <Layout keyboard>
       <Body scrollable style={styles.body}>
         <Body>
           <T.Heading style={[styles.type, styles.header]}>

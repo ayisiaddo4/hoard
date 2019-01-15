@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Link from 'components/Link';
-import Scene from 'components/Scene';
+import { Layout } from 'components/Base';
 
 export default function Legal() {
   return (
-    <Scene preload={false}>
+    <Layout>
       <View style={styles.container}>
         <View style={styles.content}>
           <Link title="User Agreement" to="UserAgreement" />
@@ -13,7 +13,7 @@ export default function Legal() {
           <Link title="Compliance" to="Compliance" />
         </View>
       </View>
-    </Scene>
+    </Layout>
   );
 }
 

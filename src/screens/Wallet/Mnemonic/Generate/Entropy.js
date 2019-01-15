@@ -170,7 +170,7 @@ export default class Entropy extends Component {
     const responders = finished ? {} : { ...this.panResponder.panHandlers };
 
     return (
-      <Layout preload={false} style={styles.layout}>
+      <Layout style={styles.layout}>
         <Header style={styles.header}>
           <T.Heading style={styles.heading}>
             {t('wallet.entropy_heading')}

@@ -62,7 +62,7 @@ export default class WordList extends Component {
     const { animateList, exitAnimation } = this.state;
 
     return (
-      <Layout preload={false}>
+      <Layout>
         <Body scrollable style={styles.body}>
           <Header>
             <T.Heading style={styles.headingStyle}>

@@ -31,7 +31,7 @@ export default class Camera extends Component {
 
   render() {
     return (
-      <Layout preload={false} keyboard>
+      <Layout keyboard>
         <Header style={styles.top}>
           <Scanner
             onRead={this.handleOnRead}

@@ -155,7 +155,7 @@ export default class Profile extends Component {
     const placeholderTextColor = '#808388';
 
     return (
-      <Layout preload={false} keyboard>
+      <Layout keyboard>
         <Body scrollable style={styles.body}>
           <Header>
             <T.Heading style={styles.headingText}>

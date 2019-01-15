@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Image, View } from 'react-native';
 
-import Scene from 'components/Scene';
+import { Layout } from 'components/Base';
 import T from 'components/Typography';
 import {
   TRANSACTION_PENDING,
@@ -77,7 +77,7 @@ export default class TransactionStatus extends Component {
     const size = transaction === TRANSACTION_ERROR ? 120 : 240;
 
     return (
-      <Scene preload={false}>
+      <Layout>
         <View style={styles.container}>
           <View style={[styles.half, styles.imageContainer]}>
             <Image
@@ -107,7 +107,7 @@ export default class TransactionStatus extends Component {
             </Try>
           </View>
         </View>
-      </Scene>
+      </Layout>
     );
   }
 }

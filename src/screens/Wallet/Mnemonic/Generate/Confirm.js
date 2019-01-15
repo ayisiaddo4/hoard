@@ -111,7 +111,7 @@ export default class Confirm extends Component {
 
   render() {
     return (
-      <Layout preload={false}>
+      <Layout>
         <Body scrollable style={styles.body}>
           <Header>
             <T.Heading style={styles.headingStyle}>

@@ -260,7 +260,7 @@ class Wallet extends React.Component {
 
   render() {
     return (
-      <Layout>
+      <Layout preload={true}>
         <Card
           colors={['#00A073', '#007982']}
           title={t('wallet.my_balance')}

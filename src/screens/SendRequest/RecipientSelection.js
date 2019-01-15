@@ -32,7 +32,7 @@ export default class RecipientSelection extends Component {
     const { isSignedIn, transactionType } = this.props.navigation.state.params;
 
     return (
-      <Layout preload={false}>
+      <Layout>
         <Header style={styles.container}>
           <T.Heading style={{ color: 'white', marginBottom: 20 }}>
             {t('send_request.recipient')}

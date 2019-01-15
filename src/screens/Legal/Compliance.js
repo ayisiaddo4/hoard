@@ -1,18 +1,18 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import T from 'components/Typography';
-import Scene from 'components/Scene';
+import { Layout } from 'components/Base';
 
 export default function Legal() {
   return (
-    <Scene preload={false}>
+    <Layout>
       <View style={styles.container}>
         <View style={styles.content}>
           <T.Heading style={styles.title}>Compliance</T.Heading>
           <T.Light style={styles.title}>Coming Soon...</T.Light>
         </View>
       </View>
-    </Scene>
+    </Layout>
   );
 }
 

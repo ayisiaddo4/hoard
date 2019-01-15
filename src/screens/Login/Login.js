@@ -99,7 +99,7 @@ export default class Login extends Component {
 
   render() {
     return (
-      <Layout preload={false} keyboard focusedInput={this.state.focusedInput}>
+      <Layout keyboard focusedInput={this.state.focusedInput}>
         <Body scrollable style={styles.body} navigationOffset={80}>
           <Header style={{ alignItems: 'center', marginTop: -40 }}>
             <Image

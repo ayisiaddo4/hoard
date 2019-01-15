@@ -5,7 +5,6 @@ import { StyleSheet, View } from 'react-native';
 import SuccessFailureScreen, {
   TYPE_SUCCESS,
 } from 'components/SuccessFailureScreen';
-import Scene from 'components/Scene';
 import { Layout } from 'components/Base';
 import { t } from 'translations/i18n';
 import Type from './Type';
@@ -84,7 +83,7 @@ export default class Mnemonic extends Component {
 
   render() {
     return (
-      <Layout withHeader={false} preload={false}>
+      <Layout withHeader={false}>
         <View style={styles.container}>
           {this.getComponentForStep(this.state.step)}
         </View>

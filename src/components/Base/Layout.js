@@ -12,7 +12,7 @@
  * <[Header|Body|Footer]> generic content views with special styling/layout
  *
  * Example - fixed header and footer, only body is scrollable:
- * <Layout preload={false}>
+ * <Layout>
  *   <Header> - Fixed to top
  *   <Body scrollable bounces={false}> -- scrollable body
  *     <Header />  -- scrolls in parent
@@ -24,7 +24,7 @@
  *
  *
  * Example - all content is scrollable:
- * <Layout preload={false}>
+ * <Layout>
  *   <Body scrollable bounces={true}>
  *     <Header>
  *       <Body>
@@ -74,7 +74,7 @@ class Layout extends Component {
   static defaultProps = {
     delay: 0,
     duration: 750,
-    preload: true,
+    preload: false,
     contentReady: true,
     withHeader: true,
     keyboard: false,
