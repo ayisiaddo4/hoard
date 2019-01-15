@@ -14,6 +14,7 @@ import {
   takeLatest,
   select,
   takeEvery,
+  take,
   call,
 } from 'redux-saga/effects';
 import {
@@ -25,15 +26,19 @@ import {
   CANCEL_CONTACT_TRANSACTION_SUCCESS,
   TRANSACTIONS_STORAGE_KEY,
 } from './constants';
-import { transactionFound } from './actions';
 import ethSagas, { fetchHistoryEth } from './ethsagas';
 import btcSagas, { fetchHistoryBTC } from './btcsagas';
 import contactSagas from './contactsagas';
-import { fetchHistoryBoar, LAST_HOARD_BLOCK_STORAGE_KEY } from './boarsagas';
+import hoardSagas, {
+  fetchHistoryHoard,
+  LAST_HOARD_BLOCK_STORAGE_KEY,
+} from './hoardsagas';
 import { walletSelector } from 'screens/Wallet/selectors';
+import { actionBridgeChannel } from './helpers';
 
 export default function* transactionSagaWatcher() {
   yield all([
+    fork(setupActionBridgeChannel),
     takeLatest(INIT_REQUESTING, initialize),
     takeEvery(SEARCH_FOR_TRANSACTIONS, fetchHistory),
     throttle(1000, TRANSACTION_FOUND, forwardActionToSaveTransactions),
@@ -47,9 +52,17 @@ export default function* transactionSagaWatcher() {
   ]);
 }
 
+export function* setupActionBridgeChannel() {
+  while (true) {
+    const action = yield take(actionBridgeChannel);
+    yield put(action);
+  }
+}
+
 export function* initialize() {
   yield fork(ethSagas);
   yield fork(btcSagas);
+  yield fork(hoardSagas);
   yield fork(contactSagas);
 
   yield call(hydrate);
@@ -58,7 +71,7 @@ export function* initialize() {
 export function* hydrate() {
   const savedState = yield call(AsyncStorage.getItem, TRANSACTIONS_STORAGE_KEY);
 
-  let state;
+  let state; // eslint-disable-line immutable/no-let
   if (savedState) {
     try {
       state = JSON.parse(savedState);
@@ -114,7 +127,7 @@ export function* fetchHistory(action) {
       return;
     }
     case SYMBOL_HOARD: {
-      yield call(fetchHistoryBoar, action);
+      yield call(fetchHistoryHoard, action);
       return;
     }
     default: {
@@ -122,7 +135,7 @@ export function* fetchHistory(action) {
         // eslint-disable-next-line no-console
         console.log(
           'unable to fetch transaction history for wallet: ',
-          action.address
+          wallet.publicAddress
         );
       }
     }

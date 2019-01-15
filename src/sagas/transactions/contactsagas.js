@@ -1,5 +1,4 @@
 import Config from 'react-native-config';
-import { AsyncStorage } from 'react-native';
 import {
   all,
   select,

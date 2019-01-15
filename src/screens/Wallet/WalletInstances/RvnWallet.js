@@ -1,7 +1,6 @@
 import { SYMBOL_RVN } from 'containers/App/constants';
 import { getNetworkForCoin } from 'lib/currency-metadata';
 import BtcWallet from './BtcWallet';
-import api from 'lib/api';
 import Config from 'react-native-config';
 
 const RavencoinNetworks = {

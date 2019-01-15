@@ -67,6 +67,10 @@ const wallets = {
   */
 };
 
+export function getWalletInstance(id) {
+  return wallets[id];
+}
+
 export function* initWalletsFlow() {
   yield call(hydrate);
 }
@@ -146,29 +150,7 @@ async function commonWalletInitializationActions(wallet) {
   const id = makeId();
   const symbol = wallet.symbol;
   const publicAddress = await wallet.getPublicAddress();
-  wallets[id] = wallet;
-
-  if (symbol === 'ETH') {
-    wallet.listenForBalanceChange(balance => {
-      StoreRegistry.getStore().dispatch({
-        type: WALLET_UPDATE_BALANCE_SUCCESS,
-        payload: {
-          id,
-          balance: Number(balance.toString()),
-        },
-      });
-    });
-  } else if (symbol === SYMBOL_HOARD) {
-    setTimeout(
-      () =>
-        StoreRegistry.getStore().dispatch({
-          type: SEARCH_FOR_TRANSACTIONS,
-          id,
-          wallet,
-        }),
-      0
-    );
-  }
+  wallets[id] = wallet; // eslint-disable-line immutable/no-mutation
 
   setTimeout(() => StoreRegistry.getStore().dispatch(updateBalance(id)), 0);
 

@@ -1,4 +1,4 @@
-import ethers from 'ethers';
+import { ethers } from 'ethers';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 

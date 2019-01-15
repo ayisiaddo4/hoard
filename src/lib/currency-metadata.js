@@ -43,8 +43,8 @@ export function getCoinMetadata(symbol) {
       };
     case 'HOARD':
       return {
-        image: require('assets/boar_logo.png'),
-        icon: require('assets/boar_icon.png'),
+        image: require('assets/hoard_logo.png'),
+        icon: require('assets/hoard_icon.png'),
         colors: ['#E5129A', '#AA0D72'],
         fullName: 'HOARD',
       };

@@ -57,7 +57,7 @@
     "babel-plugin-rewrite-require": "^1.14.5",
     "bitcoinjs-lib": "^3.3.2",
     "brorand-shim": "https://github.com/HoardInvest/brorand",
-    "ethers": "^3.0.9",
+    "ethers": "^4.0.20",
     "lodash": "^4.17.10",
     "lottie-react-native": "^2.5.9",
     "prop-types": "^15.6.1",

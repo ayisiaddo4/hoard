@@ -210,7 +210,7 @@ export default class Notification extends Component {
                 ]}
               />
               <Image
-                source={require('assets/boar_icon.png')}
+                source={require('assets/hoard_icon.png')}
                 style={styles.loadingIcon}
               />
             </View>

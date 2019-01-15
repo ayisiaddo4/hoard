@@ -1,10 +1,10 @@
-import ethers from 'ethers';
+import { ethers } from 'ethers';
 import EthWallet from './EthWallet';
 import { bigNumberToEther } from 'lib/formatters';
 import { SYMBOL_HOARD } from 'containers/App/constants';
 import Config from 'react-native-config';
 
-export default class BoarWallet extends EthWallet {
+export default class HoardWallet extends EthWallet {
   constructor(isMnemonic, mnemonicOrPrivateKey) {
     super(isMnemonic, mnemonicOrPrivateKey);
     this._contract = new ethers.Contract(

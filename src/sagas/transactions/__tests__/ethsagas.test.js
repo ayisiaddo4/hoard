@@ -1,4 +1,4 @@
-import ethers from 'ethers';
+import { ethers } from 'ethers';
 import { AsyncStorage } from 'react-native';
 import { call, put } from 'redux-saga/effects';
 import { WALLET_CREATE_SUCCESS } from 'screens/Wallet/constants';

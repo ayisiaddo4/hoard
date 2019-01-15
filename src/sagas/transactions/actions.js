@@ -1,19 +1,15 @@
 import {
-  BLOCK_ADDED_TO_QUEUE,
-  BLOCK_UPDATED,
-  INTERESTING_BLOCK_FOUND,
-  SEARCH_FOR_INTERESTING_BLOCKS,
+  SEARCH_FOR_TRANSACTIONS,
   TRANSACTION_FOUND,
   RECORD_CONTACT_TRANSACTION,
   CANCEL_CONTACT_TRANSACTION_REQUESTING,
   TRANSACTION_UPDATE,
 } from './constants';
 
-export function triggerSearchForInterestingBlocks(publicAddress, symbol) {
+export function searchForTransactions(id) {
   return {
-    type: SEARCH_FOR_INTERESTING_BLOCKS,
-    publicAddress,
-    symbol,
+    type: SEARCH_FOR_TRANSACTIONS,
+    id,
   };
 }
 
@@ -37,16 +33,4 @@ export function transactionFound(transaction, doNotSave = false) {
 
 export function updateTransaction(transaction) {
   return { type: TRANSACTION_UPDATE, transaction };
-}
-
-export function blockUpdated() {
-  return { type: BLOCK_UPDATED };
-}
-
-export function blockAddedToQueue() {
-  return { type: BLOCK_ADDED_TO_QUEUE };
-}
-
-export function interestingBlockFound(block) {
-  return { type: INTERESTING_BLOCK_FOUND, block };
 }

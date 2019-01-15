@@ -15,11 +15,13 @@ export const config = {
 export default class BtcWallet {
   constructor(isMnemonic, initializer, configOverride = config) {
     if (isMnemonic) {
+      // eslint-disable-next-line immutable/no-mutation
       this._wallet = Bitcoin.HDNode.fromSeedBuffer(
         bip39.mnemonicToSeed(initializer),
         configOverride.network
       );
     } else {
+      // eslint-disable-next-line immutable/no-mutation
       this._wallet = Bitcoin.HDNode.fromBase58(
         initializer,
         configOverride.network
@@ -89,7 +91,8 @@ export default class BtcWallet {
     const balanceSatoshis = Math.round(balance * 1e8);
 
     const feePerKilobyte = await this._estimateFee();
-    const feeSatoshisPerKilobyte = Math.round(feePerKilobyte * 1e8);
+    const safeFee = feePerKilobyte >= 0 ? feePerKilobyte : 0.00001;
+    const feeSatoshisPerKilobyte = Math.round(safeFee * 1e8);
 
     const address = await this.getPublicAddress();
 

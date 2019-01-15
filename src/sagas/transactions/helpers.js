@@ -1,141 +1,65 @@
-export function asyncMemoize(func) {
-  const memoizer = {};
+import { AsyncStorage } from 'react-native';
+import { channel } from 'redux-saga';
+import api from 'lib/api';
+import Config from 'react-native-config';
 
-  return async (...args) => {
-    const key = args.join();
+const HISTORICAL_PRICE_CACHE_KEY = 'HISTORICAL_PRICE_CACHE';
 
-    if (!memoizer[key]) {
-      memoizer[key] = func(...args);
-    }
+const cacheResponse = (url, response) =>
+  AsyncStorage.setItem(
+    `${HISTORICAL_PRICE_CACHE_KEY}:${url}`,
+    JSON.stringify(response)
+  );
 
-    const value = await memoizer[key];
+const asyncDelay = number =>
+  new Promise(resolve => setTimeout(() => resolve(), number));
 
-    return value;
+export async function timestampPriceApi(symbol, fiat, timestamp) {
+  const request = `?fsym=${symbol}&tsyms=${fiat}&ts=${timestamp}`;
+  const storedValue = await AsyncStorage.getItem(
+    `${HISTORICAL_PRICE_CACHE_KEY}:${request}`
+  );
+
+  const hasPrice = response => {
+    return (
+      !!response &&
+      !!response[symbol] &&
+      Object.keys(response[symbol]).includes(fiat)
+    );
   };
-}
 
-export function getHalfwayPoint(startBlockNumber, endBlockNumber) {
-  const difference = endBlockNumber - startBlockNumber;
-
-  if (difference <= 1) {
-    return null;
+  let parsedValue; // eslint-disable-line immutable/no-let
+  if (storedValue) {
+    parsedValue = JSON.parse(storedValue);
   }
 
-  return startBlockNumber + Number.parseInt(difference / 2);
-}
-
-export class Queue {
-  length = 0;
-  _head = null;
-  _tail = null;
-
-  makeQueueItem(data) {
-    return {
-      next: null,
-      data,
-    };
+  if (hasPrice(parsedValue)) {
+    return parsedValue[symbol][fiat];
   }
 
-  push = data => {
-    const item = this.makeQueueItem(data);
+  let retry = false; // eslint-disable-line immutable/no-let
+  let attempts = 0; // eslint-disable-line immutable/no-let
 
-    if (this._tail) {
-      this._tail.next = item;
-    }
-
-    if (!this._head) {
-      this._head = item;
-    }
-
-    this._tail = item;
-    this.length = this.length + 1;
-
-    return this.length;
-  };
-
-  pop = () => {
-    const item = this._head;
-
-    if (item) {
-      this._head = item.next;
-      this.length = this.length - 1;
-      return item.data;
-    } else {
-      this._tail = null;
-      return null;
-    }
-  };
-}
-
-export class RequestLimiter {
-  constructor(baseUrl, { numRequests, perTimestamp }, retryOnCondition) {
-    this.baseUrl = baseUrl;
-    this.numRequests = numRequests;
-    this.perTimestamp = perTimestamp;
-    this.shouldRetry = retryOnCondition;
-
-    this.requestQueue = new Queue();
-
-    this.currentlyProcessing = false;
-  }
-
-  processItem = async ({
-    additionalUrlSpecifications,
-    fetchOptions,
-    resolve,
-  }) => {
-    try {
-      const results = await fetch(
-        this.baseUrl + additionalUrlSpecifications,
-        fetchOptions
-      );
-      resolve(results);
-    } catch (e) {
-      resolve(e);
-    }
-  };
-
-  processTotalQueue = () => {
-    this.currentlyProcessing = true;
-
-    const item = this.requestQueue.pop();
-    if (item) {
-      this.processItem(item);
-    }
-
-    setTimeout(() => {
-      if (this.requestQueue.length) {
-        this.processTotalQueue();
-      } else {
-        this.currentlyProcessing = false;
-      }
-    }, this.perTimestamp / this.numRequests);
-  };
-
-  makeRequest = async (additionalUrlSpecifications = '', fetchOptions = {}) => {
-    const promise = new Promise(resolve =>
-      this.requestQueue.push({
-        additionalUrlSpecifications,
-        fetchOptions,
-        resolve,
-      })
+  do {
+    const response = await api.get(
+      `${Config.EREBOR_ENDPOINT}/pricing_data/pricehistorical${request}`
     );
 
-    if (!this.currentlyProcessing) {
-      this.processTotalQueue();
+    if (hasPrice(response)) {
+      await cacheResponse(request, response);
+      return response[symbol][fiat];
     }
 
-    const request = await promise;
-
-    if (request.ok) {
-      const json = await request.json();
-      if (this.shouldRetry(json)) {
-        return this.makeRequest(additionalUrlSpecifications, fetchOptions);
-      } else {
-        return json;
-      }
+    if (response.status === 429 && attempts < 5) {
+      retry = true;
+      attempts++;
+      await asyncDelay(1000 * attempts);
     } else {
-      return request;
+      retry = false;
+      await cacheResponse(request, response);
+      throw new Error('Too Many Attempts To Retry Request');
     }
-  };
+  } while (retry);
 }
+
+export const actionBridgeChannel = channel();

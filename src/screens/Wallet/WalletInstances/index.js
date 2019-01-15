@@ -5,7 +5,7 @@ import {
   SYMBOL_RVN,
 } from 'containers/App/constants';
 import EthWallet from './EthWallet';
-import BoarWallet from './BoarWallet';
+import HoardWallet from './HoardWallet';
 import BtcWallet from './BtcWallet';
 import RvnWallet from './RvnWallet';
 
@@ -26,7 +26,7 @@ export function initializeWallet(symbol, isMnemonic, mnemonicOrPrivateKey) {
       return new EthWallet(isMnemonic, mnemonicOrPrivateKey);
     }
     case SYMBOL_HOARD: {
-      return new BoarWallet(isMnemonic, mnemonicOrPrivateKey);
+      return new HoardWallet(isMnemonic, mnemonicOrPrivateKey);
     }
     case SYMBOL_BTC: {
       return new BtcWallet(isMnemonic, mnemonicOrPrivateKey);

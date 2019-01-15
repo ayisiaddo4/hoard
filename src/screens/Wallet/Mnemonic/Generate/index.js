@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ethers from 'ethers';
+import { ethers } from 'ethers';
 
 import Entropy from './Entropy';
 import WordList from './WordList';
