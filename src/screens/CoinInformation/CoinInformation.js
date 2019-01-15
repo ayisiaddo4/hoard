@@ -154,7 +154,7 @@ export default class CoinInformation extends React.Component {
         <Card
           icon={metadata.icon}
           colors={metadata.colors}
-          title={wallet.balance.toFixed(2)}
+          title={wallet.balance.toString()}
           walletsToChart={[wallet]}
           subtitle={`$${(wallet.balance * price).toFixed(2)}`}
         />
