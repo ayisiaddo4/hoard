@@ -40,6 +40,8 @@ import {
   getNavigationOptions,
 } from 'components/Base/Navigation';
 
+import { getStoredMnemonic } from 'screens/Wallet/sagas';
+
 export const store = configureStore();
 StoreRegistry.setStore(store);
 export let navigatorRef;
@@ -159,21 +161,34 @@ class App extends Component {
     }
   }
 
-  refDidLoad = async navigatorRef => {
+  refDidLoad = async navigatorRef =>
     NavigatorService.setContainer(navigatorRef);
+
+  componentDidMount = async () => {
     if (!this.props.hasPreviouslyInitialized) {
-      const previousNetworkType = await AsyncStorage.getItem('CURRENCY_NETWORK_TYPE');
+      const previousNetworkType = await AsyncStorage.getItem(
+        'CURRENCY_NETWORK_TYPE'
+      );
       if (previousNetworkType !== RNConfig.CURRENCY_NETWORK_TYPE) {
         await AsyncStorage.clear();
-        await AsyncStorage.setItem('CURRENCY_NETWORK_TYPE', RNConfig.CURRENCY_NETWORK_TYPE);
+        await AsyncStorage.setItem(
+          'CURRENCY_NETWORK_TYPE',
+          RNConfig.CURRENCY_NETWORK_TYPE
+        );
       }
+
+      // we don't need to wait for initialization if there is no mnemonic,
+      // since there really isn't anything to set up at that point
+      const mnemonic = await getStoredMnemonic();
+      if (!mnemonic) {
+        NavigatorService.resetReplace('LoadingScreen', 'Login');
+      }
+
       this.props.store.dispatch({ type: INIT_REQUESTING });
     }
-  };
 
-  componentDidMount() {
     SplashScreen.hide();
-  }
+  };
 
   render() {
     return (
