@@ -28,14 +28,14 @@ const mapStateToProps = (store, ownProps) => {
     store,
     wallet.symbol,
     wallet.publicAddress,
-    'ASC'
+    'DESC'
   );
 
   contactTransactions = isSignedIn
     ? sortedContactTransactionsForSymbolSelector(
         store,
         wallet.symbol,
-        'ASC'
+        'DESC'
       ).filter(tx => tx.details.status === 'pending')
     : [];
 
