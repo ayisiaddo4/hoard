@@ -8,7 +8,11 @@ import { getWalletInstance } from 'screens/Wallet/sagas';
 
 import { blockchainTransactionSelector } from './selectors';
 
-import { timestampPriceApi, actionBridgeChannel } from './helpers';
+import {
+  timestampPriceApi,
+  actionBridgeChannel,
+  asyncNextFrame,
+} from './helpers';
 import { config as BtcConfig } from 'screens/Wallet/WalletInstances/BtcWallet';
 import { config as RvnConfig } from 'screens/Wallet/WalletInstances/RvnWallet';
 
@@ -47,6 +51,8 @@ export function* fetchTransaction(wallet, transaction) {
   if (txFound) {
     return;
   }
+
+  yield call(asyncNextFrame);
 
   try {
     const inAddresses = transaction.vin.map(vin => vin.addr);

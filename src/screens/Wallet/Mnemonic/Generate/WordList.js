@@ -6,6 +6,7 @@ import T from 'components/Typography';
 import Animations, { FADE, SLIDE_Y } from 'hocs/Animations';
 import { Layout, Body, Header, Footer } from 'components/Base';
 import { t } from 'translations/i18n';
+import { asyncNextFrame } from 'sagas/transactions/helpers';
 
 export default class WordList extends Component {
   static propTypes = {
@@ -51,11 +52,15 @@ export default class WordList extends Component {
   };
 
   handleNextButton = () => {
-    this.setState({ animateList: false, exitAnimation: true });
+    this.setState({ loading: true }, async () => {
+      await asyncNextFrame();
+      this.setState({ animateList: false, exitAnimation: true });
+    });
   };
 
-  handleExitAnimation = () => {
-    this.setState({ loading: true }, this.props.saveAndContinue);
+  handleExitAnimation = async () => {
+    await asyncNextFrame();
+    this.props.saveAndContinue();
   };
 
   render() {

@@ -11,7 +11,10 @@ const cacheResponse = (url, response) =>
     JSON.stringify(response)
   );
 
-const asyncDelay = number =>
+export const asyncNextFrame = () =>
+  new Promise(resolve => requestAnimationFrame(() => resolve()));
+
+export const asyncDelay = number =>
   new Promise(resolve => setTimeout(() => resolve(), number));
 
 export async function timestampPriceApi(symbol, fiat, timestamp) {

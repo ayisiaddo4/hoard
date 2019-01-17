@@ -1,31 +1,22 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  TouchableOpacity,
   InteractionManager,
   Dimensions,
   PanResponder,
   StyleSheet,
-  Image,
   View,
 } from 'react-native';
-import SVG, {
-  Path,
-  Circle,
-  Defs,
-  LinearGradient,
-  Stop,
-} from 'react-native-svg';
+import SVG, { Path, LinearGradient, Stop } from 'react-native-svg';
 
 import { CircularProgress } from 'react-native-svg-circular-progress';
 import { t } from 'translations/i18n';
 
-import Conditional, { Try, Otherwise } from 'components/Conditional';
+import { Try } from 'components/Conditional';
 import Button from 'components/Button';
 import T from 'components/Typography';
 import { Layout, Body, Header, Footer } from 'components/Base';
-
-const LANG_BACK_TEXT = 'back';
+import { asyncNextFrame } from 'sagas/transactions/helpers';
 
 const MAX_DATA_POINTS = 150;
 const SAMPLE_EVERY_X = 7;
@@ -49,6 +40,7 @@ export default class Entropy extends Component {
   panResponder = null;
 
   componentWillMount() {
+    // eslint-disable-next-line immutable/no-mutation
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onStartShouldSetPanResponderCapture: () => true,
@@ -56,13 +48,7 @@ export default class Entropy extends Component {
       onMoveShouldSetPanResponderCapture: () => true,
       onPanResponderTerminationRequest: () => true,
       onPanResponderGrant: () => this.setState({ isRecording: true }),
-      onPanResponderMove: ({ nativeEvent: { pageX, pageY } }, gestureState) =>
-        this.setState({
-          movement: [
-            ...this.state.movement,
-            { ...gestureState, pageX, pageY, time: Date.now() },
-          ],
-        }),
+      onPanResponderMove: this.setupPanresponderHandler(),
       onPanResponderRelease: () => this.setState({ isRecording: false }),
     });
   }
@@ -78,6 +64,35 @@ export default class Entropy extends Component {
       InteractionManager.clearInteractionHandle(interactionHandle);
     }
   }
+
+  setupPanresponderHandler = () => {
+    let movements = []; // eslint-disable-line immutable/no-let
+    let shouldTry = false; // eslint-disable-line immutable/no-let
+    let going = false; // eslint-disable-line immutable/no-let
+
+    const renderMovements = () => {
+      going = true;
+      shouldTry = false;
+      this.setState({ movement: [...movements] }, async () => {
+        await asyncNextFrame();
+        if (shouldTry) {
+          renderMovements();
+        } else {
+          going = false;
+        }
+      });
+    };
+
+    return ({ nativeEvent: { pageX, pageY } }, gestureState) => {
+      if (movements.length < MAX_DATA_POINTS) {
+        shouldTry = true;
+        movements.push({ ...gestureState, pageX, pageY, time: Date.now() });
+        if (!going) {
+          renderMovements();
+        }
+      }
+    };
+  };
 
   handleLayout = ({
     nativeEvent: {
@@ -109,30 +124,29 @@ export default class Entropy extends Component {
   };
 
   handleNextButton = () => {
-    this.setState({ loading: true }, () =>
-      requestAnimationFrame(() => {
-        /* here we are grabbing all of the integer values from the movement data
-         * that we are recording in the `onPanResponderMove` callback.
-         *
-         * this should include x/y positions, x/y velocities, and the timestamp
-         * for each of those movements.
-         *
-         * we then strip out all non-integer values, so we can pass all of that
-         * as hex data to our mnemonic phrase generator.
-         */
+    this.setState({ loading: true }, async () => {
+      await asyncNextFrame();
+      /* here we are grabbing all of the integer values from the movement data
+       * that we are recording in the `onPanResponderMove` callback.
+       *
+       * this should include x/y positions, x/y velocities, and the timestamp
+       * for each of those movements.
+       *
+       * we then strip out all non-integer values, so we can pass all of that
+       * as hex data to our mnemonic phrase generator.
+       */
 
-        const str = this.state.movement
-          .reduce((accumulator, data, i) => {
-            if (i % SAMPLE_EVERY_X === 0) {
-              return accumulator + Object.values(data).join('');
-            }
-            return accumulator;
-          }, '')
-          .replace(/[^0-9]/g, '');
+      const str = this.state.movement
+        .reduce((accumulator, data, i) => {
+          if (i % SAMPLE_EVERY_X === 0) {
+            return accumulator + Object.values(data).join('');
+          }
+          return accumulator;
+        }, '')
+        .replace(/[^0-9]/g, '');
 
-        this.props.saveAndContinue(`0x${str}`);
-      })
-    );
+      this.props.saveAndContinue(`0x${str}`);
+    });
   };
 
   setViewRef = ref => (this.viewRef = ref);

@@ -35,7 +35,7 @@ export default class Generate extends Component {
 
   state = {
     step: 1,
-    mnemonic: ethers.Wallet.createRandom().mnemonic,
+    mnemonic: '',
     confirmationList: [],
   };
 

@@ -13,7 +13,11 @@ import { bigNumberToEther } from 'lib/formatters';
 import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
 
 import { transactionFound, searchForTransactions } from './actions';
-import { actionBridgeChannel, timestampPriceApi } from './helpers';
+import {
+  actionBridgeChannel,
+  timestampPriceApi,
+  asyncNextFrame,
+} from './helpers';
 
 import { getNetworkForCoin } from 'lib/currency-metadata';
 
@@ -67,6 +71,7 @@ export function* fetchHistoryEth({ id }) {
     for (const transaction of response.result.slice(
       cachedTransactions.length
     )) {
+      yield call(asyncNextFrame);
       const isFrom =
         transaction.from.toLowerCase() === publicAddress.toLowerCase();
       const isTo = transaction.to.toLowerCase() === publicAddress.toLowerCase();

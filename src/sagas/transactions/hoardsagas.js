@@ -14,7 +14,10 @@ import {
 
 import { updateBalance } from 'screens/Wallet/actions';
 import { provider } from 'sagas/transactions/ethsagas';
-import { actionBridgeChannel } from 'sagas/transactions/helpers';
+import {
+  actionBridgeChannel,
+  asyncNextFrame,
+} from 'sagas/transactions/helpers';
 
 import { getWalletInstance } from 'screens/Wallet/sagas';
 
@@ -59,6 +62,7 @@ const eventCallback = (type, walletId) => async (
   value,
   event
 ) => {
+  await asyncNextFrame();
   const block = await event.getBlock();
   const amount = bigNumberToEther(value);
   const transaction = {
@@ -102,6 +106,7 @@ export function* fetchHistoryHoard({ id }) {
     const lastFetchedBlock = yield provider.getBlock();
 
     for (const log of logs) {
+      yield call(asyncNextFrame);
       const fromTopic = log.topics[1];
       const toTopic = log.topics[2];
 
