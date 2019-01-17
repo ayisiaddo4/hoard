@@ -30,6 +30,10 @@ export default class RecipientSelection extends Component {
 
   render() {
     const { isSignedIn, transactionType } = this.props.navigation.state.params;
+    const instructions =
+      transactionType === TYPE_SEND
+        ? t('send_request.send_instructions')
+        : t('send_request.request_instructions');
 
     return (
       <Layout>
@@ -37,9 +41,7 @@ export default class RecipientSelection extends Component {
           <T.Heading style={{ color: 'white', marginBottom: 20 }}>
             {t('send_request.recipient')}
           </T.Heading>
-          <T.Light style={{ color: 'white' }}>
-            {t('send_request.instructions')}
-          </T.Light>
+          <T.Light style={{ color: 'white' }}>{instructions}</T.Light>
         </Header>
         <Body style={styles.container}>
           <Try condition={isSignedIn}>
@@ -50,19 +52,17 @@ export default class RecipientSelection extends Component {
             />
           </Try>
           <Try condition={transactionType === TYPE_SEND}>
-            <Fragment>
-              <Link
-                onPress={this.makeSelection('AddressModal')}
-                title={t('send_request.enter_wallet_address')}
-                arrowOverride={<View />}
-              />
-              <Link
-                onPress={this.makeSelection('QRModal')}
-                title={t('send_request.scan_qr')}
-                arrowOverride={<View />}
-              />
-            </Fragment>
+            <Link
+              onPress={this.makeSelection('AddressModal')}
+              title={t('send_request.enter_wallet_address')}
+              arrowOverride={<View />}
+            />
           </Try>
+          <Link
+            onPress={this.makeSelection('QRModal')}
+            title={t('send_request.scan_qr')}
+            arrowOverride={<View />}
+          />
         </Body>
       </Layout>
     );

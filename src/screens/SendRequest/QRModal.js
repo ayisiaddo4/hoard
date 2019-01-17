@@ -6,7 +6,12 @@ import Scanner from 'components/Camera/Scanner';
 import { Header } from 'components/Base/Navigation';
 import { t } from 'translations/i18n';
 
-import { RECIPIENT_TYPE_ADDRESS } from 'screens/SendRequest/constants';
+import {
+  TYPE_SEND,
+  TYPE_REQUEST,
+  RECIPIENT_TYPE_ADDRESS,
+  RECIPIENT_TYPE_OTHER,
+} from 'screens/SendRequest/constants';
 import { colors } from 'styles';
 
 export default class QRModal extends Component {
@@ -15,16 +20,33 @@ export default class QRModal extends Component {
       state: PropTypes.shape({
         params: PropTypes.shape({
           onChangeRecipient: PropTypes.func.isRequired,
+          transactionType: PropTypes.oneOf([TYPE_REQUEST, TYPE_SEND]),
         }),
       }),
     }),
   };
 
   handleRead = value => {
-    this.props.navigation.state.params.onChangeRecipient({
-      recipientType: RECIPIENT_TYPE_ADDRESS,
-      recipient: value.replace(/(\w+:)? ?(\w+)(([\?\&]\w+=\w+)+)?/, '$2'),
+    const {
+      transactionType,
+      onChangeRecipient,
+    } = this.props.navigation.state.params;
+
+    const recipientType =
+      transactionType === TYPE_SEND
+        ? RECIPIENT_TYPE_ADDRESS
+        : RECIPIENT_TYPE_OTHER;
+
+    const recipient =
+      transactionType === TYPE_SEND
+        ? value.replace(/(\w+:)? ?(\w+)(([\?\&]\w+=\w+)+)?/, '$2')
+        : value;
+
+    onChangeRecipient({
+      recipientType,
+      recipient,
     });
+
     NavigatorService.navigate('SendRequest');
   };
 
