@@ -1,5 +1,9 @@
 [
   {
+    "release_notes": "[FIX] Do not show loading bar if mnemonic has not been created\n[FIX] Stuck spinner on page loads\n[FIX] Fix ETH transaction history updates, HOARD balance fetching\n[NEW] pass release notes into slack on fastlane deployments",
+    "version_code": "1.16"
+  },
+  {
     "release_notes": "FIX change password warnings \nFIX Fix broken qr regex to allow for no params and space after \nFIX make sure pin store screen is within safe view\nRename Boar\nFix coin amount display\nFix testnet warnings",
     "version_code": "1.15"
   },
