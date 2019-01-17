@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { updateUser } from 'containers/User/actions';
 import { usernameSelector } from 'containers/User/selectors';
+import { notificationRecieved } from 'containers/Notifications/actions';
 
 import ChangePassword from './ChangePassword';
 
@@ -11,6 +12,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
+  notificationRecieved,
   updateUser,
 };
 

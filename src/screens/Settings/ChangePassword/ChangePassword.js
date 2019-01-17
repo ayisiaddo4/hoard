@@ -15,10 +15,13 @@ import { t } from 'translations/i18n';
 
 import memoize from 'lodash/memoize';
 
+import NavigatorService from 'lib/navigator';
+
 export default class ChangePassword extends Component {
   static propTypes = {
     navigation: PropTypes.any,
     username: PropTypes.string.isRequired,
+    notificationRecieved: PropTypes.func.isRequired,
   };
 
   state = {
@@ -55,10 +58,12 @@ export default class ChangePassword extends Component {
         new_password,
       });
 
-      this.setState({
-        successfulSubmission: true,
-        loading: false,
+      this.props.notificationRecieved({
+        type: 'success',
+        title: t('change_password.success_title'),
+        content: t('change_password.success_subtitle'),
       });
+      NavigatorService.navigate('Settings');
     } catch (e) {
       this.setState({
         errorMessage: e.errors[0].message,
@@ -70,14 +75,12 @@ export default class ChangePassword extends Component {
   handleFormSubmit = () => {
     const { current_password, new_password } = this.state.answers;
 
-    this.setState(
-      { loading: true, errorMessage: '', successfulSubmission: false },
-      () =>
-        this.updatePassword({
-          username: this.props.username,
-          current_password,
-          new_password,
-        })
+    this.setState({ loading: true, errorMessage: '' }, () =>
+      this.updatePassword({
+        username: this.props.username,
+        current_password,
+        new_password,
+      })
     );
   };
 
@@ -178,18 +181,6 @@ export default class ChangePassword extends Component {
               <View style={styles.errorMessageContainer}>
                 <T.Light style={styles.errorMessage}>
                   {this.state.errorMessage}
-                </T.Light>
-              </View>
-            </Try>
-            <Try condition={!!this.state.successfulSubmission}>
-              <View
-                style={[
-                  styles.errorMessageContainer,
-                  styles.successMessageContainer,
-                ]}
-              >
-                <T.Light style={styles.errorMessage}>
-                  {t('change_password.success_message')}
                 </T.Light>
               </View>
             </Try>

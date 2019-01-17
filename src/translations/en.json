@@ -289,7 +289,8 @@
     "current_password": "Current Password",
     "new_password": "New Password",
     "confirm_password": "Confirm New Password",
-    "success_message": "Successfully changed password",
+    "success_title": "Success",
+    "success_subtitle": "Successfully changed password",
     "errors": {
       "current_password_required": "Current password required",
       "empty_password": "Please input a new password",
