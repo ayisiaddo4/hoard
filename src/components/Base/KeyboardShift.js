@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInput,
   UIManager,
+  View,
 } from 'react-native';
 
 const { State: TextInputState } = TextInput;
@@ -42,14 +43,16 @@ export default class KeyboardShift extends Component {
   render() {
     const { children } = this.props;
     return (
-      <Animated.View
-        style={[
-          styles.container,
-          { transform: [{ translateY: this.keyboardshift }] },
-        ]}
-      >
-        {children}
-      </Animated.View>
+      <View style={styles.relativeContainer}>
+        <Animated.View
+          style={[
+            styles.container,
+            { transform: [{ translateY: this.keyboardshift }] },
+          ]}
+        >
+          {children}
+        </Animated.View>
+      </View>
     );
   }
 
@@ -116,6 +119,10 @@ export default class KeyboardShift extends Component {
 }
 
 const styles = StyleSheet.create({
+  relativeContainer: {
+    flex: 1,
+    position: 'relative',
+  },
   container: {
     height: '100%',
     left: 0,
