@@ -377,6 +377,8 @@ export default class QRScannerView extends Component {
   scannerLineMove() {
     this.state.animatedValue.setValue(0); //重置Rotate动画值为0
     Animated.timing(this.state.animatedValue, {
+      useNativeDriver: true,
+      isInteraction: false,
       toValue: this.props.rectHeight,
       duration: this.props.scanBarAnimateTime,
       easing: Easing.linear,
