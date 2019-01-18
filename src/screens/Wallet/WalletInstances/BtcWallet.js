@@ -33,6 +33,7 @@ export default class BtcWallet {
   config = config;
 
   _derivationPath = `m/44'/${this.config.coinPath}'/0'/0/0`;
+  _derivedPath = null;
 
   _getUtxos = async () => {
     const address = await this.getPublicAddress();
@@ -76,7 +77,12 @@ export default class BtcWallet {
   };
 
   getPublicAddress = async () => {
-    return this._wallet.derivePath(this._derivationPath).getAddress();
+    if (!this._derivedPath) {
+      //eslint-disable-next-line immutable/no-mutation
+      this._derivedPath = this._wallet.derivePath(this._derivationPath);
+    }
+
+    return this._derivedPath.getAddress();
   };
 
   getPrivateKey = async () => {
@@ -110,9 +116,7 @@ export default class BtcWallet {
     tx.addOutput(address, change);
     tx.addOutput(toAddress, amountSatoshis);
 
-    utxos.map((_, idx) =>
-      tx.sign(idx, this._wallet.derivePath(this._derivationPath).keyPair)
-    );
+    utxos.map((_, idx) => tx.sign(idx, this._derivedPath.keyPair));
 
     const builtTransaction = tx.build().toHex();
 
