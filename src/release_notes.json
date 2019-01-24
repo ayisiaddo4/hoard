@@ -1,5 +1,9 @@
 [
   {
+    "release_notes": "Caches computationally expensive BTC/RVN address calls",
+    "version_code": "1.18"
+  },
+  {
     "release_notes": "Fix broken margins on reset password and username modals\nFix issue where scanning QR could cause spinner lockups\nPerformance improvements on mnemonic generation and transaction fetching\nReverse recent activity in coin information page\nShow full balance of wallet in detail view\nNavigate to settings page on successful password update\n",
     "version_code": "1.17"
   },
