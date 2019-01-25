@@ -14,6 +14,7 @@ import NavigatorService from 'lib/navigator';
 import { t } from 'translations/i18n';
 import { Try } from 'components/Conditional';
 import Button from 'components/Button';
+import ErrorReport from './ErrorReport';
 
 export default class TransactionStatus extends Component {
   static propTypes = {
@@ -26,11 +27,14 @@ export default class TransactionStatus extends Component {
         },
       },
     },
-    transaction: PropTypes.oneOf([
-      TRANSACTION_PENDING,
-      TRANSACTION_SUCCESS,
-      TRANSACTION_ERROR,
-    ]).isRequired,
+    transaction: PropTypes.shape({
+      status: PropTypes.oneOf([
+        TRANSACTION_PENDING,
+        TRANSACTION_SUCCESS,
+        TRANSACTION_ERROR,
+      ]).isRequired,
+      error: PropTypes.any,
+    }).isRequired,
   };
 
   toDashboard() {
@@ -41,7 +45,7 @@ export default class TransactionStatus extends Component {
     const { transaction, navigation } = this.props;
     const isContactTransaction = navigation.state.params.isContactTransaction;
     const type = navigation.state.params.type;
-    let heading, subheading;
+    let heading, subheading; // eslint-disable-line immutable/no-let
 
     if (isContactTransaction) {
       heading = t('transaction_status.contact_transaction.heading');
@@ -57,14 +61,14 @@ export default class TransactionStatus extends Component {
       }
     } else {
       heading = t('transaction_status.blockchain_transaction.pending_heading');
-      if (transaction === TRANSACTION_SUCCESS) {
+      if (transaction.status === TRANSACTION_SUCCESS) {
         heading = t(
           'transaction_status.blockchain_transaction.success_heading'
         );
         subheading = t(
           'transaction_status.blockchain_transaction.success_subheading'
         );
-      } else if (transaction === TRANSACTION_ERROR) {
+      } else if (transaction.status === TRANSACTION_ERROR) {
         heading = t(
           'transaction_status.blockchain_transaction.failure_heading'
         );
@@ -74,7 +78,7 @@ export default class TransactionStatus extends Component {
       }
     }
 
-    const size = transaction === TRANSACTION_ERROR ? 120 : 240;
+    const size = transaction.status === TRANSACTION_ERROR ? 120 : 240;
 
     return (
       <Layout>
@@ -83,7 +87,7 @@ export default class TransactionStatus extends Component {
             <Image
               style={[styles.image, { height: size, width: size }]}
               source={
-                transaction === TRANSACTION_ERROR
+                transaction.status === TRANSACTION_ERROR
                   ? require('assets/error-circle.png')
                   : require('assets/waiting_icon.png')
               }
@@ -96,9 +100,27 @@ export default class TransactionStatus extends Component {
                 {subheading}
               </T.SubHeading>
             </Try>
+            {transaction.status === TRANSACTION_ERROR && transaction.error && (
+              <View style={styles.errorContainer}>
+                <T.Light style={styles.additionalInfo}>
+                  {t('transaction_status.additional_error_information')}
+                </T.Light>
+                <View style={styles.errorBorder}>
+                  <ErrorReport
+                    name={transaction.error.name}
+                    value={
+                      transaction.error.message
+                        ? transaction.error.message
+                        : transaction.error
+                    }
+                  />
+                </View>
+              </View>
+            )}
             <Try
               condition={
-                transaction !== TRANSACTION_PENDING || isContactTransaction
+                transaction.status !== TRANSACTION_PENDING ||
+                isContactTransaction
               }
             >
               <Button style={styles.actionButton} onPress={this.toDashboard}>
@@ -140,5 +162,19 @@ const styles = StyleSheet.create({
   actionButton: {
     marginTop: 'auto',
     marginBottom: 30,
+  },
+  errorContainer: {
+    marginTop: 20,
+  },
+  additionalInfo: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  errorBorder: {
+    marginVertical: 5,
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'lightgrey',
   },
 });

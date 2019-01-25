@@ -21,25 +21,34 @@ export default function reducer(state = initialState, action) {
     case RECORD_CONTACT_TRANSACTION: {
       return {
         ...state,
-        [action.transaction.details.uid]: TRANSACTION_PENDING,
+        [action.transaction.details.uid]: {
+          status: TRANSACTION_PENDING,
+        },
       };
     }
     case WALLET_SEND_FUNDS_REQUESTING: {
       return {
         ...state,
-        [action.id]: TRANSACTION_PENDING,
+        [action.id]: {
+          status: TRANSACTION_PENDING,
+        },
       };
     }
     case WALLET_SEND_FUNDS_SUCCESS: {
       return {
         ...state,
-        [action.id]: TRANSACTION_SUCCESS,
+        [action.id]: {
+          status: TRANSACTION_SUCCESS,
+        },
       };
     }
     case WALLET_SEND_FUNDS_ERROR: {
       return {
         ...state,
-        [action.id]: TRANSACTION_ERROR,
+        [action.id]: {
+          status: TRANSACTION_ERROR,
+          error: action.error,
+        },
       };
     }
     default:

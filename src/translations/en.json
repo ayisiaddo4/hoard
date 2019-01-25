@@ -220,7 +220,8 @@
       "failure_heading": "Error",
       "success_subheading": "Your transaction is pending.",
       "failure_subheading": "Oops! Something went wrong. Please try again soon."
-    }
+    },
+    "additional_error_information": "Additional Information"
   },
   "view_address": {
     "wallet_address": "Wallet Address",

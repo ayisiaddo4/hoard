@@ -111,6 +111,10 @@ export default class BtcWallet {
 
     const change = balanceSatoshis - fee - amountSatoshis;
 
+    if (change < 0) {
+      throw new Error(`Balance not sufficient to cover mining fee of ${fee} satoshis`);
+    }
+
     utxos.map(utxo => tx.addInput(utxo.txid, utxo.vout));
 
     tx.addOutput(address, change);
