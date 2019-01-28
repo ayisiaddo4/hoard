@@ -1,5 +1,9 @@
 [
   {
+    "release_notes": "Provide additional insight to transaction errors",
+    "version_code": "1.19"
+  },
+  {
     "release_notes": "Caches computationally expensive BTC/RVN address calls",
     "version_code": "1.18"
   },
