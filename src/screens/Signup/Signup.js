@@ -55,10 +55,11 @@ export default class Signup extends Component {
   signupPasswordConfirmationInput = React.createRef();
 
   static getDerivedStateFromProps(props, state) {
-    if (state.loading && !props.signup.requesting && !props.signup.successful) {
+    const errorMessage = props.signup.error || '';
+    if (errorMessage !== state.errorMessage) {
       return {
-        loading: false,
-        errorMessage: props.signup.error,
+        loading: props.signup.requesting,
+        errorMessage,
       };
     }
     return null;

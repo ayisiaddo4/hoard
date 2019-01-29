@@ -83,7 +83,6 @@ export default function* signupFlow(action) {
     // the successful response.
     yield put({ type: SIGNUP_SUCCESS, response });
   } catch (error) {
-    console.log(error);
     // TODO: return nice-looking errors to the user
     yield put({
       type: SIGNUP_ERROR,
