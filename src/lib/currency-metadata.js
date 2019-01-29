@@ -26,6 +26,7 @@ export function getCoinMetadata(symbol) {
         image: require('assets/ravencoin.png'),
         colors: ['#0c00ed', '#080092'],
         fullName: 'Ravencoin',
+        pointsOfPrecision: 8,
       };
     case 'BTC':
       return {
@@ -33,6 +34,7 @@ export function getCoinMetadata(symbol) {
         icon: require('assets/btc_icon.png'),
         colors: ['#F2A900', '#BD8401'],
         fullName: 'Bitcoin',
+        pointsOfPrecision: 8,
       };
     case 'ETH':
       return {
@@ -40,6 +42,7 @@ export function getCoinMetadata(symbol) {
         icon: require('assets/eth_icon.png'),
         colors: ['#C99D66', '#99774D'],
         fullName: 'Ethereum',
+        pointsOfPrecision: 18,
       };
     case 'HOARD':
       return {
@@ -47,6 +50,7 @@ export function getCoinMetadata(symbol) {
         icon: require('assets/hoard_icon.png'),
         colors: ['#E5129A', '#AA0D72'],
         fullName: 'HOARD',
+        pointsOfPrecision: 18,
       };
     default:
       return {

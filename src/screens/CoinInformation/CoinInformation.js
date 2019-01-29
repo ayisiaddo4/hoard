@@ -147,6 +147,9 @@ export default class CoinInformation extends React.Component {
     const { pricing, wallet, isSignedIn, contactTransactions } = this.props;
     const metadata = getCoinMetadata(wallet.symbol);
     const price = pricing.price.price || 0;
+    const formattedBalance = wallet.balance
+      .toString()
+      .match(new RegExp(`^\\d+.?(\\d{0,${metadata.pointsOfPrecision}})?`))[0];
 
     return (
       <View style={styles.container}>
@@ -154,7 +157,7 @@ export default class CoinInformation extends React.Component {
         <Card
           icon={metadata.icon}
           colors={metadata.colors}
-          title={wallet.balance.toString()}
+          title={formattedBalance}
           walletsToChart={[wallet]}
           subtitle={`$${(wallet.balance * price).toFixed(2)}`}
         />

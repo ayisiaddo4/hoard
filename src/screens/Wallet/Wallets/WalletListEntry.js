@@ -22,6 +22,8 @@ const WalletListEntry = ({
   price,
   priceStatus,
 }) => {
+  const metadata = getCoinMetadata(symbol);
+
   const value =
     [balanceStatus, priceStatus].reduce(
       (prev, status) => prev && status === ENTRY_STATUS.SUCCESSFUL,
@@ -31,6 +33,11 @@ const WalletListEntry = ({
   const formattedPrice = Number(price)
     .toFixed(5)
     .replace(/0{0,3}$/, '');
+
+  const formattedBalance = balance && balance
+    .toString()
+    .match(new RegExp(`^\\d+.?(\\d{0,${metadata.pointsOfPrecision}})?`))[0];
+
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
@@ -43,10 +50,7 @@ const WalletListEntry = ({
                 </View>
               </Try>
               <Otherwise>
-                <Image
-                  style={styles.coinImage}
-                  source={getCoinMetadata(symbol).image}
-                />
+                <Image style={styles.coinImage} source={metadata.image} />
               </Otherwise>
             </Conditional>
           </View>
@@ -84,7 +88,7 @@ const WalletListEntry = ({
             <T.SemiBoldAlternate style={{ color: '#777' }}>
               <Conditional>
                 <Try condition={balanceStatus === ENTRY_STATUS.SUCCESSFUL}>
-                  {balance} {symbol}
+                  {formattedBalance} {symbol}
                 </Try>
                 <Otherwise>...</Otherwise>
               </Conditional>
