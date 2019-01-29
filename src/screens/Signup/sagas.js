@@ -44,7 +44,9 @@ async function signupApi(
   try {
     return api.post(signupUrl, signupOptions);
   } catch (error) {
-    console.log(error);
+    if (__DEV__) {
+      console.log(error);
+    }
     throw error;
   }
 }
@@ -77,6 +79,10 @@ export default function* signupFlow(action) {
       password,
       deviceInfo
     );
+
+    if (response.uid) {
+      response.user_uid = response.user_uid || response.uid;
+    }
 
     // when the above api call has completed it will "put",
     // or dispatch, an action of type SIGNUP_SUCCESS with
