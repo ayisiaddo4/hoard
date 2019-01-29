@@ -85,6 +85,10 @@ class TradeItem extends Component {
 
     const tradeTitle = transaction.fiatTrade
       ? isTradeTitle[transactionType]
+      : transaction.details.status === 'pending'
+      ? transaction.type === TYPE_SEND
+        ? 'Send Attempted'
+        : 'Request Sent'
       : transactionType;
 
     const otherWalletAddress = transaction.details.creates
