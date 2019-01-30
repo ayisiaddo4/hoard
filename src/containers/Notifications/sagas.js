@@ -1,6 +1,7 @@
 import Config from 'react-native-config';
 import { UrbanAirship } from 'urbanairship-react-native';
 import api from 'lib/api';
+import DeviceInfo from 'react-native-device-info';
 
 import {
   all,
@@ -38,6 +39,7 @@ import {
 import { cancelContactTransaction } from 'sagas/transactions/actions';
 
 import { updateEnablePushNotifications } from 'screens/Settings/actions';
+import { saveState as saveSettingsState } from 'screens/Settings/sagas';
 
 import {
   CANCEL_CONTACT_TRANSACTION_SUCCESS,
@@ -49,6 +51,7 @@ import { walletsForSymbolSelector } from 'screens/Wallet/selectors';
 import NavigatorService from 'lib/navigator';
 
 import StoreRegistry from 'lib/store-registry';
+import { AsyncAlert } from 'components/AsyncAlert';
 
 const KICKOFF_PROMPT_CONTACT_SAGA = 'saga/notifications/prompt_contact';
 const KICKOFF_CANCEL_CONTACT_SAGA = 'saga/notifications/cancel_contact';
@@ -280,14 +283,26 @@ function* flowHandler(action) {
 }
 
 function* initialize() {
-  const enablePushNotifications = yield call(
-    UrbanAirship.isUserNotificationsEnabled
-  );
-  const action = updateEnablePushNotifications(enablePushNotifications);
-  yield put(action);
-  if (enablePushNotifications) {
-    yield call(handleUrbanAirshipListeners, action);
+  if (!DeviceInfo.isEmulator()) {
+    const enablePushNotifications = yield call(
+      UrbanAirship.isUserNotificationsEnabled
+    );
+
+    const action = updateEnablePushNotifications(enablePushNotifications);
+    yield put(action);
+    if (enablePushNotifications) {
+      yield call(handleUrbanAirshipListeners, action);
+    }
+  } else if (__DEV__) {
+    const status = yield call(AsyncAlert, {
+      title: 'Prompt Push Notifications',
+    });
+    const action = updateEnablePushNotifications(status);
+    yield put(action);
   }
+
+  // Save the settings
+  yield call(saveSettingsState);
 }
 
 /*
