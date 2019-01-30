@@ -441,7 +441,7 @@ function handleUrbanAirshipListeners(action) {
   }
 }
 
-export default function* pricingSagaWatcher() {
+export default function* notificationsSagaWatcher() {
   yield call(initialize);
   yield all([
     takeEvery(NOTIFICATIONS_START_FLOW, flowHandler),
