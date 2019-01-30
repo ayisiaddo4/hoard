@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { UrbanAirship } from 'urbanairship-react-native';
 import DeviceInfo from 'react-native-device-info';
-import { put, take, select, call, all } from 'redux-saga/effects';
+import { put, take, takeEvery, select, call, all } from 'redux-saga/effects';
 
 import Storage from 'lib/storage';
 
@@ -66,7 +66,7 @@ export default function* settingsSagas() {
   yield call(initialize);
 
   yield all([
-    take(
+    takeEvery(
       [
         // add other settings change events here
         UPDATE_TRADING_PAIR,
