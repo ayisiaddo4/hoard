@@ -187,6 +187,7 @@
     "default_biometrics_title": "Authentication",
     "enable_biometrics_title": "Enable {{type}}",
     "enable_feature_in_settings": "Make sure you've enabled this option in your System Settings.",
+    "change_notifications_in_settings": "Notification preferences must be changed in your System Settings",
     "go_to_system_settings": "Open Settings"
   },
   "signup": {

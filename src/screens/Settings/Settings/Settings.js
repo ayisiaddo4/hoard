@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { StyleSheet, Switch } from 'react-native';
+import { Alert, Linking, StyleSheet, Switch } from 'react-native';
 
 import { Layout, Body } from 'components/Base';
+import { toTitleCase } from 'lib/string-helpers';
 import { t } from 'translations/i18n';
 
 import Link from 'components/Link';
-import { UrbanAirship } from 'urbanairship-react-native';
 
 export default class Settings extends Component {
   static propTypes = {
@@ -17,9 +17,21 @@ export default class Settings extends Component {
   };
 
   togglePushNotifications = () => {
-    const newValue = !this.props.enablePushNotifications;
-    UrbanAirship.setUserNotificationsEnabled(newValue);
-    this.props.updateEnablePushNotifications(newValue);
+    Alert.alert(
+      null,
+      t('settings.change_notifications_in_settings'),
+      [
+        {
+          text: t('settings.go_to_system_settings'),
+          onPress: () => Linking.openURL('app-settings:'),
+        },
+        {
+          text: toTitleCase(t('actions.cancel')),
+          style: 'cancel',
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   render() {
