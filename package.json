@@ -91,7 +91,7 @@
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
     "reselect": "^3.0.1",
-    "urbanairship-react-native": "2.1.1",
+    "urbanairship-react-native": "2.2.0",
     "victory-native": "30.0.0",
     "vm-browserify": "^1.0.1",
     "wallet-address-validator": "^0.1.7"
