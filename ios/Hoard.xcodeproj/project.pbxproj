@@ -14,6 +14,8 @@
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* HoardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* HoardTests.m */; };
 		0794D8FD60EB49C8BA011D26 /* Exo-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 146A8938FD0F4DE49642BF5C /* Exo-Bold.ttf */; };
+		07992BD822037F1700A75B12 /* AirshipKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07992BCD22037E9900A75B12 /* AirshipKit.framework */; };
+		07992BD922037F1700A75B12 /* AirshipKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07992BCD22037E9900A75B12 /* AirshipKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		07A39C0E2188C662007D31FE /* Lottie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A39BD12188C650007D31FE /* Lottie.framework */; };
 		07A39C0F2188C662007D31FE /* Lottie.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07A39BD12188C650007D31FE /* Lottie.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		07AB59F3218B95520040B01E /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07AB59F2218B95520040B01E /* AirshipConfig.plist */; };
@@ -177,6 +179,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = CC64F0541D8B77E3009CEF27;
 			remoteInfo = AirshipKitTests;
+		};
+		07992BDA22037F1700A75B12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07992BC322037E9900A75B12 /* AirshipKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 494DD9561B0EB677009C134E;
+			remoteInfo = AirshipKit;
 		};
 		07A39B5A2188C57B007D31FE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -586,6 +595,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				07992BD922037F1700A75B12 /* AirshipKit.framework in Embed Frameworks */,
 				07A39C0F2188C662007D31FE /* Lottie.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -732,6 +742,7 @@
 				2121A55FB6954550A69DA4A3 /* libLottieReactNative.a in Frameworks */,
 				72B4CE0C4FAE48F9BA2A6982 /* libRNCamera.a in Frameworks */,
 				913E04C77EF94CB79CEA4D0F /* libReactNativeConfig.a in Frameworks */,
+				07992BD822037F1700A75B12 /* AirshipKit.framework in Frameworks */,
 				6B101C0A4A0649D085D5E876 /* libRCTContacts.a in Frameworks */,
 				DEB7E20F517F4CFFB6C8EF6F /* libRNI18n.a in Frameworks */,
 				A06E071C92AA49B9B5E40FA3 /* libRNLanguages.a in Frameworks */,
@@ -1237,6 +1248,7 @@
 			);
 			dependencies = (
 				07A39C112188C662007D31FE /* PBXTargetDependency */,
+				07992BDB22037F1700A75B12 /* PBXTargetDependency */,
 			);
 			name = Hoard;
 			productName = "Hello World";
@@ -2004,6 +2016,11 @@
 			isa = PBXTargetDependency;
 			target = 13B07F861A680F5B00A75B9A /* Hoard */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+		07992BDB22037F1700A75B12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AirshipKit;
+			targetProxy = 07992BDA22037F1700A75B12 /* PBXContainerItemProxy */;
 		};
 		07A39C112188C662007D31FE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
