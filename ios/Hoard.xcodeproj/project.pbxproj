@@ -16,8 +16,6 @@
 		0794D8FD60EB49C8BA011D26 /* Exo-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 146A8938FD0F4DE49642BF5C /* Exo-Bold.ttf */; };
 		07A39C0E2188C662007D31FE /* Lottie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A39BD12188C650007D31FE /* Lottie.framework */; };
 		07A39C0F2188C662007D31FE /* Lottie.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07A39BD12188C650007D31FE /* Lottie.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		07A39C992188CC32007D31FE /* AirshipKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07A39C532188CBBE007D31FE /* AirshipKit.framework */; };
-		07A39C9A2188CC32007D31FE /* AirshipKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07A39C532188CBBE007D31FE /* AirshipKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		07AB59F3218B95520040B01E /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07AB59F2218B95520040B01E /* AirshipConfig.plist */; };
 		07D774BA219CC10500B9FCCB /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07D774B8219CC10500B9FCCB /* Crashlytics.framework */; };
 		07D774BB219CC10500B9FCCB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07D774B9219CC10500B9FCCB /* Fabric.framework */; };
@@ -299,55 +297,6 @@
 			remoteGlobalIDString = 62CA59B71E3C173B002D7188;
 			remoteInfo = Lottie_iOS;
 		};
-		07A39C522188CBBE007D31FE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 07A39C492188CBBD007D31FE /* AirshipKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 494DD9571B0EB677009C134E;
-			remoteInfo = AirshipKit;
-		};
-		07A39C542188CBBE007D31FE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 07A39C492188CBBD007D31FE /* AirshipKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CC8999771D8B625500A0CECC;
-			remoteInfo = AirshipResources;
-		};
-		07A39C562188CBBE007D31FE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 07A39C492188CBBD007D31FE /* AirshipKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DF6DD6561E7A1EB8000C281A;
-			remoteInfo = "AirshipKit tvOS";
-		};
-		07A39C582188CBBE007D31FE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 07A39C492188CBBD007D31FE /* AirshipKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DF7E739E1E7B3F0A0039F65D;
-			remoteInfo = "AirshipResources tvOS";
-		};
-		07A39C5A2188CBBE007D31FE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 07A39C492188CBBD007D31FE /* AirshipKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CC899CD01D8B712D00A0CECC;
-			remoteInfo = AirshipLib;
-		};
-		07A39C5C2188CBBE007D31FE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 07A39C492188CBBD007D31FE /* AirshipKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CC64F0541D8B77E3009CEF27;
-			remoteInfo = AirshipKitTests;
-		};
-		07A39C9B2188CC32007D31FE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 07A39C492188CBBD007D31FE /* AirshipKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 494DD9561B0EB677009C134E;
-			remoteInfo = AirshipKit;
-		};
 		139105C01AF99BAD00B5F7CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */;
@@ -595,7 +544,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				07A39C9A2188CC32007D31FE /* AirshipKit.framework in Embed Frameworks */,
 				07A39C0F2188C662007D31FE /* Lottie.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -615,7 +563,6 @@
 		00E356F21AD99517003FC87E /* HoardTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HoardTests.m; sourceTree = "<group>"; };
 		05ACFDD13B144C9A8A24520D /* Exo-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo-LightItalic.ttf"; path = "../src/assets/fonts/Exo-LightItalic.ttf"; sourceTree = "<group>"; };
 		07A39B912188C5E1007D31FE /* Hoard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Hoard.entitlements; path = Hoard/Hoard.entitlements; sourceTree = "<group>"; };
-		07A39C492188CBBD007D31FE /* AirshipKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AirshipKit.xcodeproj; path = AirshipKit/AirshipKit.xcodeproj; sourceTree = "<group>"; };
 		07AB59F2218B95520040B01E /* AirshipConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
 		07D774B8219CC10500B9FCCB /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		07D774B9219CC10500B9FCCB /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -740,7 +687,6 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				2121A55FB6954550A69DA4A3 /* libLottieReactNative.a in Frameworks */,
-				07A39C992188CC32007D31FE /* AirshipKit.framework in Frameworks */,
 				72B4CE0C4FAE48F9BA2A6982 /* libRNCamera.a in Frameworks */,
 				913E04C77EF94CB79CEA4D0F /* libReactNativeConfig.a in Frameworks */,
 				6B101C0A4A0649D085D5E876 /* libRCTContacts.a in Frameworks */,
@@ -980,19 +926,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		07A39C4A2188CBBD007D31FE /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				07A39C532188CBBE007D31FE /* AirshipKit.framework */,
-				07A39C552188CBBE007D31FE /* AirshipResources.bundle */,
-				07A39C572188CBBE007D31FE /* AirshipKit.framework */,
-				07A39C592188CBBE007D31FE /* AirshipResources tvOS.bundle */,
-				07A39C5B2188CBBE007D31FE /* libUAirship.a */,
-				07A39C5D2188CBBE007D31FE /* AirshipKitTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1171,7 +1104,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				07A39C492188CBBD007D31FE /* AirshipKit.xcodeproj */,
 				13B07FAE1A68108700A75B9A /* Hoard */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* HoardTests */,
@@ -1248,7 +1180,6 @@
 			);
 			dependencies = (
 				07A39C112188C662007D31FE /* PBXTargetDependency */,
-				07A39C9C2188CC32007D31FE /* PBXTargetDependency */,
 			);
 			name = Hoard;
 			productName = "Hello World";
@@ -1294,10 +1225,6 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
-				{
-					ProductGroup = 07A39C4A2188CBBD007D31FE /* Products */;
-					ProjectRef = 07A39C492188CBBD007D31FE /* AirshipKit.xcodeproj */;
-				},
 				{
 					ProductGroup = 07A39B502188C57A007D31FE /* Products */;
 					ProjectRef = 4B33001DB3E5471CA5D261B4 /* BVLinearGradient.xcodeproj */;
@@ -1614,48 +1541,6 @@
 			fileType = archive.ar;
 			path = libLottie.a;
 			remoteRef = 07A39BD62188C650007D31FE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		07A39C532188CBBE007D31FE /* AirshipKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = AirshipKit.framework;
-			remoteRef = 07A39C522188CBBE007D31FE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		07A39C552188CBBE007D31FE /* AirshipResources.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = AirshipResources.bundle;
-			remoteRef = 07A39C542188CBBE007D31FE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		07A39C572188CBBE007D31FE /* AirshipKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = AirshipKit.framework;
-			remoteRef = 07A39C562188CBBE007D31FE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		07A39C592188CBBE007D31FE /* AirshipResources tvOS.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "AirshipResources tvOS.bundle";
-			remoteRef = 07A39C582188CBBE007D31FE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		07A39C5B2188CBBE007D31FE /* libUAirship.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libUAirship.a;
-			remoteRef = 07A39C5A2188CBBE007D31FE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		07A39C5D2188CBBE007D31FE /* AirshipKitTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = AirshipKitTests.xctest;
-			remoteRef = 07A39C5C2188CBBE007D31FE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		139105C11AF99BAD00B5F7CC /* libRCTSettings.a */ = {
@@ -2021,11 +1906,6 @@
 			isa = PBXTargetDependency;
 			name = Lottie_iOS;
 			targetProxy = 07A39C102188C662007D31FE /* PBXContainerItemProxy */;
-		};
-		07A39C9C2188CC32007D31FE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = AirshipKit;
-			targetProxy = 07A39C9B2188CC32007D31FE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
