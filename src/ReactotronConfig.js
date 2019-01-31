@@ -10,6 +10,7 @@ import sagaPlugin from 'reactotron-redux-saga';
 require('./debug'); // Import debug utils
 
 const instance = Reactotron.configure({
+  // host: '192.168.7.32',
   name: 'React Native Demo',
 })
   .useReactNative() // add all built-in react native plugins

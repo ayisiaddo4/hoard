@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Provider, connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
-import { AsyncStorage, StyleSheet, YellowBox } from 'react-native';
+import { AsyncStorage, StyleSheet, YellowBox, AppState } from 'react-native';
+import { UrbanAirship } from 'urbanairship-react-native';
 
 import NavigatorService from 'lib/navigator';
 import configureStore from './configureStore';
@@ -151,6 +152,7 @@ const ModalStack = createStackNavigator(
 class App extends Component {
   constructor() {
     super();
+    console.log('UA: Background 3');
 
     if (__DEV__) {
       YellowBox.ignoreWarnings([
@@ -159,12 +161,17 @@ class App extends Component {
         'Require cycle: ',
       ]);
     }
+    this.state = {
+      appState: AppState.currentState,
+    };
   }
 
   refDidLoad = async navigatorRef =>
     NavigatorService.setContainer(navigatorRef);
 
   componentDidMount = async () => {
+    AppState.addEventListener('change', this._handleAppStateChange);
+
     if (!this.props.hasPreviouslyInitialized) {
       const previousNetworkType = await AsyncStorage.getItem(
         'CURRENCY_NETWORK_TYPE'
@@ -187,7 +194,69 @@ class App extends Component {
       this.props.store.dispatch({ type: INIT_REQUESTING });
     }
 
+    UrbanAirship.getChannelId().then(channelId => {
+      this.setState({ channelId: channelId });
+    });
+
+    UrbanAirship.isUserNotificationsEnabled().then(enabled => {
+      this.setState({ notificationsEnabled: enabled });
+    });
+
+    UrbanAirship.isLocationEnabled().then(enabled => {
+      this.setState({ locationEnabled: enabled });
+    });
+
+    UrbanAirship.addListener('notificationResponse', response => {
+      console.log(
+        'UA: APP ------------- notificationResponse:',
+        JSON.stringify(response)
+      );
+      alert('notificationResponse: ' + response.notification.alert);
+    });
+
+    UrbanAirship.addListener('pushReceived', notification => {
+      console.log(
+        'UA: APP ------------- pushReceived:',
+        JSON.stringify(notification)
+      );
+      alert('pushReceived: ' + notification.alert);
+    });
+
+    UrbanAirship.addListener('deepLink', event => {
+      console.log('UA: APP ------------- deepLink:', JSON.stringify(event));
+      alert('deepLink: ' + event.deepLink);
+    });
+
+    UrbanAirship.addListener('registration', event => {
+      console.log('UA: APP ------------- registration:', JSON.stringify(event));
+      this.state.channelId = event.channelId;
+      this.setState(this.state);
+    });
+
+    UrbanAirship.addListener('notificationOptInStatus', event => {
+      console.log(
+        'UA: APP ------------- notificationOptInStatus:',
+        JSON.stringify(event)
+      );
+    });
+
     SplashScreen.hide();
+  };
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = nextAppState => {
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      console.log('UA: App has come to the foreground!');
+    }
+    console.log('UA: APP SATE!', nextAppState);
+
+    this.setState({ appState: nextAppState });
   };
 
   render() {

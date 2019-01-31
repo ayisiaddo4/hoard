@@ -2,7 +2,7 @@ import Config from 'react-native-config';
 import { UrbanAirship } from 'urbanairship-react-native';
 import api from 'lib/api';
 import DeviceInfo from 'react-native-device-info';
-
+import { Platform } from 'react-native';
 import {
   all,
   select,
@@ -38,7 +38,10 @@ import {
 
 import { cancelContactTransaction } from 'sagas/transactions/actions';
 
-import { updateEnablePushNotifications } from 'screens/Settings/actions';
+import {
+  updateEnablePushNotifications,
+  updateDeviceInfo,
+} from 'screens/Settings/actions';
 import { saveState as saveSettingsState } from 'screens/Settings/sagas';
 
 import {
@@ -52,7 +55,13 @@ import NavigatorService from 'lib/navigator';
 
 import StoreRegistry from 'lib/store-registry';
 import { AsyncAlert } from 'components/AsyncAlert';
-
+import {
+  isPhonePushNotificationsEnabledOnDevice,
+  enableUserPushNotificationsOnDevice,
+  getChannelIdOnPushService,
+  getRegistrationTokenOnPushService,
+  isUserNotificationsOptedInOnPushService,
+} from 'lib/notification-helpers';
 const KICKOFF_PROMPT_CONTACT_SAGA = 'saga/notifications/prompt_contact';
 const KICKOFF_CANCEL_CONTACT_SAGA = 'saga/notifications/cancel_contact';
 const KICKOFF_ERROR_CONTACT_SAGA = 'saga/notifications/error_contact';
@@ -283,14 +292,53 @@ function* flowHandler(action) {
 }
 
 function* initialize() {
-  if (!DeviceInfo.isEmulator()) {
-    const enablePushNotifications = yield call(
-      UrbanAirship.isUserNotificationsEnabled
-    );
+  // TODO:
+  // 1. toggle opted in status with urban airship
+  // 2. check to see if settings init function should call setEnablePushNotifications or enablePushNotifications
 
+  // ON STARTUP: This block of code was from the settings.js initialize method after if(state)...
+  if (!DeviceInfo.isEmulator()) {
+    // const channel = yield call(UrbanAirship.getChannelId);
+    const channel = yield call(getChannelIdOnPushService);
+    const device_type = Platform.OS;
+    yield put(updateDeviceInfo({ channel, device_type }));
+    console.log('UA: settings/sagas.js: 4 updateDeviceInfo', {
+      channel,
+      device_type,
+    });
+
+    // yield call(UrbanAirship.enableUserPushNotifications, true);
+    const statusOfEnablePush = yield call(enableUserPushNotificationsOnDevice);
+    console.log(
+      'UA: notifications/sagas.js: first time settings',
+      statusOfEnablePush
+    );
+  }
+  // /ON STARTUP
+
+  console.log('UA: notifications/sagas.js: notifications init');
+
+  if (!DeviceInfo.isEmulator()) {
+    // const channel = yield call(getChannelId);
+    const channel = yield call(getChannelIdOnPushService);
+    console.log('UA: notifications/sagas.js: new channel', channel);
+    // UA: notifications/sagas.js: new channel 882c272e-f6ea-482a-af78-78a16dd30932
+
+    const enablePushNotifications = yield call(
+      // UrbanAirship.isUserNotificationsOptedIn
+      isUserNotificationsOptedInOnPushService
+    );
+    console.log(
+      'UA: notifications/sagas.js: enablePushNotifications',
+      enablePushNotifications
+    );
     const action = updateEnablePushNotifications(enablePushNotifications);
     yield put(action);
     if (enablePushNotifications) {
+      console.log(
+        'UA: notifications/sagas.js: enablePushNotifications is true, starting Listeners...'
+      );
+
       yield call(handleUrbanAirshipListeners, action);
     }
   } else if (__DEV__) {
@@ -302,6 +350,7 @@ function* initialize() {
   }
 
   // Save the settings
+  console.log('UA: notifications/sagas.js: saveSettingsState');
   yield call(saveSettingsState);
 }
 
@@ -360,6 +409,8 @@ function handleDeepLink({ paths, params }) {
 }
 
 function handleUrbanAirshipListeners(action) {
+  console.log('UA: Background 1');
+
   if (action.enablePushNotifications) {
     UrbanAirship.addListener('notificationResponse', pushNotification => {
       if (__DEV__) {
@@ -458,6 +509,8 @@ function handleUrbanAirshipListeners(action) {
 
 export default function* notificationsSagaWatcher() {
   yield call(initialize);
+  console.log('UA: Background 2');
+
   yield all([
     takeEvery(NOTIFICATIONS_START_FLOW, flowHandler),
     takeEvery(KICKOFF_ERROR_CONTACT_SAGA, errorContact),

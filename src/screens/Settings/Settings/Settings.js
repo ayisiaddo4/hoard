@@ -5,9 +5,8 @@ import { StyleSheet, Switch } from 'react-native';
 
 import { Layout, Body } from 'components/Base';
 import { t } from 'translations/i18n';
-
+import { setUserNotificationsEnabledOnPushService } from 'lib/notification-helpers';
 import Link from 'components/Link';
-import { UrbanAirship } from 'urbanairship-react-native';
 
 export default class Settings extends Component {
   static propTypes = {
@@ -16,10 +15,13 @@ export default class Settings extends Component {
     isSignedIn: PropTypes.bool,
   };
 
-  togglePushNotifications = () => {
+  togglePushNotifications = async () => {
     const newValue = !this.props.enablePushNotifications;
-    UrbanAirship.setUserNotificationsEnabled(newValue);
-    this.props.updateEnablePushNotifications(newValue);
+    console.log('UA: settings.js: toggle changed to:', newValue);
+    // UrbanAirship.setUserNotificationsEnabled(newValue);
+    const suck = await setUserNotificationsEnabledOnPushService(newValue); // UA
+    console.log('UA: settings.js: awaited the suckiness:', suck);
+    this.props.updateEnablePushNotifications(newValue); // Redux
   };
 
   render() {
