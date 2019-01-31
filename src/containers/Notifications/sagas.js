@@ -13,6 +13,7 @@ import {
   put,
 } from 'redux-saga/effects';
 
+import { delay } from 'redux-saga';
 import {
   TYPE_SEND,
   TYPE_REQUEST,
@@ -299,6 +300,10 @@ function* initialize() {
   // ON STARTUP: This block of code was from the settings.js initialize method after if(state)...
   if (!DeviceInfo.isEmulator()) {
     // const channel = yield call(UrbanAirship.getChannelId);
+    console.log('UA: before delay');
+    yield delay(5000);
+    console.log('UA: after delay');
+
     const channel = yield call(getChannelIdOnPushService);
     const device_type = Platform.OS;
     yield put(updateDeviceInfo({ channel, device_type }));
