@@ -1,13 +1,11 @@
-import { Platform } from 'react-native';
-import { UrbanAirship } from 'urbanairship-react-native';
-import DeviceInfo from 'react-native-device-info';
-import { put, take, select, call, all } from 'redux-saga/effects';
+import { put, take, takeEvery, select, call, all } from 'redux-saga/effects';
 
 import Storage from 'lib/storage';
 
 import {
   UPDATE_TRADING_PAIR,
   UPDATE_ENABLE_BIOMETRICS,
+  UPDATE_DEVICE_INFO,
   PROMPTED_ENABLE_BIOMETRICS,
   UPDATE_ENABLE_PUSH_NOTIFICATIONS,
   SETTINGS_STORAGE_KEY,
@@ -15,7 +13,7 @@ import {
 
 import CONFIG from 'src/config';
 
-import { initializeSettings, updateDeviceInfo } from './actions';
+import { initializeSettings } from './actions';
 
 import { INIT_REQUESTING } from 'containers/App/constants';
 import { enableBiometrics } from 'screens/Settings/helpers';
@@ -47,13 +45,6 @@ export function* initialize() {
   } else if (CONFIG.PROMPT_BIOMETRICS_ON_STARTUP) {
     yield call(promptUserForSettings);
   }
-
-  if (!DeviceInfo.isEmulator()) {
-    const channel = yield call(UrbanAirship.getChannelId);
-    const device_type = Platform.OS;
-    yield put(updateDeviceInfo({ channel, device_type }));
-    yield call(UrbanAirship.setUserNotificationsEnabled, true);
-  }
 }
 
 export function* saveState() {
@@ -66,11 +57,12 @@ export default function* settingsSagas() {
   yield call(initialize);
 
   yield all([
-    take(
+    takeEvery(
       [
         // add other settings change events here
         UPDATE_TRADING_PAIR,
         UPDATE_ENABLE_BIOMETRICS,
+        UPDATE_DEVICE_INFO,
         UPDATE_ENABLE_PUSH_NOTIFICATIONS,
       ],
       saveState

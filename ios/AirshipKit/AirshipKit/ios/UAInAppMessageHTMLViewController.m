@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright 2010-2019 Urban Airship and Contributors */
 
 #import "UAirship.h"
 #import "UAInAppMessageHTMLViewController+Internal.h"
@@ -159,6 +159,10 @@ NS_ASSUME_NONNULL_BEGIN
             [self load];
         }
     });
+}
+
+- (void)closeWindowAnimated:(BOOL)animated {
+    [self dismissWithResolution:[UAInAppMessageResolution userDismissedResolution]];
 }
 
 @end

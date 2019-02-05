@@ -7021,9 +7021,9 @@ update-notifier@^2.2.0:
     semver-diff "^2.0.0"
     xdg-basedir "^3.0.0"
 
-urbanairship-react-native@2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/urbanairship-react-native/-/urbanairship-react-native-2.1.1.tgz#56e8535017d9e6ae4ca2432edb29cd8be583e6cf"
+urbanairship-react-native@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/urbanairship-react-native/-/urbanairship-react-native-2.2.0.tgz#399291ceaf3e4fdf48efd2b928e0821a96e6bda7"
 
 uri-js@^4.2.2:
   version "4.2.2"

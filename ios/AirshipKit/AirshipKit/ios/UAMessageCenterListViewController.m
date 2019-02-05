@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright 2010-2019 Urban Airship and Contributors */
 
 #import "UAMessageCenterListViewController.h"
 #import "UAMessageCenterListCell.h"
@@ -1059,9 +1059,6 @@
     if (![self.iconCache objectForKey:iconListURLString]) {
 
         NSURL *iconListURL = [NSURL URLWithString:iconListURLString];
-
-        // Tell the cache to remember the URL
-        [UAURLProtocol addCachableURL:iconListURL];
 
         // NOTE: All add/remove operations on the cache & in-progress set should be done
         // on the main thread. They'll be cleared below in a dispatch_async/main queue block.

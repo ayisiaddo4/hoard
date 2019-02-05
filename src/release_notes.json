@@ -1,5 +1,9 @@
 [
   {
+    "release_notes": "Rework handling of notifications settings",
+    "version_code": "1.21"
+  },
+  {
     "release_notes": "Fix trailing digits on balances\nFix issue where signing up for a new account would not log the user in\nFix issue where signup errors would not be shown\nFix inaccurate display of small numbers in Send screen\nUpdate titles of contact transactions\n",
     "version_code": "1.20"
   },

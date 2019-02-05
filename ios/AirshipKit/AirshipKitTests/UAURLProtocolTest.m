@@ -1,7 +1,10 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright 2010-2019 Urban Airship and Contributors */
 
 #import "UABaseTest.h"
 #import "UAURLProtocol.h"
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 @interface UAURLProtocolTest : UABaseTest
 @property (nonatomic, strong) NSURL *cachableURL;
@@ -100,5 +103,6 @@
     }
 }
 
+#pragma GCC diagnostic pop
 
 @end

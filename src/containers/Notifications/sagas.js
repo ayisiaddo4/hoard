@@ -1,6 +1,8 @@
 import Config from 'react-native-config';
+import { Platform } from 'react-native';
 import { UrbanAirship } from 'urbanairship-react-native';
 import api from 'lib/api';
+import DeviceInfo from 'react-native-device-info';
 
 import {
   all,
@@ -26,6 +28,8 @@ import {
   NOTIFICATION_RECIEVED,
 } from './constants';
 
+import { INIT_REQUESTING } from 'containers/App/constants';
+
 import { UPDATE_ENABLE_PUSH_NOTIFICATIONS } from 'screens/Settings/constants';
 
 import {
@@ -37,7 +41,10 @@ import {
 
 import { cancelContactTransaction } from 'sagas/transactions/actions';
 
-import { updateEnablePushNotifications } from 'screens/Settings/actions';
+import {
+  updateEnablePushNotifications,
+  updateDeviceInfo,
+} from 'screens/Settings/actions';
 
 import {
   CANCEL_CONTACT_TRANSACTION_SUCCESS,
@@ -279,14 +286,23 @@ function* flowHandler(action) {
   }
 }
 
-function* initialize() {
-  const enablePushNotifications = yield call(
-    UrbanAirship.isUserNotificationsEnabled
-  );
-  const action = updateEnablePushNotifications(enablePushNotifications);
-  yield put(action);
-  if (enablePushNotifications) {
-    yield call(handleUrbanAirshipListeners, action);
+function initialize() {
+  if (!DeviceInfo.isEmulator()) {
+    requestAnimationFrame(() => UrbanAirship.setUserNotificationsEnabled(true));
+
+    UrbanAirship.addListener('registration', async ({ channelId }) => {
+      const store = StoreRegistry.getStore();
+      const device_type = Platform.OS;
+
+      const isUserNotificationsEnabled = await UrbanAirship.isUserNotificationsEnabled();
+      if (!isUserNotificationsEnabled) {
+        UrbanAirship.setUserNotificationsEnabled(true);
+      }
+      const optInPushNotifications = await UrbanAirship.isUserNotificationsOptedIn();
+
+      store.dispatch(updateDeviceInfo({ channel: channelId, device_type }));
+      store.dispatch(updateEnablePushNotifications(optInPushNotifications));
+    });
   }
 }
 
@@ -441,8 +457,10 @@ function handleUrbanAirshipListeners(action) {
   }
 }
 
-export default function* pricingSagaWatcher() {
+export default function* notificationsSagaWatcher() {
+  yield take(INIT_REQUESTING);
   yield call(initialize);
+
   yield all([
     takeEvery(NOTIFICATIONS_START_FLOW, flowHandler),
     takeEvery(KICKOFF_ERROR_CONTACT_SAGA, errorContact),

@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright 2010-2019 Urban Airship and Contributors */
 
 #import "UAInboxMessageList+Internal.h"
 
@@ -305,8 +305,6 @@ typedef void (^UAInboxMessageFetchCompletionHandler)(NSArray *);
                                       if (message.unread) {
                                           unreadCount ++;
                                       }
-                                      // Add messsage's body url to the cachable urls
-                                      [UAURLProtocol addCachableURL:message.messageBodyURL];
 
                                       [messages addObject:message];
                                   }

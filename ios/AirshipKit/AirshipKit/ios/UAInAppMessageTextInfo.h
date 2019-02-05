@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright 2010-2019 Urban Airship and Contributors */
 
 #import <UIKit/UIKit.h>
 
@@ -32,7 +32,7 @@ typedef NS_OPTIONS(NSUInteger, UAInAppMessageTextInfoStyleType) {
 /**
  * Represents the possible text alignment options.
  */
-typedef NS_OPTIONS(NSUInteger, UAInAppMessageTextInfoAlignmentType) {
+typedef NS_ENUM(NSUInteger, UAInAppMessageTextInfoAlignmentType) {
     /**
      * Unspecified alignment (actual alignment specified by container)
      */

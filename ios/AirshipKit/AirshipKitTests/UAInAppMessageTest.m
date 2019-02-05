@@ -1,4 +1,4 @@
-/* Copyright 2018 Urban Airship and Contributors */
+/* Copyright 2010-2019 Urban Airship and Contributors */
 
 #import "UABaseTest.h"
 
@@ -24,7 +24,7 @@
                                         },
                                 },
                   @"display_type": UAInAppMessageDisplayTypeBannerValue,
-                  @"extras": @{@"foo":@"baz", @"baz":@"foo"},
+                  @"extra": @{@"foo":@"baz", @"baz":@"foo"},
                   @"audience": @{@"new_user" : @YES},
                   @"actions": @{@"cool":@"story"},
                   @"source": @"remote-data",
