@@ -6,6 +6,7 @@
  */
 
 #import "AppDelegate.h"
+#import <CodePush/CodePush.h>
 #import "SplashScreen.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
@@ -23,7 +24,7 @@
   #ifdef DEBUG
     jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   #else
-    jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+    jsCodeLocation = [CodePush bundleURL];
   #endif
 
 
