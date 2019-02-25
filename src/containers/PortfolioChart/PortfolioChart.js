@@ -148,15 +148,31 @@ export default class PortfolioChart extends Component {
   }
 
   async compileHistoricalPricesBySymbol(symbol, earliestTime) {
-    // i want 100 points;
-    // now - initialTime / ms in day / 100
-    // this will get us the aggregate number for the history request
-    const aggregate = Math.round((Date.now() - earliestTime) / 86400000 / 100);
+    // just to give some perspective on the variables we're working with
+    const ms = 1;
+    const s = ms * 1000;
+    const m = s * 60;
+    const h = m * 60;
+    const d = h * 24;
+
+    const timeDifference = Date.now() - earliestTime;
+
+    // if we have less than 100 days between the earliest transaction and now,
+    //  we will need to make a request with the hourly interval
+    const interval = timeDifference >= d * 100 ? Intervals.day : Intervals.hour;
+
+    // depending on the interval, we want to know how many intervals would need
+    // to be aggregated together to reach our target of 100 maximum data points.
+    // for example, for a timeDifference of 200 days, we want an aggregate of 2
+    const aggregate = interval === Intervals.day ?
+      Math.round(timeDifference / d / 100) :
+      Math.round(timeDifference / h / 100);
+
     const historicalPrices = await getCurrencyHistory(
       symbol,
       'USD',
       100,
-      Intervals.day,
+      interval,
       aggregate,
       json =>
         json.Response === 'Success' && json.Data.map
@@ -301,7 +317,7 @@ export default class PortfolioChart extends Component {
     if (this.props.transactionsToCoalesce) {
       for (const txList of this.props.transactionsToCoalesce) {
         totalCount += txList.transactions.length;
-        if (totalCount > 1) {
+        if (totalCount > 0) {
           return true;
         }
       }
