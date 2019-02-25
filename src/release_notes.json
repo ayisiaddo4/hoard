@@ -1,54 +1,6 @@
 [
   {
-    "release_notes": "Rework handling of notifications settings",
-    "version_code": "1.21"
-  },
-  {
-    "release_notes": "Fix trailing digits on balances\nFix issue where signing up for a new account would not log the user in\nFix issue where signup errors would not be shown\nFix inaccurate display of small numbers in Send screen\nUpdate titles of contact transactions\n",
-    "version_code": "1.20"
-  },
-  {
-    "release_notes": "Provide additional insight to transaction errors",
-    "version_code": "1.19"
-  },
-  {
-    "release_notes": "Caches computationally expensive BTC/RVN address calls",
-    "version_code": "1.18"
-  },
-  {
-    "release_notes": "Fix broken margins on reset password and username modals\nFix issue where scanning QR could cause spinner lockups\nPerformance improvements on mnemonic generation and transaction fetching\nReverse recent activity in coin information page\nShow full balance of wallet in detail view\nNavigate to settings page on successful password update\n",
-    "version_code": "1.17"
-  },
-  {
-    "release_notes": "[FIX] Do not show loading bar if mnemonic has not been created\n[FIX] Stuck spinner on page loads\n[FIX] Fix ETH transaction history updates, HOARD balance fetching\n[NEW] pass release notes into slack on fastlane deployments",
-    "version_code": "1.16"
-  },
-  {
-    "release_notes": "FIX change password warnings \nFIX Fix broken qr regex to allow for no params and space after \nFIX make sure pin store screen is within safe view\nRename Boar\nFix coin amount display\nFix testnet warnings",
-    "version_code": "1.15"
-  },
-  {
-    "release_notes": "Mainnet build\nFixes keyboard \"next\" button and scrolling issues\nAdjusts implementation of input error for better usability\nFixes Ravencoin mainnet address validation\nRemoves testnet warnings from splash screen\nAdjusts loading bar animation",
-    "version_code": "1.14"
-  },
-  {
-    "release_notes": "Mainnet build\nFixed Pin Input Screens styles\nFixed bug persisting old network transactions\nFixed recovery screen styles, next buttons",
-    "version_code": "1.13"
-  },
-  {
-    "release_notes": "Mainnet build\nFixed inconsistent Pin Input Screens\nFixed auto-selecting next input field\nFixed keyboard covering inputs",
-    "version_code": "1.12"
-  },
-  {
-    "release_notes": "Mainnet build setup and related bugfixes",
-    "version_code": "1.11"
-  },
-  {
-    "release_notes": "Performance Improvements\nAdd Ravencoin wallet\nAdd Push Notifications Support\nAdd Security Settings Screen\nAdd additional authentication options\nAdd change password form\nAdd profile update form\nAllow fulfillment of contact transactions\nAllow updating of PIN\nFix some btc send errors\nUse phone-pad keyboard for Signup phone input",
-    "version_code": "1.10"
-  },
-  {
-    "release_notes": "Add progress bar to loading screen\nAdd in-app messaging\nAdd preliminary support for internationalization\nAdjust loading screen and app icons\nPull release notes into to release notes page\nAllow fulfillment of contact transactions from transaction history\nGive support ticket description a minimum height",
-    "version_code": "1.9"
+    "release_notes": "Welcome to the first beta release of Hoard!",
+    "version_code": "0.1"
   }
 ]
