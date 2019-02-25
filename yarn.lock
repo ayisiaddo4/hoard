@@ -6349,6 +6349,11 @@ react-native-camera@^1.1.4:
     lodash "^4.17.10"
     prop-types "^15.6.2"
 
+react-native-code-push-saga@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-code-push-saga/-/react-native-code-push-saga-1.0.1.tgz#66af9a7ede4cfd5e2dbf6752ebbcac2933f05886"
+  integrity sha1-Zq+aft5M/V4tv2dS67ysKTPwWIY=
+
 react-native-code-push@^5.5.2:
   version "5.5.2"
   resolved "https://registry.yarnpkg.com/react-native-code-push/-/react-native-code-push-5.5.2.tgz#b394e8f92f8bc4d184d73ff8d066406def24c1e8"
