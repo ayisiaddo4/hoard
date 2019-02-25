@@ -116,7 +116,7 @@
     "transaction_hydration": "Fetching Transactions",
     "price_initialization": "Structuring Prices",
     "wallet_hydration": "Setting Up Wallets",
-    "loading_finished": "Reticulating Splines"
+    "loading_finished": "Almost Done!"
   },
   "login": {
     "log_in": "Log In",

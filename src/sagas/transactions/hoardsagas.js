@@ -20,6 +20,7 @@ import {
 } from 'sagas/transactions/helpers';
 
 import { getWalletInstance } from 'screens/Wallet/sagas';
+import Config from 'react-native-config';
 
 export const LAST_HOARD_BLOCK_STORAGE_KEY = 'LAST_HOARD_BLOCK_STORAGE_KEY';
 
@@ -92,7 +93,11 @@ export function* fetchHistoryHoard({ id }) {
       LAST_HOARD_BLOCK_STORAGE_KEY
     );
 
-    const fromBlock = (previousBlock && Number(previousBlock)) || '0x305FC6';
+    const initializationBlock =
+      Config.CURRENCY_NETWORK_TYPE === 'main' ? 6330762 : 3170245;
+
+    const fromBlock =
+      (previousBlock && Number(previousBlock)) || initializationBlock;
     const address = yield call(wallet.getPublicAddress);
     const logs = yield call(() =>
       wallet._wallet.provider.getLogs({

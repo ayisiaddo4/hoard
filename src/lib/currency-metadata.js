@@ -49,7 +49,7 @@ export function getCoinMetadata(symbol) {
         image: require('assets/hoard_logo.png'),
         icon: require('assets/hoard_icon.png'),
         colors: ['#E5129A', '#AA0D72'],
-        fullName: 'HOARD',
+        fullName: 'Hoard',
         pointsOfPrecision: 18,
       };
     default:
