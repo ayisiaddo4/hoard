@@ -27,10 +27,10 @@ export default class LoadingScreen extends Component {
   };
 
   handleProgressCompletion = () => {
-    const navigationMethod = Array.isArray(this.props.to)
-      ? 'resetReplaceDeep'
-      : 'resetReplace';
-    NavigatorService[navigationMethod]('LoadingScreen', this.props.to);
+    const arrayTo = Array.isArray(this.props.to)
+      ? this.props.to
+      : [this.props.to];
+    NavigatorService.resetTo(...arrayTo);
   };
 
   componentDidMount() {

@@ -1,5 +1,5 @@
 const initialState = {
-  postLoadRedirect: 'Login',
+  postLoadRedirect: [{ routeName: 'Main' }, { routeName: 'Login' }],
 };
 
 export default function LoadingReducer(state = initialState, action) {

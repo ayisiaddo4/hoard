@@ -60,36 +60,8 @@ function resetNavigate(routeName, params) {
   );
 }
 
-function resetReplace(fromRoute, toRoute, params) {
-  _container.dispatch(
-    StackActions.reset({
-      index: 0,
-      actions: [
-        StackActions.replace({
-          key: fromRoute,
-          routeName: toRoute,
-          params,
-        }),
-      ],
-    })
-  );
-}
-
-function resetReplaceDeep(fromRoute, innerRoutes) {
-  const replace = innerRoutes[0];
-  _container.dispatch(
-    StackActions.reset({
-      index: 0,
-      actions: [
-        StackActions.replace({
-          key: fromRoute,
-          routeName: replace.routeName,
-          params: replace.params,
-          action: buildDeepNavigation(innerRoutes.slice(1)),
-        }),
-      ],
-    })
-  );
+function resetTo(...routes) {
+  _container._navigation.reset([buildDeepNavigation(routes)]);
 }
 
 function back() {
@@ -109,8 +81,8 @@ function navigate(routeName, params) {
 function buildDeepNavigation(actions) {
   return actions.reduceRight(
     (prevAction, action) =>
+      action &&
       NavigationActions.navigate({
-        type: 'Navigation/NAVIGATE',
         routeName: action.routeName,
         params: action.params,
         action: prevAction,
@@ -136,8 +108,7 @@ export default {
   navigateDeep,
   navigate,
   resetNavigate,
-  resetReplace,
-  resetReplaceDeep,
+  resetTo,
   back,
   closeDrawer,
   openDrawer,

@@ -62,7 +62,7 @@ export default class Login extends Component {
 
   handleBypassButton = () => {
     if (this.props.hasMnemonic) {
-      NavigatorService.resetReplace('Login', 'Menu');
+      NavigatorService.resetTo({ routeName: 'Main' }, { routeName: 'Menu' });
     } else {
       NavigatorService.navigate('Mnemonic');
     }

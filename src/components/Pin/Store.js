@@ -36,7 +36,11 @@ export default class Store extends Component {
   onSuccessHandler = () => {
     this.setState({ loading: true }, () =>
       requestAnimationFrame(() =>
-        NavigatorService.resetReplace('Login', 'Wallet')
+        NavigatorService.resetTo(
+          { routeName: 'Main' },
+          { routeName: 'Menu' },
+          { routeName: 'Wallet' }
+        )
       )
     );
   };

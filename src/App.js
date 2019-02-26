@@ -181,7 +181,7 @@ class App extends Component {
       // since there really isn't anything to set up at that point
       const mnemonic = await getStoredMnemonic();
       if (!mnemonic) {
-        NavigatorService.resetReplace('LoadingScreen', 'Login');
+        NavigatorService.resetTo({ routeName: 'Main' }, { routeName: 'Login' });
       }
 
       this.props.store.dispatch({ type: INIT_REQUESTING });

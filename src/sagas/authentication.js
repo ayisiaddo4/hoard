@@ -16,7 +16,6 @@ export const AUTH_USER_SET = 'AUTH_USER_SET';
 export const AUTH_SIGNOUT = 'AUTH_SIGNOUT';
 export const AUTH_USER_STORAGE_KEY = 'auth/user';
 
-import { UPDATE_USER } from 'containers/User/constants';
 import { initUser, clearUser } from 'containers/User/actions';
 import StoreRegistry from 'lib/store-registry';
 import { getKey } from 'components/Pin/utils';
@@ -188,12 +187,16 @@ export default function* authenticationWatcher() {
       const pin = yield call(getKey);
 
       let to;
-      let resetReplace = false;
+      let reset = false;
       if (mnemonicPhrase && pin) {
-        resetReplace = true;
-        to = 'Menu';
+        reset = true;
+        to = [{ routeName: 'Main' }, { routeName: 'Menu' }];
       } else if (mnemonicPhrase && !pin) {
-        to = [{ routeName: 'Menu' }, { routeName: 'Store' }];
+        to = [
+          { routeName: 'Main' },
+          { routeName: 'Menu' },
+          { routeName: 'Store' },
+        ];
       } else {
         to = 'Mnemonic';
       }
@@ -203,8 +206,8 @@ export default function* authenticationWatcher() {
       if (currentRoute === 'LoadingScreen') {
         yield put({ type: 'POST_LOAD_REDIRECT', to });
       } else {
-        if (resetReplace) {
-          NavigatorService.resetReplace(currentRoute, to);
+        if (reset) {
+          NavigatorService.resetTo(...to);
         } else {
           if (Array.isArray(to)) {
             NavigatorService.navigateDeep(to);
