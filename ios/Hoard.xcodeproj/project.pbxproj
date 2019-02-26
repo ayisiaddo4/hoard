@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -42,6 +41,7 @@
 		495863069F62438ABF38B72A /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 929485AC829E44839F6E1512 /* Foundation.ttf */; };
 		4BC637DD5F74425888F947ED /* Exo-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9C1F62DC541451BBFF4E8B3 /* Exo-MediumItalic.ttf */; };
 		4C0A0E3822CE46209DAC9BF2 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 68A6C03AD66C4E2DA1600EFE /* Entypo.ttf */; };
+		4D11DEDADA9B4D68B8CBD2A4 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 655391F15128471B9942EF77 /* libRNGestureHandler.a */; };
 		4E3F76CF49F84F51B6F014D9 /* Exo-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A40299FF2D2B409288CD984C /* Exo-BoldItalic.ttf */; };
 		512085E26E3141F9B202BCD7 /* OpenSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5616F73A0530411AA7376CA5 /* OpenSans-ExtraBoldItalic.ttf */; };
 		52B0F7DEBF48468887C11A93 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6DA1B38850CF442ABBEC8DC9 /* Zocial.ttf */; };
@@ -551,6 +551,13 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		AA20C584220C8FD9008ECE12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C0FF38670C674CC59724A37C /* RNGestureHandler.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNGestureHandler;
+		};
 		AA8994042203D1D8004B7F14 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 40E473A7E1714E51935A7148 /* UARCTModule.xcodeproj */;
@@ -660,6 +667,7 @@
 		5DFF654F9EA94289B29DB5E0 /* Exo-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Exo-Black.ttf"; path = "../src/assets/fonts/Exo-Black.ttf"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		6055631A0350490BA7B3E5AD /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-SemiBold.ttf"; path = "../src/assets/fonts/OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		655391F15128471B9942EF77 /* libRNGestureHandler.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNGestureHandler.a; sourceTree = "<group>"; };
 		66202142069445D9985A99DE /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
 		687BBA9857CC44FD90183FF1 /* RNOS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNOS.xcodeproj; path = "../node_modules/react-native-os/ios/RNOS.xcodeproj"; sourceTree = "<group>"; };
 		68A6C03AD66C4E2DA1600EFE /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
@@ -686,6 +694,7 @@
 		AE9B55A336314231A9A6B6EC /* libRNI18n-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNI18n-tvOS.a"; sourceTree = "<group>"; };
 		B098689163914A9D98EF739F /* libUARCTModule.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libUARCTModule.a; sourceTree = "<group>"; };
 		BAA48116D8FC494B98ACE06E /* libSplashScreen.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libSplashScreen.a; sourceTree = "<group>"; };
+		C0FF38670C674CC59724A37C /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		C8A64839AC834FADB4A69051 /* libRNOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNOS.a; sourceTree = "<group>"; };
 		CACFF37B22C642ABA6FB31BA /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-SemiBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		CCCC582E83A5468DB223C976 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Bold.ttf"; path = "../src/assets/fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
@@ -756,6 +765,7 @@
 				A46BCC2F016F4E73B295EB89 /* libRNVectorIcons.a in Frameworks */,
 				C6EAB2B8527B493DAB105804 /* libRNDeviceInfo.a in Frameworks */,
 				FB60007B433747E194D2F99B /* libUARCTModule.a in Frameworks */,
+				4D11DEDADA9B4D68B8CBD2A4 /* libRNGestureHandler.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -861,6 +871,8 @@
 				2D4F1271426A45DEB7EB6C5A /* libRNDeviceInfo.a */,
 				D4F66AE58B53477B8A26382E /* libRNDeviceInfo-tvOS.a */,
 				B098689163914A9D98EF739F /* libUARCTModule.a */,
+				655391F15128471B9942EF77 /* libRNGestureHandler.a */,
+				8517677EED0C4D3591DFD427 /* libRNScreens.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1147,6 +1159,7 @@
 				1097FD45D55145FEAC33BEA2 /* Lottie.xcodeproj */,
 				EAE39A5887D741F5AAF8E629 /* RNDeviceInfo.xcodeproj */,
 				40E473A7E1714E51935A7148 /* UARCTModule.xcodeproj */,
+				C0FF38670C674CC59724A37C /* RNGestureHandler.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1182,6 +1195,14 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* Hoard.app */,
 				00E356EE1AD99517003FC87E /* HoardTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AA20C54C220C8FD9008ECE12 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA20C585220C8FD9008ECE12 /* libRNGestureHandler.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1373,6 +1394,10 @@
 				{
 					ProductGroup = AAC8B57B21BAC6F600C19D11 /* Products */;
 					ProjectRef = EAE39A5887D741F5AAF8E629 /* RNDeviceInfo.xcodeproj */;
+				},
+				{
+					ProductGroup = AA20C54C220C8FD9008ECE12 /* Products */;
+					ProjectRef = C0FF38670C674CC59724A37C /* RNGestureHandler.xcodeproj */;
 				},
 				{
 					ProductGroup = 07A39B3E2188C579007D31FE /* Products */;
@@ -1868,6 +1893,13 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		AA20C585220C8FD9008ECE12 /* libRNGestureHandler.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNGestureHandler.a;
+			remoteRef = AA20C584220C8FD9008ECE12 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		AA8994052203D1D8004B7F14 /* libUARCTModule.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -2068,6 +2100,7 @@
 					"$(SRCROOT)/../node_modules/lottie-ios/lottie-ios/Classes/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/urbanairship-react-native/ios/UARCTModule",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = HoardTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2075,7 +2108,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)/System/Library/Frameworks\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -2110,6 +2142,7 @@
 					"$(SRCROOT)/../node_modules/lottie-ios/lottie-ios/Classes/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/urbanairship-react-native/ios/UARCTModule",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = HoardTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2117,7 +2150,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)/System/Library/Frameworks\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -2162,6 +2194,7 @@
 					"$(SRCROOT)/../node_modules/lottie-ios/lottie-ios/Classes/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/urbanairship-react-native/ios/UARCTModule",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = Hoard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2208,6 +2241,7 @@
 					"$(SRCROOT)/../node_modules/lottie-ios/lottie-ios/Classes/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/urbanairship-react-native/ios/UARCTModule",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 				);
 				INFOPLIST_FILE = Hoard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

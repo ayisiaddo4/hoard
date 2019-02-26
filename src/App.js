@@ -23,7 +23,7 @@ import QRModal from 'screens/SendRequest/QRModal';
 import ContactModal from 'screens/SendRequest/ContactModal';
 import CurrencyModal from 'screens/SendRequest/CurrencyModal';
 import Notifications from 'containers/Notifications';
-import { createStackNavigator } from 'react-navigation';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 import { INIT_REQUESTING } from './containers/App/constants';
 import { gradients } from 'styles';
 import LinearGradient from 'react-native-linear-gradient';
@@ -35,7 +35,6 @@ if (CONFIG.USE_REACTOTRON) {
 }
 
 import {
-  cardStyle,
   transitionConfig,
   getNavigationOptions,
 } from 'components/Base/Navigation';
@@ -57,6 +56,7 @@ const RoutingStack = createStackNavigator(
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
+          header: null,
           leftAction: null,
           rightAction: null,
         }),
@@ -105,18 +105,19 @@ const RoutingStack = createStackNavigator(
   },
   {
     headerMode: 'float',
-    navigationOptions: {
+    defaultNavigationOptions: {
       headerStyle: {
         backgroundColor: 'transparent',
         borderBottomWidth: 0,
       },
     },
-    cardStyle,
     transitionConfig,
+    transparentCard: true,
+    cardShadowEnabled: false,
   }
 );
 
-const ModalStack = createStackNavigator(
+const ModalStack = createAppContainer(createStackNavigator(
   {
     Main: { screen: RoutingStack },
     ForgotModal: {
@@ -141,12 +142,11 @@ const ModalStack = createStackNavigator(
   {
     mode: 'modal',
     headerMode: 'none',
-    cardStyle: { backgroundColor: 'transparent', shadowOpacity: 0 },
-    transitionConfig: () => ({
-      containerStyle: { backgroundColor: 'transparent' },
-    }),
+    transparentCard: true,
+    cardShadowEnabled: false,
+    transitionConfig: () => ({containerStyle: {}}),
   }
-);
+));
 
 class App extends Component {
   constructor() {

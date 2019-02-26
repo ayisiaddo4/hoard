@@ -164,7 +164,7 @@ export const getNavigationOptions = navProps => {
 
 export const transitionConfig = () => {
   return {
-    containerStyle: { backgroundColor: 'transparent' },
+    containerStyle: {},
     transitionSpec: {
       duration: 750,
       easing: Easing.out(Easing.poly(4)),
@@ -190,14 +190,6 @@ export const transitionConfig = () => {
       return { opacity: opacity, transform: [{ translateX: translateX }] };
     },
   };
-};
-
-export const cardStyle = {
-  backgroundColor: 'transparent',
-  shadowColor: undefined,
-  shadowOffset: undefined,
-  shadowOpacity: undefined,
-  shadowRadius: undefined,
 };
 
 const styles = StyleSheet.create({

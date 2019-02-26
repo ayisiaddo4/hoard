@@ -5,7 +5,6 @@ import OpenSource from './OpenSource';
 import ReleaseNotes from './ReleaseNotes';
 
 import {
-  cardStyle,
   transitionConfig,
   getNavigationOptions,
 } from 'components/Base/Navigation';
@@ -42,7 +41,8 @@ const RoutingStack = createStackNavigator(
   },
   {
     headerMode: 'float',
-    cardStyle,
+    transparentCard: true,
+    cardShadowEnabled: false,
     transitionConfig,
   }
 );
