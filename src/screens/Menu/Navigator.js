@@ -19,6 +19,7 @@ import {
   transitionConfig,
   getNavigationOptions,
 } from 'components/Base/Navigation';
+import { colors } from 'styles';
 
 const RouteConfigs = {
   Wallet: {
@@ -68,8 +69,8 @@ const RouteConfigs = {
         },
       },
       {
+        cardStyle: { backgroundColor: colors.background },
         headerMode: 'float',
-        transparentCard: true,
         cardShadowEnabled: false,
         transitionConfig,
       }
@@ -102,6 +103,7 @@ const RouteConfigs = {
 };
 
 const drawerNavigatorConfig = {
+  drawerBackgroundColor: colors.menuBackground,
   headerMode: 'float',
   drawerPosition: 'right',
   drawerWidth: Dimensions.get('window').width - 100,

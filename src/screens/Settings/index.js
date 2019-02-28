@@ -14,6 +14,7 @@ import Settings from './Settings';
 import ManagePin from './ManagePin';
 import UpdatePin from './UpdatePin';
 import { t } from 'translations/i18n';
+import { colors } from 'styles';
 
 const RoutingStack = createStackNavigator(
   {
@@ -95,8 +96,7 @@ const RoutingStack = createStackNavigator(
   },
   {
     headerMode: 'float',
-    cardStyle: {backgroundColor: 'transparent'},
-    transparentCard: true,
+    cardStyle: { backgroundColor: colors.background },
     cardOverlayEnabled: true,
     cardShadowEnabled: false,
     transitionConfig,

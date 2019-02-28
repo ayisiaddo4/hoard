@@ -4,6 +4,7 @@ import {
   getNavigationOptions,
 } from 'components/Base/Navigation';
 import { t } from 'translations/i18n';
+import { colors } from 'styles';
 import GetHelp from './GetHelp';
 import CreateSupportTicket from './CreateSupportTicket';
 
@@ -29,7 +30,7 @@ const RoutingStack = createStackNavigator(
   },
   {
     headerMode: 'float',
-    transparentCard: true,
+    cardStyle: { backgroundColor: colors.background },
     cardShadowEnabled: false,
     transitionConfig,
   }

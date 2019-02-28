@@ -10,7 +10,11 @@ export default function Modal({ children, footer, title }) {
   return (
     <Layout style={styles.container}>
       <Header>
-        <NavHeader leftAction="cancel" rightAction={null} />
+        <NavHeader
+          leftAction="cancel"
+          rightAction={null}
+          containerStyle={{ backgroundColor: colors.blueGray }}
+        />
       </Header>
       <Body style={styles.body}>
         <T.Heading style={styles.heading}>{title}</T.Heading>
@@ -33,6 +37,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blueGray,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
+    overflow: 'hidden',
     flex: 1,
     marginTop: 40,
   },

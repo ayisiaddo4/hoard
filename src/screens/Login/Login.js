@@ -101,7 +101,7 @@ export default class Login extends Component {
     return (
       <Layout keyboard focusedInput={this.state.focusedInput}>
         <Body scrollable style={styles.body} navigationOffset={80}>
-          <Header style={{ alignItems: 'center', marginTop: -40 }}>
+          <Header style={{ alignItems: 'center', marginTop: 40 }}>
             <Image
               style={styles.logo}
               source={require('assets/hoard_outline_logo.png')}

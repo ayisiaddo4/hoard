@@ -4,6 +4,7 @@ import {
   transitionConfig,
   getNavigationOptions,
 } from 'components/Base/Navigation';
+import { colors } from 'styles';
 
 import Legal from './Legal';
 import UserAgreement from './UserAgreement';
@@ -48,7 +49,7 @@ const RoutingStack = createStackNavigator(
   },
   {
     headerMode: 'float',
-    transparentCard: true,
+    cardStyle: { backgroundColor: colors.background },
     cardShadowEnabled: false,
     transitionConfig,
   }

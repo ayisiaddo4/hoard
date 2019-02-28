@@ -80,7 +80,10 @@ export const Header = props => {
     : [createStyles().header, styles.titleBold];
 
   return (
-    <SafeAreaView forceInset={{ top: 'always' }}>
+    <SafeAreaView
+      style={[{ backgroundColor: colors.background }, props.containerStyle]}
+      forceInset={{ top: 'always', bottom: 'never' }}
+    >
       <View style={styles.container}>
         <LeftActionComponent type={props.leftAction} />
         <View style={styles.headerContainer}>
@@ -118,6 +121,7 @@ Header.propTypes = {
   currentPage: PropTypes.number,
   totalPages: PropTypes.number,
   style: ViewPropTypes.style,
+  containerStyle: ViewPropTypes.style,
 };
 
 /*
@@ -156,38 +160,17 @@ export const getNavigationOptions = navProps => {
         />
       );
     },
-    headerStyle: {
-      backgroundColor: 'transparent',
-    },
+    headerStyle: {},
   };
 };
 
 export const transitionConfig = () => {
   return {
-    containerStyle: {},
     transitionSpec: {
       duration: 750,
       easing: Easing.out(Easing.poly(4)),
       timing: Animated.timing,
       useNativeDriver: true,
-    },
-    screenInterpolator: sceneProps => {
-      const { layout, position, scene } = sceneProps;
-
-      const thisSceneIndex = scene.index;
-      const width = layout.initWidth;
-
-      const translateX = position.interpolate({
-        inputRange: [thisSceneIndex - 1, thisSceneIndex],
-        outputRange: [width, 0],
-      });
-
-      const opacity = position.interpolate({
-        inputRange: [thisSceneIndex - 1, thisSceneIndex],
-        outputRange: [0, 1],
-      });
-
-      return { opacity: opacity, transform: [{ translateX: translateX }] };
     },
   };
 };
@@ -195,7 +178,6 @@ export const transitionConfig = () => {
 const styles = StyleSheet.create({
   container: {
     minHeight: 50,
-    backgroundColor: 'transparent',
     flexDirection: 'row',
     paddingHorizontal: padding.md,
     paddingTop: 10,

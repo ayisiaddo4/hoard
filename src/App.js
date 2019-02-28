@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Provider, connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
-import { AsyncStorage, StyleSheet, YellowBox } from 'react-native';
+import { AsyncStorage, StyleSheet, YellowBox, View } from 'react-native';
 
 import NavigatorService from 'lib/navigator';
 import configureStore from './configureStore';
@@ -29,6 +29,7 @@ import { gradients } from 'styles';
 import LinearGradient from 'react-native-linear-gradient';
 import RNConfig from 'react-native-config';
 import CONFIG from 'src/config';
+import { colors } from 'styles';
 
 if (CONFIG.USE_REACTOTRON) {
   var Reactotron = require('./ReactotronConfig').default;
@@ -56,7 +57,6 @@ const RoutingStack = createStackNavigator(
       navigationOptions: navProps =>
         getNavigationOptions({
           ...navProps,
-          header: null,
           leftAction: null,
           rightAction: null,
         }),
@@ -107,46 +107,49 @@ const RoutingStack = createStackNavigator(
     headerMode: 'float',
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: 'transparent',
         borderBottomWidth: 0,
       },
     },
+    cardStyle: {
+      backgroundColor: colors.background,
+    },
     transitionConfig,
-    transparentCard: true,
     cardShadowEnabled: false,
   }
 );
 
-const ModalStack = createAppContainer(createStackNavigator(
-  {
-    Main: { screen: RoutingStack },
-    ForgotModal: {
-      screen: ForgotModal,
+const ModalStack = createAppContainer(
+  createStackNavigator(
+    {
+      Main: { screen: RoutingStack },
+      ForgotModal: {
+        screen: ForgotModal,
+      },
+      AddressModal: {
+        screen: AddressModal,
+      },
+      ContactModal: {
+        screen: ContactModal,
+      },
+      CurrencyModal: {
+        screen: CurrencyModal,
+      },
+      QRModal: {
+        screen: QRModal,
+      },
+      ViewAddress: {
+        screen: ViewAddress,
+      },
     },
-    AddressModal: {
-      screen: AddressModal,
-    },
-    ContactModal: {
-      screen: ContactModal,
-    },
-    CurrencyModal: {
-      screen: CurrencyModal,
-    },
-    QRModal: {
-      screen: QRModal,
-    },
-    ViewAddress: {
-      screen: ViewAddress,
-    },
-  },
-  {
-    mode: 'modal',
-    headerMode: 'none',
-    transparentCard: true,
-    cardShadowEnabled: false,
-    transitionConfig: () => ({containerStyle: {}}),
-  }
-));
+    {
+      mode: 'modal',
+      headerMode: 'none',
+      transparentCard: true,
+      cardShadowEnabled: false,
+      transitionConfig: () => ({ containerStyle: {} }),
+    }
+  )
+);
 
 class App extends Component {
   constructor() {
@@ -192,16 +195,9 @@ class App extends Component {
 
   render() {
     return (
-      <LinearGradient
-        start={gradients.topLeft.start}
-        end={gradients.topLeft.end}
-        colors={gradients.blue}
-        style={styles.container}
-      >
-        <Notifications>
-          <ModalStack ref={this.refDidLoad} />
-        </Notifications>
-      </LinearGradient>
+      <Notifications>
+        <ModalStack ref={this.refDidLoad} />
+      </Notifications>
     );
   }
 }
@@ -210,17 +206,6 @@ App.propTypes = {
   hasPreviouslyInitialized: PropTypes.bool.isRequired,
   store: PropTypes.object.isRequired,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    zIndex: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-  },
-});
 
 // We will want the root-level app aware of user preferences, in order
 // to intercept and reroute push notification action, so we need to connect()

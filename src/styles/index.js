@@ -70,6 +70,9 @@ export const colors = {
   error: '#FF6161',
   success: '#33FF33',
   active: '#00C1FF',
+
+  background: '#1C242E',
+  menuBackground: '#3C434B',
 };
 
 export const colorsRGBA = {
