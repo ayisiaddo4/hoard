@@ -1,5 +1,9 @@
 [
   {
+    "release_notes": "Updated coin screen to allow charting for single-transaction wallets.\nUpdated app and menu backgrounds to solid colors.\nUpdated default blocks to search for Hoard transactions.\nUpdated miscellaneous messaging.\nFixed issue where previously accessed settings screens could be rendered upon first navigation to a new screen.\nFixed issue where users could swipe back to the Login screen from the Wallets screen.\nFixed bug in derivation path of Ravencoin address generation.",
+    "version_code": "0.2"
+  },
+  {
     "release_notes": "Welcome to the first beta release of Hoard!",
     "version_code": "0.1"
   }
