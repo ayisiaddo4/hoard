@@ -19,6 +19,12 @@ export const walletSelector = createSelector(
   (wallets, id) => wallets[id]
 );
 
+export const hoardWalletForSymbolSelector = createSelector(
+  state => state,
+  (state, symbol) => state.wallet.hoardWallets[symbol],
+  walletSelector
+);
+
 export const mnemonicPhraseSelector = createSelector(
   state => state.wallet,
   walletState => walletState.mnemonicPhrase

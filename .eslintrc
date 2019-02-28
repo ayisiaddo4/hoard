@@ -21,5 +21,8 @@
     "console": true,
     "Promise": true,
     "setTimeout": true
+  },
+  "env": {
+    "jest": true
   }
 }

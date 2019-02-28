@@ -19,7 +19,9 @@
     "send": "SEND",
     "submit": "SUBMIT",
     "update": "UPDATE",
-    "view": "VIEW"
+    "delete": "DELETE",
+    "view": "VIEW",
+    "dismiss": "DISMISS"
   },
   "requests": {
     "apologetic_interjection_of_mild_dismay": "Oops!"
@@ -69,7 +71,11 @@
   },
   "coin_informtion": {
     "pending_transactions": "Pending Transactions",
-    "recent_activity": "Recent Activity"
+    "recent_activity": "Recent Activity",
+    "review_only_header": "Review Only",
+    "review_only_content": "This wallet is no longer available for use; all functions have been disabled.",
+    "review_only_notification_title": "Delete Old {{full_name}} Wallet",
+    "review_only_notification_content": "This wallet is no longer available for use; all functions have been disabled. You may now delete or keep it for review purposes only."
   },
   "dashboard": {
     "price": "price"
@@ -312,5 +318,15 @@
     "confirm_pin_subtitle": "Please re-enter new pin",
     "success_title": "Success",
     "success_subtitle": "Your PIN has been changed!"
+  },
+  "notification_flows": {
+    "upgrade_rvn": {
+      "needs_updating_title": "Ravencoin Wallet",
+      "needs_updating_content": "Your wallet needs to be updated. In order to update your wallet, you will need to transfer your Ravencoin to a new wallet.",
+      "no_balance": "Your wallet currently does not carry a balance and can be safely deleted.",
+      "needs_updating_transfer_action": "Transfer Now",
+      "has_transferred_title": "Ravencoin Transfer",
+      "has_transferred_content": "Your Ravencoin have been transferred. Don't worry, any transaction fees that may have occurred will be covered by Hoard."
+    }
   }
 }

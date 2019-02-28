@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import { UrbanAirship } from 'urbanairship-react-native';
 import api from 'lib/api';
 import DeviceInfo from 'react-native-device-info';
+import { toTitleCase } from 'lib/string-helpers';
 
 import {
   all,
@@ -19,12 +20,14 @@ import {
   TYPE_REQUEST,
   RECIPIENT_TYPE_OTHER,
 } from 'screens/SendRequest/constants';
+import { SYMBOL_RVN } from 'containers/App/constants';
 
 import {
   NOTIFICATION_DISMISSED,
   NOTIFICATION_UPDATED,
   NOTIFICATIONS_START_FLOW,
   NOTIFICATION_FLOW_TYPE_CONTACT_FULFILLMENT,
+  NOTIFICATION_FLOW_TYPE_UPGRADE_BAD_RVN_DERIVATION_PATH,
   NOTIFICATION_RECIEVED,
 } from './constants';
 
@@ -51,7 +54,13 @@ import {
   CANCEL_CONTACT_TRANSACTION_FAILURE,
 } from 'sagas/transactions/constants';
 
-import { walletsForSymbolSelector } from 'screens/Wallet/selectors';
+import { getWalletInstance } from 'screens/Wallet/sagas';
+import {
+  walletsForSymbolSelector,
+  hoardWalletForSymbolSelector,
+} from 'screens/Wallet/selectors';
+import { sendFunds } from 'screens/Wallet/actions';
+import { t } from 'translations/i18n';
 
 import NavigatorService from 'lib/navigator';
 
@@ -114,10 +123,7 @@ function* cancelContact({ notification, transaction }) {
           })
         );
       } else {
-        yield put({
-          type: KICKOFF_ERROR_CONTACT_SAGA,
-          notification,
-        });
+        yield put({ type: KICKOFF_ERROR_CONTACT_SAGA, notification });
       }
     } else {
       yield call(waitForTransaction);
@@ -272,17 +278,123 @@ function* fulfillTransaction(arg) {
         })
       );
     } else {
-      yield put({
-        type: KICKOFF_ERROR_CONTACT_SAGA,
-        notification,
-      });
+      yield put({ type: KICKOFF_ERROR_CONTACT_SAGA, notification });
     }
   }
+}
+
+function* upgradeBadRvnDerivationPath(action) {
+  const id = action.wallet.id;
+  const walletInstance = getWalletInstance(id);
+  const goodWallet = yield select(state =>
+    hoardWalletForSymbolSelector(state, SYMBOL_RVN)
+  );
+
+  const { notification } = yield put(
+    notificationRecieved({
+      type: 'brand',
+      title: t('notification_flows.upgrade_rvn.needs_updating_title'),
+      content: t('notification_flows.upgrade_rvn.needs_updating_content'),
+      icon: require('assets/exclamation-circle.png'),
+      onDismiss: () => {},
+      actions: [
+        {
+          title: toTitleCase(t('actions.dismiss')),
+          onPress: () =>
+            StoreRegistry.getStore().dispatch(
+              notificationDismissed(notification)
+            ),
+        },
+        {
+          title: t(
+            'notification_flows.upgrade_rvn.needs_updating_transfer_action'
+          ),
+          onPress: async () => {
+            StoreRegistry.getStore().dispatch(
+              notificationUpdated({
+                ...notification,
+                loading: true,
+              })
+            );
+
+            const balance = await walletInstance.getBalance();
+            if (balance > 0) {
+              const fee = await walletInstance._estimateFee();
+
+              const response = await walletInstance.send(
+                balance - fee,
+                goodWallet.publicAddress
+              );
+
+              StoreRegistry.getStore().dispatch(
+                notificationUpdated({
+                  ...notification,
+                  loading: false,
+                  type: 'neutral',
+                  title: t(
+                    'notification_flows.upgrade_rvn.has_transferred_title'
+                  ),
+                  content: t(
+                    'notification_flows.upgrade_rvn.has_transferred_content'
+                  ),
+                  actions: [
+                    {
+                      title: toTitleCase(t('actions.dismiss')),
+                      onPress: () =>
+                        StoreRegistry.getStore().dispatch(
+                          notificationDismissed(notification)
+                        ),
+                    },
+                  ],
+                })
+              );
+
+              await api.post(`${Config.EREBOR_ENDPOINT}/support`, {
+                email_address: 'info@hoardinvest.com',
+                name: 'Anonymous',
+                subject: 'TX fee to be reimbursed',
+                description: `${
+                  action.wallet.publicAddress
+                } has transferred ${balance - fee} Ravencoin to the new wallet ${
+                  goodWallet.publicAddress
+                }. Transaction hash: ${response.txid}`,
+              });
+            } else {
+              StoreRegistry.getStore().dispatch(
+                notificationUpdated({
+                  ...notification,
+                  loading: false,
+                  type: 'neutral',
+                  title: t(
+                    'notification_flows.upgrade_rvn.needs_updating_title'
+                  ),
+                  content: t('notification_flows.upgrade_rvn.no_balance'),
+                  actions: [
+                    {
+                      title: toTitleCase(t('actions.dismiss')),
+                      onPress: () =>
+                        StoreRegistry.getStore().dispatch(
+                          notificationDismissed(notification)
+                        ),
+                    },
+                  ],
+                })
+              );
+            }
+          },
+        },
+      ],
+    })
+  );
 }
 
 function* flowHandler(action) {
   if (action.flowType === NOTIFICATION_FLOW_TYPE_CONTACT_FULFILLMENT) {
     yield fulfillTransaction(action);
+  } else if (
+    action.flowType === NOTIFICATION_FLOW_TYPE_UPGRADE_BAD_RVN_DERIVATION_PATH
+  ) {
+    yield upgradeBadRvnDerivationPath(action);
   }
 }
 
@@ -351,8 +463,13 @@ function handleDeepLink({ paths, params }) {
     });
   } else if (mainPath === 'confirm_transaction') {
     NavigatorService.navigateDeep([
-      { routeName: 'Wallet' },
-      { routeName: 'Confirm', params: params },
+      {
+        routeName: 'Wallet',
+      },
+      {
+        routeName: 'Confirm',
+        params: params,
+      },
     ]);
   } else {
     // TODO handle default or unhandled deeplinks

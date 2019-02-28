@@ -1,5 +1,8 @@
 import { transactionFound, searchForTransactions } from './actions';
-import { WALLET_TRACK_SYMBOL_SUCCESS } from 'screens/Wallet/constants';
+import {
+  WALLET_TRACK_SYMBOL_SUCCESS,
+  WALLET_IMPORT_SUCCESS,
+} from 'screens/Wallet/constants';
 import { updateBalance } from 'screens/Wallet/actions';
 import { SYMBOL_BTC, SYMBOL_RVN } from 'containers/App/constants';
 import { fork, all, takeEvery, call, put, select } from 'redux-saga/effects';
@@ -24,7 +27,12 @@ const configForCoin = {
 };
 
 export default function* btcTransactionsSagaWatcher() {
-  yield all([takeEvery(WALLET_TRACK_SYMBOL_SUCCESS, initializeWallet)]);
+  yield all([
+    takeEvery(
+      [WALLET_TRACK_SYMBOL_SUCCESS, WALLET_IMPORT_SUCCESS],
+      initializeWallet
+    ),
+  ]);
 }
 
 const POLLING_INTERVAL = 1000 * 60 * 2;

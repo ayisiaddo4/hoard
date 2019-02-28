@@ -7,17 +7,26 @@ import { getNetworkForCoin } from 'lib/currency-metadata';
 import api from 'lib/api';
 
 export const config = {
+  symbol: SYMBOL_BTC,
   endpoint: Config.BTC_NODE_ENDPOINT,
   network: Bitcoin.networks[getNetworkForCoin(SYMBOL_BTC)],
   coinPath: Config.BTC_COINPATH,
 };
 
 export default class BtcWallet {
-  constructor(isMnemonic, initializer, configOverride = config) {
+  constructor(isMnemonic, initializer, additionalInfo) {
+    const configOverride =
+      (additionalInfo && additionalInfo.configOverride) || config;
+
+    this.config = configOverride; // eslint-disable-line immutable/no-mutation
+    this.symbol = configOverride.symbol; // eslint-disable-line immutable/no-mutation
+    // eslint-disable-next-line immutable/no-mutation
+    this._derivationPath = `m/44'/${configOverride.coinPath}'/0'/0/0`;
+
     if (isMnemonic) {
       // eslint-disable-next-line immutable/no-mutation
-      this._wallet = Bitcoin.HDNode.fromSeedBuffer(
-        bip39.mnemonicToSeed(initializer),
+      this._wallet = Bitcoin.HDNode.fromSeedHex(
+        bip39.mnemonicToSeedHex(initializer),
         configOverride.network
       );
     } else {
@@ -29,11 +38,12 @@ export default class BtcWallet {
     }
   }
 
-  symbol = SYMBOL_BTC;
-  config = config;
+  version = 0;
 
-  _derivationPath = `m/44'/${this.config.coinPath}'/0'/0/0`;
   _derivedPath = null;
+
+  shouldUpgrade = () => false;
+  getUpgradeNotificationFlow = () => null;
 
   _getUtxos = async () => {
     const address = await this.getPublicAddress();
@@ -53,7 +63,10 @@ export default class BtcWallet {
       this.config.endpoint
     }/utils/estimatefee?nbBlocks=${numBlocks}`;
     const feeResponse = await api.get(endpoint);
-    return Number(feeResponse[numBlocks]);
+    const feePerKilobyte = Number(feeResponse[numBlocks]);
+    const safeFee = feePerKilobyte >= 0 ? feePerKilobyte : 0.00001;
+
+    return safeFee;
   };
 
   _calculateTransactionSize = (numIn, numOut) => {
@@ -97,8 +110,7 @@ export default class BtcWallet {
     const balanceSatoshis = Math.round(balance * 1e8);
 
     const feePerKilobyte = await this._estimateFee();
-    const safeFee = feePerKilobyte >= 0 ? feePerKilobyte : 0.00001;
-    const feeSatoshisPerKilobyte = Math.round(safeFee * 1e8);
+    const feeSatoshisPerKilobyte = Math.round(feePerKilobyte * 1e8);
 
     const address = await this.getPublicAddress();
 
@@ -112,7 +124,9 @@ export default class BtcWallet {
     const change = balanceSatoshis - fee - amountSatoshis;
 
     if (change < 0) {
-      throw new Error(`Balance not sufficient to cover mining fee of ${fee} satoshis`);
+      throw new Error(
+        `Balance not sufficient to cover mining fee of ${fee} satoshis`
+      );
     }
 
     utxos.map(utxo => tx.addInput(utxo.txid, utxo.vout));

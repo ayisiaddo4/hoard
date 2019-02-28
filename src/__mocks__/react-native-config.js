@@ -1,3 +1,5 @@
 export default {
   CURRENCY_NETWORK_TYPE: 'test',
+  BTC_COINPATH: 'BTC_COINPATH',
+  RVN_COINPATH: 'RVN_COINPATH',
 };

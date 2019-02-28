@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import CoinInformation from './CoinInformation';
 import { getCurrencyHistory } from 'sagas/pricing/actions';
 import { walletSelector } from 'screens/Wallet/selectors';
+import { deleteWallet } from 'screens/Wallet/actions';
 import { isSignedInSelector } from 'containers/User/selectors';
 import {
   sortedTransactionsForWalletSelector,
@@ -13,7 +14,11 @@ import {
 } from 'sagas/transactions/actions';
 import { showReceiveModal } from 'containers/ReceiveModal/actions';
 import { showSendModal } from 'containers/SendModal/actions';
-import { startNotificationFlow } from 'containers/Notifications/actions';
+import {
+  notificationRecieved,
+  notificationDismissed,
+  startNotificationFlow,
+} from 'containers/Notifications/actions';
 
 const mapStateToProps = (store, ownProps) => {
   const id = ownProps.navigation.state.params.id;
@@ -54,6 +59,9 @@ const mapDispatchToProps = {
   cancelContactTransaction,
   getCurrencyHistory,
   updateTransaction,
+  deleteWallet,
+  notificationRecieved,
+  notificationDismissed,
   startNotificationFlow,
   showSendModal,
   showReceiveModal,

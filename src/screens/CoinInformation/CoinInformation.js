@@ -14,7 +14,7 @@ import TradeItem from 'components/TradeItem';
 import { getCoinMetadata, getInfoUrl } from 'lib/currency-metadata';
 import { Intervals } from 'components/GetCurrencyHistory';
 import NavigatorService from 'lib/navigator';
-import { Try } from 'components/Conditional';
+import Conditional, { Try, Otherwise } from 'components/Conditional';
 import Card from 'components/Card';
 import T from 'components/Typography';
 import { Layout } from 'components/Base';
@@ -22,6 +22,7 @@ import Swipeable from 'react-native-swipeable';
 import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
 import { NOTIFICATION_FLOW_TYPE_CONTACT_FULFILLMENT } from 'containers/Notifications/constants';
 import { t } from 'translations/i18n';
+import { colors } from 'styles';
 
 const commonTransactionProps = {
   type: PropTypes.oneOf([TYPE_SEND, TYPE_REQUEST]).isRequired,
@@ -68,10 +69,14 @@ export default class CoinInformation extends React.Component {
     showSendModal: PropTypes.func.isRequired,
     getCurrencyHistory: PropTypes.func.isRequired,
     cancelContactTransaction: PropTypes.func.isRequired,
+    deleteWallet: PropTypes.func.isRequired,
+    notificationRecieved: PropTypes.func.isRequired,
+    notificationDismissed: PropTypes.func.isRequired,
   };
 
   state = {
     selected: null,
+    hasDismissedReviewModal: false,
   };
 
   componentWillUpdate(props) {
@@ -87,11 +92,45 @@ export default class CoinInformation extends React.Component {
   }
 
   componentWillMount() {
-    this.props.navigation.setParams({
-      title: this.props.wallet.symbol,
+    const { wallet, navigation, getCurrencyHistory } = this.props;
+
+    if (wallet.additionalInfo && wallet.additionalInfo.reviewOnly) {
+      const metadata = getCoinMetadata(wallet.symbol);
+      const { notification } = this.props.notificationRecieved({
+        type: 'neutral',
+        title: t('coin_informtion.review_only_notification_title', {
+          full_name: metadata.fullName,
+        }),
+        content: t('coin_informtion.review_only_notification_content'),
+        onDismiss: () => {
+          this.setState({ hasDismissedReviewModal: true });
+          this.props.notificationDismissed(notification);
+        },
+        actions: [
+          {
+            title: 'Cancel',
+            onPress: () => {
+              this.setState({ hasDismissedReviewModal: true });
+              this.props.notificationDismissed(notification);
+            },
+          },
+          {
+            title: 'Delete',
+            onPress: () => {
+              NavigatorService.back();
+              this.props.deleteWallet(wallet.id);
+              this.props.notificationDismissed(notification);
+            },
+          },
+        ],
+      });
+    }
+
+    navigation.setParams({
+      title: wallet.symbol,
       leftAction: 'back',
     });
-    this.props.getCurrencyHistory(this.props.wallet.symbol, {
+    getCurrencyHistory(wallet.symbol, {
       limit: 2,
       interval: Intervals.all,
     });
@@ -151,6 +190,12 @@ export default class CoinInformation extends React.Component {
       .toString()
       .match(new RegExp(`^\\d+.?(\\d{0,${metadata.pointsOfPrecision}})?`))[0];
 
+    const reviewOnly =
+      wallet.additionalInfo && wallet.additionalInfo.reviewOnly;
+
+    const actionButtonStyle = reviewOnly
+      ? [styles.actionButton, { opacity: 0.75 }]
+      : styles.actionButton;
     return (
       <View style={styles.container}>
         <T.Heading style={styles.heading}>{metadata.fullName}</T.Heading>
@@ -161,46 +206,75 @@ export default class CoinInformation extends React.Component {
           walletsToChart={[wallet]}
           subtitle={`$${(wallet.balance * price).toFixed(2)}`}
         />
-        <View style={styles.actionButtonContainer}>
-          <TouchableOpacity
-            onPress={this.handleSend}
-            style={styles.actionButton}
-          >
-            <View style={styles.actionButtonView}>
-              <Image style={styles.image} source={require('assets/send.png')} />
-              <T.Small style={styles.actionButtonText}>
-                {t('actions.send')}
-              </T.Small>
-            </View>
-          </TouchableOpacity>
-          <Try condition={isSignedIn}>
-            <TouchableOpacity
-              onPress={this.handleRequest}
-              style={styles.actionButton}
-            >
-              <View style={styles.actionButtonView}>
-                <Image
-                  style={styles.image}
-                  source={require('assets/request.png')}
-                />
-                <T.Small style={styles.actionButtonText}>
-                  {t('actions.request')}
-                </T.Small>
+        <Conditional>
+          <Try condition={reviewOnly && this.state.hasDismissedReviewModal}>
+            <View style={styles.reviewOnlyContainer}>
+              <Image
+                source={require('assets/exclamation-circle.png')}
+                style={styles.reviewOnlyIcon}
+              />
+              <View style={styles.reviewOnlyBody}>
+                <T.SubHeading style={styles.reviewOnlyHeader}>
+                  {t('coin_informtion.review_only_header')}
+                </T.SubHeading>
+                <T.Light style={styles.reviewOnlyContent}>
+                  {t('coin_informtion.review_only_content')}
+                </T.Light>
               </View>
-            </TouchableOpacity>
-          </Try>
-          <TouchableOpacity
-            onPress={this.handleView}
-            style={styles.actionButton}
-          >
-            <View style={styles.actionButtonView}>
-              <Image style={styles.image} source={require('assets/scan.png')} />
-              <T.Small style={styles.actionButtonText}>
-                {t('actions.view')}
-              </T.Small>
             </View>
-          </TouchableOpacity>
-        </View>
+          </Try>
+          <Otherwise>
+            <View style={styles.actionButtonContainer}>
+              <TouchableOpacity
+                onPress={this.handleSend}
+                style={actionButtonStyle}
+                disabled={reviewOnly}
+              >
+                <View style={styles.actionButtonView}>
+                  <Image
+                    style={styles.image}
+                    source={require('assets/send.png')}
+                  />
+                  <T.Small style={styles.actionButtonText}>
+                    {t('actions.send')}
+                  </T.Small>
+                </View>
+              </TouchableOpacity>
+              <Try condition={isSignedIn}>
+                <TouchableOpacity
+                  onPress={this.handleRequest}
+                  style={actionButtonStyle}
+                  disabled={reviewOnly}
+                >
+                  <View style={styles.actionButtonView}>
+                    <Image
+                      style={styles.image}
+                      source={require('assets/request.png')}
+                    />
+                    <T.Small style={styles.actionButtonText}>
+                      {t('actions.request')}
+                    </T.Small>
+                  </View>
+                </TouchableOpacity>
+              </Try>
+              <TouchableOpacity
+                onPress={this.handleView}
+                style={actionButtonStyle}
+                disabled={reviewOnly}
+              >
+                <View style={styles.actionButtonView}>
+                  <Image
+                    style={styles.image}
+                    source={require('assets/scan.png')}
+                  />
+                  <T.Small style={styles.actionButtonText}>
+                    {t('actions.view')}
+                  </T.Small>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </Otherwise>
+        </Conditional>
         <Try condition={contactTransactions.length > 0}>
           <Fragment>
             <SectionHeader style={styles.sectionHeader}>
@@ -376,5 +450,33 @@ const styles = StyleSheet.create({
   walletActionText: {
     color: '#fff',
     fontSize: 12,
+  },
+  reviewOnlyContainer: {
+    marginVertical: 20,
+    padding: 20,
+    borderRadius: 20,
+    backgroundColor: colors.active,
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  reviewOnlyIcon: {
+    height: 50,
+    width: 50,
+    resizeMode: 'contain',
+    marginRight: 15,
+  },
+  reviewOnlyBody: {
+    flex: 1,
+  },
+  reviewOnlyHeader: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: 'white',
+  },
+  reviewOnlyContent: {
+    fontSize: 12,
+    color: 'white',
   },
 });

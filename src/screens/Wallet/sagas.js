@@ -18,9 +18,11 @@ import StoreRegistry from 'lib/store-registry';
 import {
   WALLET_INITIALIZE_PASSPHRASE,
   WALLET_HYDRATED,
+  WALLET_DELETE,
   WALLET_TRACK_SYMBOL,
   WALLET_TRACK_SYMBOL_SUCCESS,
   WALLET_IMPORT,
+  WALLET_IMPORT_SUCCESS,
   WALLET_UPDATE_BALANCE_ERROR,
   WALLET_UPDATE_BALANCE_REQUESTING,
   WALLET_UPDATE_BALANCE_SUCCESS,
@@ -43,6 +45,11 @@ import {
 
 import { userUidSelector } from 'containers/User/selectors';
 import { allWalletsSelector, mnemonicPhraseSelector } from './selectors';
+import {
+  getStoredWalletVersion,
+  storeWalletVersion,
+  migrateWalletToNewVersion,
+} from './migrationSagas';
 
 import api from 'lib/api';
 import Config from 'react-native-config';
@@ -107,13 +114,18 @@ export function* hydrate() {
   const mnemonic = yield call(getStoredMnemonic);
   const storedWallets = yield call(getStoredWallets);
 
-  yield put(initializeMnemonic(mnemonic));
+  yield put(initializeMnemonic(mnemonic, { fromHydration: true }));
 
   yield all(
     storedWallets.map(wallet => {
       if (wallet.imported) {
         return put(
-          importWallet(wallet.symbol, 'privateKey', wallet.privateKey)
+          importWallet(
+            wallet.symbol,
+            'privateKey',
+            wallet.privateKey,
+            wallet.additionalInfo
+          )
         );
       }
     })
@@ -146,7 +158,7 @@ export function* storeWallets() {
   );
 }
 
-async function commonWalletInitializationActions(wallet) {
+async function commonWalletInitializationActions(wallet, additionalInfo) {
   const id = makeId();
   const symbol = wallet.symbol;
   const publicAddress = await wallet.getPublicAddress();
@@ -154,23 +166,42 @@ async function commonWalletInitializationActions(wallet) {
 
   setTimeout(() => StoreRegistry.getStore().dispatch(updateBalance(id)), 0);
 
+  let otherInfo, fromHydration; // eslint-disable-line immutable/no-let
+  if (additionalInfo) {
+    const { fromHydration: hydrationKey, ...otherKeys } = additionalInfo;
+    fromHydration = hydrationKey;
+    otherInfo = otherKeys;
+  }
+
+  if (fromHydration) {
+    const previousVersion = await getStoredWalletVersion(symbol);
+    if (previousVersion !== wallet.version) {
+      migrateWalletToNewVersion(wallet, previousVersion);
+    }
+  } else {
+    storeWalletVersion(symbol, wallet.version);
+  }
+
   return {
     id,
     symbol,
     balance: null,
     publicAddress,
+    additionalInfo: otherInfo,
   };
 }
 
-async function createWallet(symbol, mnemonicString) {
+async function createWallet(symbol, mnemonicString, additionalInfo) {
   return commonWalletInitializationActions(
-    initializeWallet(symbol, true, mnemonicString)
+    initializeWallet(symbol, true, mnemonicString, additionalInfo),
+    additionalInfo
   );
 }
 
-async function recoverWallet(symbol, privateKey) {
+async function recoverWallet(symbol, privateKey, additionalInfo) {
   return commonWalletInitializationActions(
-    initializeWallet(symbol, false, privateKey)
+    initializeWallet(symbol, false, privateKey, additionalInfo),
+    additionalInfo
   );
 }
 
@@ -235,9 +266,9 @@ function* importWalletFlow(action) {
 
     let payload;
     if (importType === 'mnemonic') {
-      payload = yield call(createWallet, symbol, seed);
+      payload = yield call(createWallet, symbol, seed, action.additionalInfo);
     } else if (importType === 'privateKey') {
-      payload = yield call(recoverWallet, symbol, seed);
+      payload = yield call(recoverWallet, symbol, seed, action.additionalInfo);
     } else {
       throw new Error(`Invalid import type: ${importType}`);
     }
@@ -257,7 +288,12 @@ function* trackSymbolFlow(action) {
       throw new Error('No Mnemonic Phrase');
     }
 
-    const payload = yield call(createWallet, action.symbol, mnemonicPhrase);
+    const payload = yield call(
+      createWallet,
+      action.symbol,
+      mnemonicPhrase,
+      action.additionalInfo
+    );
 
     const acion = trackSymbolSuccess(payload);
     yield put(acion);
@@ -271,7 +307,7 @@ function* setUpWallets(action) {
   if (action.mnemonicPhrase) {
     yield storeMnemonic(action);
     for (const symbol of SUPPORTED_COINS_WALLET) {
-      yield put(trackSymbol(symbol));
+      yield put(trackSymbol(symbol, action.additionalInfo));
     }
   }
 }
@@ -329,6 +365,7 @@ export default function* walletSagaWatcher() {
     takeEvery(INIT_USER, registerWalletFromUser),
 
     takeEvery(WALLET_IMPORT, importWalletFlow),
+    takeEvery(WALLET_DELETE, storeWallets),
 
     takeEvery(WALLET_UPDATE_BALANCE_REQUESTING, updateBalanceFlow),
     takeLatest(WALLET_SEND_FUNDS_REQUESTING, sendFundsFlow),

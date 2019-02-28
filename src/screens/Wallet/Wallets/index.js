@@ -19,8 +19,9 @@ import { isSignedInSelector } from 'containers/User/selectors';
 import {
   notificationRecieved,
   notificationDismissed,
+  startNotificationFlow,
 } from 'containers/Notifications/actions';
-import { updateBalance } from '../actions';
+import { deleteWallet, updateBalance } from '../actions';
 
 const mapStateToProps = state => ({
   wallets: allWalletsSelector(state),
@@ -40,10 +41,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
+  deleteWallet,
   getCurrencyPrice,
   notificationRecieved,
   notificationDismissed,
   updateBalance,
+  startNotificationFlow,
 };
 
 export default connect(

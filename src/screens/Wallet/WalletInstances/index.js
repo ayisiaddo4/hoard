@@ -20,19 +20,24 @@ import RvnWallet from './RvnWallet';
   }
 */
 
-export function initializeWallet(symbol, isMnemonic, mnemonicOrPrivateKey) {
+export function initializeWallet(
+  symbol,
+  isMnemonic,
+  mnemonicOrPrivateKey,
+  additionalInfo
+) {
   switch (symbol) {
     case SYMBOL_ETH: {
-      return new EthWallet(isMnemonic, mnemonicOrPrivateKey);
+      return new EthWallet(isMnemonic, mnemonicOrPrivateKey, additionalInfo);
     }
     case SYMBOL_HOARD: {
-      return new HoardWallet(isMnemonic, mnemonicOrPrivateKey);
+      return new HoardWallet(isMnemonic, mnemonicOrPrivateKey, additionalInfo);
     }
     case SYMBOL_BTC: {
-      return new BtcWallet(isMnemonic, mnemonicOrPrivateKey);
+      return new BtcWallet(isMnemonic, mnemonicOrPrivateKey, additionalInfo);
     }
     case SYMBOL_RVN: {
-      return new RvnWallet(isMnemonic, mnemonicOrPrivateKey);
+      return new RvnWallet(isMnemonic, mnemonicOrPrivateKey, additionalInfo);
     }
     default:
       throw Error(`there is no wallet generation method for ${symbol}`);

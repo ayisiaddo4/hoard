@@ -25,7 +25,12 @@ export default class EthWallet {
     this._wallet = wallet.connect(provider); // eslint-disable-line immutable/no-mutation
   }
 
+  version = 0;
+
   symbol = SYMBOL_ETH;
+
+  shouldUpgrade = () => false;
+  getUpgradeNotificationFlow = () => null;
 
   getBalance = async () => {
     const balance = await this._wallet.getBalance();

@@ -1,6 +1,7 @@
 import {
   WALLET_HYDRATED,
   WALLET_INITIALIZE_PASSPHRASE,
+  WALLET_DELETE,
   WALLET_TRACK_SYMBOL,
   WALLET_TRACK_SYMBOL_SUCCESS,
   WALLET_TRACK_SYMBOL_ERROR,
@@ -39,6 +40,7 @@ const initialState = {
         publicAddress: string
         balance_requesting: bool
         balance_successful: bool
+        additionalInfo: object
       }
     */
   },
@@ -88,6 +90,7 @@ export default function reducer(state = initialState, action) {
             publicAddress: payload.publicAddress,
             balance_requesting: true,
             balance_successful: false,
+            additionalInfo: payload.additionalInfo,
           },
         },
       };
@@ -125,6 +128,7 @@ export default function reducer(state = initialState, action) {
             publicAddress: payload.publicAddress,
             balance_requesting: true,
             balance_successful: false,
+            additionalInfo: payload.additionalInfo,
           },
         },
       };
@@ -176,6 +180,17 @@ export default function reducer(state = initialState, action) {
             balance_successful: false,
           },
         },
+      };
+    }
+    case WALLET_DELETE: {
+      // eslint-disable-next-line no-unused-vars
+      const { [action.id]: deletedWallet, ...otherWallets } = state.wallets;
+      const newWalletList = state.walletIds.filter(id => id !== action.id);
+
+      return {
+        ...state,
+        walletIds: newWalletList,
+        wallets: otherWallets,
       };
     }
     default:

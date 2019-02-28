@@ -14,7 +14,12 @@ export default class HoardWallet extends EthWallet {
     );
   }
 
+  version = 0;
+
   symbol = SYMBOL_HOARD;
+
+  shouldUpgrade = () => false;
+  getUpgradeNotificationFlow = () => null;
 
   getBalance = async () => {
     const address = await this.getPublicAddress();

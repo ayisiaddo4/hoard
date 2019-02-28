@@ -11,6 +11,7 @@ import {
 import Button from 'components/Button';
 import Card from 'components/Card';
 import WalletListEntry, { ENTRY_STATUS } from './WalletListEntry';
+import { getWalletInstance } from 'screens/Wallet/sagas';
 import { Layout } from 'components/Base';
 import { getCoinMetadata } from 'lib/currency-metadata';
 import Storage from 'lib/storage';
@@ -27,6 +28,7 @@ class SwipableItem extends React.Component {
   static propTypes = {
     isSignedIn: PropTypes.bool,
     wallet_id: PropTypes.string,
+    imported: PropTypes.bool,
     onSwipeStart: PropTypes.func,
     children: PropTypes.node,
   };
@@ -51,12 +53,19 @@ class SwipableItem extends React.Component {
     });
   };
 
+  handleDelete = () => {
+    this.props.deleteWallet(this.props.wallet_id);
+  };
+
   render() {
     const PAY_ICON = require('assets/send.png');
     const REQUEST_ICON = require('assets/request.png');
     const VIEW_ICON = require('assets/scan.png');
+    const CANCEL_ICON = require('assets/cancel.png');
 
-    const numButtons = this.props.isSignedIn ? 3 : 2;
+    // eslint-disable-next-line immutable/no-let
+    const numButtons =
+      2 + Number(this.props.isSignedIn) + Number(this.props.imported);
     const horizontalPaddingList = 40;
     const horizontalPaddingImage = 20;
     const imageWidth = 30;
@@ -98,6 +107,19 @@ class SwipableItem extends React.Component {
           <Text style={styles.walletActionText}>{t('actions.view')}</Text>
         </View>
       </TouchableOpacity>,
+
+      this.props.imported && (
+        <TouchableOpacity
+          onPress={this.handleDelete}
+          style={styles.walletAction}
+          key={'actionDelete'}
+        >
+          <View style={styles.walletActionContainer}>
+            <Image style={styles.walletActionImage} source={CANCEL_ICON} />
+            <Text style={styles.walletActionText}>{t('actions.delete')}</Text>
+          </View>
+        </TouchableOpacity>
+      ),
     ].filter(v => v);
 
     return (
@@ -149,7 +171,7 @@ class Wallet extends React.Component {
           return;
         }
 
-        setTimeout(() => {
+        requestAnimationFrame(() => {
           const { notification } = this.props.notificationRecieved({
             type: 'error',
             title: t('testnet.warning_title'),
@@ -165,11 +187,24 @@ class Wallet extends React.Component {
           });
 
           this.setState({ testnetWarning: notification });
-        }, 1000);
+        });
       });
     }
 
     SUPPORTED_COINS_WALLET.map(symbol => this.props.getCurrencyPrice(symbol));
+
+    this.props.wallets.map(async wallet => {
+      const walletInstance = getWalletInstance(wallet.id);
+      const shouldUpgrade = await walletInstance.shouldUpgrade();
+      if (shouldUpgrade) {
+        const flowType = walletInstance.getUpgradeNotificationFlow();
+        if (flowType) {
+          requestAnimationFrame(() =>
+            this.props.startNotificationFlow({ flowType, wallet })
+          );
+        }
+      }
+    });
   }
 
   handleNavigateToCoinInfo = (id, coin) => () => {
@@ -308,7 +343,9 @@ class Wallet extends React.Component {
               <SwipableItem
                 key={id}
                 wallet_id={id}
+                imported={imported}
                 onSwipeStart={this.handleWalletSwipe}
+                deleteWallet={this.props.deleteWallet}
                 isSignedIn={this.props.isSignedIn}
               >
                 <WalletListEntry
