@@ -1,5 +1,5 @@
 import Config from 'react-native-config';
-import { Platform } from 'react-native';
+import { Platform, Alert } from 'react-native';
 import { UrbanAirship } from 'urbanairship-react-native';
 import api from 'lib/api';
 import DeviceInfo from 'react-native-device-info';
@@ -317,58 +317,89 @@ function* upgradeBadRvnDerivationPath(action) {
               })
             );
 
-            const balance = await walletInstance.getBalance();
-            if (balance > 0) {
-              const fee = await walletInstance._estimateFee();
+            try {
+              const balance = await walletInstance.getBalance();
+              if (balance > 0) {
+                const fee = await walletInstance._estimateFee();
 
-              const response = await walletInstance.send(
-                balance - fee,
-                goodWallet.publicAddress
-              );
-
-              StoreRegistry.getStore().dispatch(
-                notificationUpdated({
-                  ...notification,
-                  loading: false,
-                  type: 'neutral',
-                  title: t(
-                    'notification_flows.upgrade_rvn.has_transferred_title'
-                  ),
-                  content: t(
-                    'notification_flows.upgrade_rvn.has_transferred_content'
-                  ),
-                  actions: [
-                    {
-                      title: toTitleCase(t('actions.dismiss')),
-                      onPress: () =>
-                        StoreRegistry.getStore().dispatch(
-                          notificationDismissed(notification)
-                        ),
-                    },
-                  ],
-                })
-              );
-
-              await api.post(`${Config.EREBOR_ENDPOINT}/support`, {
-                email_address: 'info@hoardinvest.com',
-                name: 'Anonymous',
-                subject: 'TX fee to be reimbursed',
-                description: `${
-                  action.wallet.publicAddress
-                } has transferred ${balance - fee} Ravencoin to the new wallet ${
+                const response = await walletInstance.send(
+                  balance - fee,
                   goodWallet.publicAddress
-                }. Transaction hash: ${response.txid}`,
-              });
-            } else {
+                );
+
+                StoreRegistry.getStore().dispatch(
+                  notificationUpdated({
+                    ...notification,
+                    loading: false,
+                    type: 'neutral',
+                    title: t(
+                      'notification_flows.upgrade_rvn.has_transferred_title'
+                    ),
+                    content: t(
+                      'notification_flows.upgrade_rvn.has_transferred_content'
+                    ),
+                    actions: [
+                      {
+                        title: toTitleCase(t('actions.dismiss')),
+                        onPress: () =>
+                          StoreRegistry.getStore().dispatch(
+                            notificationDismissed(notification)
+                          ),
+                      },
+                    ],
+                  })
+                );
+
+                await api.post(`${Config.EREBOR_ENDPOINT}/support`, {
+                  email_address: 'info@hoardinvest.com',
+                  name: 'Anonymous',
+                  subject: 'TX fee to be reimbursed',
+                  description: `${
+                    action.wallet.publicAddress
+                  } has transferred ${balance -
+                    fee} Ravencoin to the new wallet ${
+                    goodWallet.publicAddress
+                  }. Transaction hash: ${response.txid}`,
+                });
+              } else {
+                StoreRegistry.getStore().dispatch(
+                  notificationUpdated({
+                    ...notification,
+                    loading: false,
+                    type: 'neutral',
+                    title: t(
+                      'notification_flows.upgrade_rvn.needs_updating_title'
+                    ),
+                    content: t('notification_flows.upgrade_rvn.no_balance'),
+                    actions: [
+                      {
+                        title: toTitleCase(t('actions.dismiss')),
+                        onPress: () =>
+                          StoreRegistry.getStore().dispatch(
+                            notificationDismissed(notification)
+                          ),
+                      },
+                    ],
+                  })
+                );
+              }
+            } catch (e) {
+              const errorDescription = [
+                e.name,
+                e.message,
+                typeof e === 'string' ? e : undefined,
+              ]
+                .filter(v => v)
+                .concat(' ');
               StoreRegistry.getStore().dispatch(
                 notificationUpdated({
                   ...notification,
                   loading: false,
-                  type: 'neutral',
-                  title: t(
-                    'notification_flows.upgrade_rvn.needs_updating_title'
-                  ),
-                  content: t('notification_flows.upgrade_rvn.no_balance'),
+                  type: 'error',
+                  title: t('notification_flows.upgrade_rvn.error_title'),
+                  content: t('notification_flows.upgrade_rvn.error_content', {
+                    error: errorDescription,
+                  }),
                   actions: [
                     {
                       title: toTitleCase(t('actions.dismiss')),

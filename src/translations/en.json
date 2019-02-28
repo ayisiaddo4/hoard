@@ -325,6 +325,8 @@
       "needs_updating_content": "Your wallet needs to be updated. In order to update your wallet, you will need to transfer your Ravencoin to a new wallet.",
       "no_balance": "Your wallet currently does not carry a balance and can be safely deleted.",
       "needs_updating_transfer_action": "Transfer Now",
+      "error_title": "Something Has Gone Wrong",
+      "error_content": "Please try again soon, or reach out to Hoard Support for help. Error: {{error}}",
       "has_transferred_title": "Ravencoin Transfer",
       "has_transferred_content": "Your Ravencoin have been transferred. Don't worry, any transaction fees that may have occurred will be covered by Hoard."
     }
