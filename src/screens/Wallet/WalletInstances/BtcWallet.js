@@ -131,7 +131,10 @@ export default class BtcWallet {
 
     utxos.map(utxo => tx.addInput(utxo.txid, utxo.vout));
 
-    tx.addOutput(address, change);
+    if (change > 0) {
+      tx.addOutput(address, change);
+    }
+
     tx.addOutput(toAddress, amountSatoshis);
 
     utxos.map((_, idx) => tx.sign(idx, this._derivedPath.keyPair));
