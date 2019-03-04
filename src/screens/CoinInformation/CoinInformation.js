@@ -77,6 +77,7 @@ export default class CoinInformation extends React.Component {
   state = {
     selected: null,
     hasDismissedReviewModal: false,
+    deleteOnDismount: false,
   };
 
   componentWillUpdate(props) {
@@ -116,11 +117,11 @@ export default class CoinInformation extends React.Component {
           },
           {
             title: 'Delete',
-            onPress: () => {
-              NavigatorService.back();
-              this.props.deleteWallet(wallet.id);
-              this.props.notificationDismissed(notification);
-            },
+            onPress: () =>
+              this.setState({ deleteOnDismount: true }, () => {
+                this.props.notificationDismissed(notification);
+                NavigatorService.back();
+              }),
           },
         ],
       });
@@ -134,6 +135,12 @@ export default class CoinInformation extends React.Component {
       limit: 2,
       interval: Intervals.all,
     });
+  }
+
+  componentWillUnmount() {
+    if (this.state.deleteOnDismount) {
+      this.props.deleteWallet(this.props.wallet.id);
+    }
   }
 
   handleCancelContactTransaction = transaction => () =>
