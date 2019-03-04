@@ -15,14 +15,18 @@ SectionHeader.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 15,
     borderBottomWidth: StyleSheet.hairline,
     borderColor: 'lightgrey',
     borderStyle: 'solid',
   },
   heading: {
-    color: 'white',
-    fontWeight: '700',
+    fontFamily: "HelveticaNeue",
+    fontSize: 22,
+    fontWeight: "bold",
+    fontStyle: "normal",
+    lineHeight: 28,
+    letterSpacing: 0,
+    color: "#ffffff"
   },
 });
 

@@ -56,10 +56,10 @@ const WalletListEntry = ({
           </View>
 
           <View style={styles.titleContainer}>
-            <T.TitleAlternate style={{ color: 'lightgrey', fontSize: 20 }}>
+            <T.TitleAlternate style={{ color: 'white', fontSize: 20 }}>
               {name}
             </T.TitleAlternate>
-            <T.SmallAlternate style={{ color: '#777' }}>
+            <T.SmallAlternate style={{ color: '#BFC0C3' }}>
               <Conditional>
                 <Try condition={priceStatus === ENTRY_STATUS.SUCCESSFUL}>
                   ${formattedPrice} / {symbol}
@@ -71,7 +71,7 @@ const WalletListEntry = ({
         </View>
 
         <View style={styles.right}>
-          <T.Price style={{ color: 'lightgrey', fontSize: 20 }}>
+          <T.Price style={{ color: 'white', fontSize: 20 }}>
             <Conditional>
               <Try
                 condition={
@@ -85,7 +85,7 @@ const WalletListEntry = ({
             </Conditional>
           </T.Price>
           <T.SubtitleAlternate>
-            <T.SemiBoldAlternate style={{ color: '#777' }}>
+            <T.SemiBoldAlternate style={{ color: '#BFC0C3' }}>
               <Conditional>
                 <Try condition={balanceStatus === ENTRY_STATUS.SUCCESSFUL}>
                   {formattedBalance} {symbol}

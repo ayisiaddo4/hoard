@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
   image: {
     width: 25,
     height: 25,
-    marginBottom: 5,
+    marginBottom: 8.5,
     resizeMode: 'contain',
   },
   actionButtonContainer: {
@@ -420,14 +420,20 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   actionButton: {
-    flex: 1,
     justifyContent: 'center',
+    marginHorizontal: 25,
   },
   actionButtonView: {
     alignItems: 'center',
   },
   actionButtonText: {
-    color: '#707c98',
+    fontSize: 11,
+    fontWeight: "500",
+    fontStyle: "normal",
+    lineHeight: 13,
+    letterSpacing: 0,
+    textAlign: "center",
+    color: "#ffffff"
   },
   contactTransactionsContainer: {
     marginHorizontal: -15,

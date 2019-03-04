@@ -7,6 +7,7 @@ import Input from 'components/Input';
 import RoundedButton from 'components/RoundedButton';
 import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
 import { formatDecimalInput } from 'lib/formatters';
+import { toTitleCase } from 'lib/string-helpers';
 
 const trimAddress = address => {
   if (address && address.length > 20) {
@@ -119,8 +120,14 @@ class TradeItem extends Component {
               alignItems: 'flex-start',
             }}
           >
-            <T.Light style={{ fontWeight: '400', color: 'white' }}>
-              {tradeTitle.toUpperCase()}
+            <T.Light style={{  fontFamily: "HelveticaNeue",
+  fontSize: 19,
+  fontWeight: "500",
+  fontStyle: "normal",
+  lineHeight: 22.5,
+  letterSpacing: 0,
+  color: "#ffffff"}}>
+              {toTitleCase(tradeTitle)}
             </T.Light>
             <T.Small style={{ fontWeight: '300', color: '#8cbcbd' }}>
               {trimAddress(otherWalletAddress)}
