@@ -23,14 +23,14 @@ function* checkForUpdates() {
   }
 
   yield spawn(codePushSaga, {
-    syncOnInterval: 60, // in seconds
-    deploymentKey: Config.CODEPUSH_DEPLOYMENT_KEY,
-    syncOnResume: false, //
-    delayByInterval: 10 * 60, // wait 10 minutes before checking
+    syncOnInterval: 30 * 60, // in seconds
+    syncOnResume: true, //
+    delayByInterval: 2, // wait 10 seconds before checking
     // syncActionName: "CUSTOM_SYNC", // extra redux actions to listen on
     updateDialog: false, // disabled as per iOS guidelines
     syncOptions: {
-      installMode: codePush.InstallMode.ON_NEXT_RESUME,
+      deploymentKey: Config.CODEPUSH_DEPLOYMENT_KEY,
+      installMode: codePush.InstallMode.IMMEDIATE,
     },
   });
 }
