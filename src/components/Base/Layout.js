@@ -54,6 +54,7 @@ import {
   ViewPropTypes,
   KeyboardAvoidingView,
   StatusBar,
+  Platform,
 } from 'react-native';
 
 class Layout extends Component {
@@ -180,7 +181,7 @@ class Layout extends Component {
   }
 
   renderContent = () => {
-    if (this.props.keyboard) {
+    if (this.props.keyboard && Platform.OS === 'ios') {
       return (
         <KeyboardShift {...this.props}>
           <StatusBar barStyle="light-content" />
@@ -188,6 +189,15 @@ class Layout extends Component {
             {this.props.children}
           </View>
         </KeyboardShift>
+      );
+    } else if (this.props.keyboard && Platform.OS === 'android') {
+      return (
+        <KeyboardAvoidingView {...this.props} style={{ height: '100%' }}>
+          <StatusBar barStyle="light-content" />
+          <View style={[styles.layout, this.props.style]} {...this.props}>
+            {this.props.children}
+          </View>
+        </KeyboardAvoidingView>
       );
     } else {
       return (
