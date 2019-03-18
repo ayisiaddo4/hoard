@@ -1,5 +1,9 @@
 [
   {
+    "release_notes": "Updated styles on the header, coin detail screen, and wallet screen.\nUpdated keyboard shifting behavior to work across platforms.\nFixed chart rendering issue on Android Pie.\nFixed white flash in header bar after pin storage.\n",
+    "version_code": "0.4"
+  },
+  {
     "release_notes": "Fixed issue where entire balance transfers for BTC/RVN would include empty change outputs.",
     "version_code": "0.3"
   },
