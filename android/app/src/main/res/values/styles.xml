@@ -8,6 +8,8 @@
       <item name="android:windowBackground">@drawable/background_splash</item>
       <item name="android:statusBarColor">@color/pink</item>
     </style>
-
+    <style name="AppEditTextStyle" parent="@style/Widget.AppCompat.EditText">
+       <item name="backgroundTint">@android:color/transparent</item>
+   </style>
 
 </resources>

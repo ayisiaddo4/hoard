@@ -183,7 +183,6 @@ export default class Input extends Component {
             onEndEditing={this.props.onEndEditing}
             onFocus={this.handleFocus}
             onBlur={this.handleBlur}
-            underlineColorAndroid="transparent"
             ref={this.props.inputRef || this.fallbackRef}
             secureTextEntry={this.props.secureTextEntry}
             selectionColor={colors.active}
