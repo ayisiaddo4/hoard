@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
 import { Layout, Body, Header, Footer } from 'components/Base';
-import { Header as NavHeader } from 'components/Base/Navigation';
+import MenuHeader from 'components/Base/Navigation/MenuHeader';
 import T from 'components/Typography';
 import { colors } from 'styles';
 
@@ -10,7 +10,7 @@ export default function Modal({ children, footer, title }) {
   return (
     <Layout style={styles.container}>
       <Header>
-        <NavHeader
+        <MenuHeader
           leftAction="cancel"
           rightAction={null}
           containerStyle={{ backgroundColor: colors.blueGray }}

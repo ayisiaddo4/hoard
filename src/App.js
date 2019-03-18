@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Provider, connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
-import { AsyncStorage, StyleSheet, YellowBox, View } from 'react-native';
+import { AsyncStorage, YellowBox, View } from 'react-native';
 
 import NavigatorService from 'lib/navigator';
 import configureStore from './configureStore';
@@ -30,6 +30,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import RNConfig from 'react-native-config';
 import CONFIG from 'src/config';
 import { colors } from 'styles';
+import { t } from 'translations/i18n';
 
 if (CONFIG.USE_REACTOTRON) {
   var Reactotron = require('./ReactotronConfig').default;
@@ -67,6 +68,8 @@ const RoutingStack = createStackNavigator(
         getNavigationOptions({
           ...navProps,
           leftAction: 'back',
+          title: t('signup.create_account'),
+          showTitleOnScroll: true,
           rightAction: null,
         }),
     },
@@ -78,7 +81,12 @@ const RoutingStack = createStackNavigator(
           rightAction: null,
         }),
     },
-    Menu: { screen: Menu, navigationOptions: { header: null } },
+    Menu: {
+      screen: Menu,
+      navigationOptions: {
+        header: () => <View />,
+      },
+    },
     Mnemonic: {
       screen: Mnemonic,
       navigationOptions: navProps =>

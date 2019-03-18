@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Image, View } from 'react-native';
-import T from 'components/Typography';
-import Checkbox from 'components/Checkbox';
-import Input from 'components/Input';
-import RoundedButton from 'components/RoundedButton';
-import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
+import { TYPE_SEND } from 'screens/SendRequest/constants';
 import { formatDecimalInput } from 'lib/formatters';
+import { getCoinMetadata } from 'lib/currency-metadata';
+import { toTitleCase } from 'lib/string-helpers';
+import ListItem from 'components/ListItem';
 
 const trimAddress = address => {
   if (address && address.length > 20) {
     return [
-      address.substring(0, 7),
+      address.substring(0, 3),
       '...',
-      address.substring(address.length - 7),
+      address.substring(address.length - 3),
     ].join('');
   } else {
     return address;
@@ -36,8 +34,8 @@ const isTradeTitle = {
 };
 
 const actionIcon = {
-  [send]: require('assets/send-grey.png'),
-  [receive]: require('assets/request-grey.png'),
+  [send]: require('assets/send.png'),
+  [receive]: require('assets/request.png'),
 };
 
 class TradeItem extends Component {
@@ -52,9 +50,11 @@ class TradeItem extends Component {
       ? props.transaction.tradePrice
       : props.transaction.price;
 
+    // eslint-disable-next-line immutable/no-mutation
     this.state = {
       fiatTrade: props.transaction.fiatTrade,
       tradePrice: tradePrice && tradePrice.toFixed(2),
+      trimAmount: 0,
     };
   }
 
@@ -75,8 +75,17 @@ class TradeItem extends Component {
     });
   };
 
+  handleAmountLayout = e => {
+    const height = e.nativeEvent.layout.height;
+    if (height > 30) {
+      this.setState(({ trimAmount }) => ({
+        trimAmount: trimAmount + 1,
+      }));
+    }
+  };
+
   render() {
-    const { wallet, transaction, selected } = this.props;
+    const { transaction } = this.props;
     const transactionType = transaction.details.creates
       ? creation
       : transaction.type === TYPE_SEND
@@ -97,163 +106,36 @@ class TradeItem extends Component {
 
     const date = new Date(transaction.date);
 
+    const metadata = getCoinMetadata(transaction.symbol);
+
+    const formattedAmount = Number(transaction.amount)
+      .toString()
+      .match(new RegExp(`^\\d+.?(\\d{0,${metadata.pointsOfPrecision}})?`))[0]
+      .slice(0, this.state.trimAmount ? -this.state.trimAmount : undefined);
+
     return (
-      <View style={{ paddingTop: 15, paddingHorizontal: 15 }}>
-        <View
-          style={{
-            backgroundColor: '#222933',
-            borderRadius: 2.5,
-            paddingHorizontal: 23.5,
-            paddingVertical: 14,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <View style={{ justifyContent: 'center', marginRight: 20 }}>
-            <Image source={actionIcon[transactionType]} />
-          </View>
-          <View
-            style={{
-              flexDirection: 'column',
-              flex: 1,
-              alignItems: 'flex-start',
-            }}
-          >
-            <T.Light style={{ fontWeight: '400', color: 'white' }}>
-              {tradeTitle.toUpperCase()}
-            </T.Light>
-            <T.Small style={{ fontWeight: '300', color: '#8cbcbd' }}>
-              {trimAddress(otherWalletAddress)}
-            </T.Small>
-          </View>
-          <View
-            style={{ flexDirection: 'column', flex: 1, alignItems: 'flex-end' }}
-          >
-            <T.Light style={{ fontWeight: '400', color: 'white' }}>
-              {transaction.amount} {transaction.symbol}
-            </T.Light>
-            <T.Small style={{ fontWeight: '300', color: '#8cbcbd' }}>
-              {date.toLocaleString(undefined, {
-                month: 'short',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-              })}
-            </T.Small>
-          </View>
-        </View>
-        {selected && (
-          <View
-            style={{
-              backgroundColor: '#ccccd4',
-              justifyContent: 'space-between',
-              padding: 15,
-              marginTop: 5,
-              marginHorizontal: -15,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingVertical: 5,
-              }}
-            >
-              <T.Small>
-                <T.SemiBold>block number: </T.SemiBold>
-              </T.Small>
-              <T.Small>{transaction.blockNumber}</T.Small>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingVertical: 5,
-              }}
-            >
-              <T.Small>
-                <T.SemiBold>usd price: </T.SemiBold>
-              </T.Small>
-              <T.Small>${this.state.tradePrice}</T.Small>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingVertical: 5,
-              }}
-            >
-              <T.Small>
-                <T.SemiBold>price per {wallet.symbol}: </T.SemiBold>
-              </T.Small>
-              <T.Small>{transaction.price}</T.Small>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingVertical: 5,
-              }}
-            >
-              <T.Small>
-                <T.SemiBold>gas price: </T.SemiBold>
-              </T.Small>
-              <T.Small>
-                {transaction.gasPrice} {wallet.symbol}
-              </T.Small>
-            </View>
-            {(transactionType === send || transactionType === receive) && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  paddingVertical: 5,
-                }}
-              >
-                <T.Small>
-                  <T.SemiBold>This was a trade:</T.SemiBold>
-                </T.Small>
-                <Checkbox
-                  iconStyle={{ size: 20, color: 'black' }}
-                  value={this.state.fiatTrade}
-                  onPress={this.handleToggleIsTrade}
-                />
-              </View>
-            )}
-            {this.state.fiatTrade && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  paddingVertical: 10,
-                }}
-              >
-                <Input
-                  containerStyle={{ flex: 1 }}
-                  onChangeText={this.handleChangeTradePrice}
-                  light={true}
-                  value={
-                    this.state.tradePrice ? `$${this.state.tradePrice}` : ''
-                  }
-                  placeholder="trade price"
-                />
-              </View>
-            )}
-            {(transaction.fiatTrade !== this.state.fiatTrade ||
-              transaction.tradePrice !== Number(this.state.tradePrice)) && (
-              <RoundedButton onPress={this.handleUpdate}>Update</RoundedButton>
-            )}
-          </View>
-        )}
-      </View>
+      <ListItem
+        imageSource={actionIcon[transactionType]}
+        leftLarge={toTitleCase(tradeTitle)}
+        leftSmall={`${otherWalletKeyForType[transactionType]} ${trimAddress(
+          otherWalletAddress
+        )}`}
+        rightLarge={`${Number(formattedAmount).toString()}${
+          this.state.trimAmount ? '+' : ''
+        } ${transaction.symbol}`}
+        rightSmall={date.toLocaleString(undefined, {
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+        })}
+        onLayoutRightLarge={this.handleAmountLayout}
+      />
     );
   }
 }
 
+// eslint-disable-next-line immutable/no-mutation
 TradeItem.propTypes = {
   transaction: PropTypes.object.isRequired,
   wallet: PropTypes.object.isRequired,

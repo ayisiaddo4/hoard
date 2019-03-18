@@ -73,49 +73,63 @@ export default class Card extends Component {
     const { additionalInfo, colors, icon, style, subtitle, title } = this.props;
 
     return (
-      <LinearGradient
-        start={{ x: 0, y: 1 }}
-        end={{ x: 1, y: 1 }}
-        colors={colors}
-        style={[styles.card, style]}
-      >
-        <View style={styles.top}>
-          <View style={styles.titleContainer}>
-            <Try condition={!!icon}>
-              <Image
-                style={{
-                  height: 15,
-                  width: 15,
-                  marginRight: 2,
-                  resizeMode: 'contain',
-                }}
-                source={icon}
-              />
-            </Try>
-            <Text style={[styles.text, styles.title]}>{title}</Text>
+      <View style={styles.container}>
+        <LinearGradient
+          start={{ x: 0, y: 1 }}
+          end={{ x: 1, y: 1 }}
+          colors={colors}
+          style={[styles.card, style]}
+        >
+          <View style={styles.top}>
+            <View style={styles.titleContainer}>
+              <Try condition={!!icon}>
+                <Image
+                  style={{
+                    height: 15,
+                    width: 15,
+                    marginRight: 2,
+                    resizeMode: 'contain',
+                  }}
+                  source={icon}
+                />
+              </Try>
+              <Text style={[styles.text, styles.title]}>{title}</Text>
+            </View>
+            <Text style={[styles.text, styles.subtitle]}>{subtitle}</Text>
           </View>
-          <Text style={[styles.text, styles.subtitle]}>{subtitle}</Text>
-        </View>
-        <View style={{ flex: 1 }}>
-          <PortfolioChart
-            style={styles.chart}
-            wallets={this.props.walletsToChart}
-            colors={colors}
-          />
-        </View>
-        <Try condition={!!additionalInfo}>
-          <View style={styles.bottom}>
-            <Text style={[styles.text, styles.additionalInfo]}>
-              {additionalInfo}
-            </Text>
+          <View style={{ flex: 1 }}>
+            <PortfolioChart
+              style={styles.chart}
+              wallets={this.props.walletsToChart}
+              colors={colors}
+            />
           </View>
-        </Try>
-      </LinearGradient>
+          <Try condition={!!additionalInfo}>
+            <View style={styles.bottom}>
+              <Text style={[styles.text, styles.additionalInfo]}>
+                {additionalInfo}
+              </Text>
+            </View>
+          </Try>
+        </LinearGradient>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: cardHeight,
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowRadius: 15,
+    shadowOpacity: 0.16,
+  },
   card: {
     flex: 1,
     height: cardHeight,
@@ -139,16 +153,21 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 15,
-    fontFamily: 'HelveticaNeue-Medium',
     fontWeight: '500',
     textAlign: 'left',
+    fontFamily: 'HelveticaNeue',
+    fontStyle: 'normal',
+    letterSpacing: 0,
+    color: '#ffffff',
   },
   subtitle: {
-    fontSize: 26,
-    fontFamily: 'HelveticaNeue-Bold',
+    fontFamily: 'HelveticaNeue',
+    fontSize: 28,
     fontWeight: 'bold',
-    textAlign: 'left',
+    fontStyle: 'normal',
     letterSpacing: 0,
+    color: '#ffffff',
+    textAlign: 'left',
   },
   bottom: {
     alignItems: 'flex-end',

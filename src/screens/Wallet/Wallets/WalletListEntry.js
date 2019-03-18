@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import T from 'components/Typography';
-import Icon from 'components/Icon';
-import Conditional, { Try, Otherwise } from 'components/Conditional';
+import { TouchableOpacity } from 'react-native';
 import { getCoinMetadata } from 'lib/currency-metadata';
+import ListItem from 'components/ListItem';
 
 export const ENTRY_STATUS = {
   ERROR: 'ERROR',
@@ -34,68 +32,35 @@ const WalletListEntry = ({
     .toFixed(5)
     .replace(/0{0,3}$/, '');
 
-  const formattedBalance = balance && balance
-    .toString()
-    .match(new RegExp(`^\\d+.?(\\d{0,${metadata.pointsOfPrecision}})?`))[0];
+  const formattedBalance =
+    balance &&
+    balance
+      .toString()
+      .match(new RegExp(`^\\d+.?(\\d{0,${metadata.pointsOfPrecision}})?`))[0];
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={styles.container}>
-        <View style={styles.left}>
-          <View style={styles.iconContainer}>
-            <Conditional>
-              <Try condition={imported}>
-                <View style={styles.icon}>
-                  <Icon style={{ size: 15, color: 'black' }} icon="ios-link" />
-                </View>
-              </Try>
-              <Otherwise>
-                <Image style={styles.coinImage} source={metadata.image} />
-              </Otherwise>
-            </Conditional>
-          </View>
-
-          <View style={styles.titleContainer}>
-            <T.TitleAlternate style={{ color: 'lightgrey', fontSize: 20 }}>
-              {name}
-            </T.TitleAlternate>
-            <T.SmallAlternate style={{ color: '#777' }}>
-              <Conditional>
-                <Try condition={priceStatus === ENTRY_STATUS.SUCCESSFUL}>
-                  ${formattedPrice} / {symbol}
-                </Try>
-                <Otherwise>...</Otherwise>
-              </Conditional>
-            </T.SmallAlternate>
-          </View>
-        </View>
-
-        <View style={styles.right}>
-          <T.Price style={{ color: 'lightgrey', fontSize: 20 }}>
-            <Conditional>
-              <Try
-                condition={
-                  priceStatus === ENTRY_STATUS.SUCCESSFUL &&
-                  balanceStatus === ENTRY_STATUS.SUCCESSFUL
-                }
-              >
-                ${value}
-              </Try>
-              <Otherwise>...</Otherwise>
-            </Conditional>
-          </T.Price>
-          <T.SubtitleAlternate>
-            <T.SemiBoldAlternate style={{ color: '#777' }}>
-              <Conditional>
-                <Try condition={balanceStatus === ENTRY_STATUS.SUCCESSFUL}>
-                  {formattedBalance} {symbol}
-                </Try>
-                <Otherwise>...</Otherwise>
-              </Conditional>
-            </T.SemiBoldAlternate>
-          </T.SubtitleAlternate>
-        </View>
-      </View>
+      <ListItem
+        icon={imported && 'ios-link'}
+        imageSource={!imported && metadata.image}
+        leftLarge={name}
+        leftSmall={
+          priceStatus === ENTRY_STATUS.SUCCESSFUL
+            ? `$${formattedPrice} / ${symbol}`
+            : '...'
+        }
+        rightLarge={
+          priceStatus === ENTRY_STATUS.SUCCESSFUL &&
+          balanceStatus === ENTRY_STATUS.SUCCESSFUL
+            ? `$${value}`
+            : '...'
+        }
+        rightSmall={
+          balanceStatus === ENTRY_STATUS.SUCCESSFUL
+            ? `${formattedBalance} ${symbol}`
+            : '...'
+        }
+      />
     </TouchableOpacity>
   );
 };
@@ -107,6 +72,7 @@ const EntryStatusProp = PropTypes.oneOf([
   ENTRY_STATUS.LOADING,
   ENTRY_STATUS.ERROR,
 ]);
+
 WalletListEntry.propTypes = {
   balance: PropTypes.number,
   price: PropTypes.number,
@@ -118,40 +84,3 @@ WalletListEntry.propTypes = {
   symbol: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: 5,
-    marginHorizontal: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-    backgroundColor: '#202934',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  iconContainer: {
-    marginRight: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  titleContainer: {
-    flexDirection: 'column',
-  },
-  icon: {
-    paddingLeft: 5,
-  },
-  left: {
-    flexDirection: 'row',
-    flexGrow: 2,
-  },
-  right: {
-    flexGrow: 1,
-    alignItems: 'flex-end',
-  },
-  coinImage: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-  },
-});

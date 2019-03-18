@@ -18,6 +18,7 @@ import Conditional, { Try, Otherwise } from 'components/Conditional';
 import Card from 'components/Card';
 import T from 'components/Typography';
 import { Layout } from 'components/Base';
+import { updateHeaderFromScroll } from 'components/Base/Navigation';
 import Swipeable from 'react-native-swipeable';
 import { TYPE_SEND, TYPE_REQUEST } from 'screens/SendRequest/constants';
 import { NOTIFICATION_FLOW_TYPE_CONTACT_FULFILLMENT } from 'containers/Notifications/constants';
@@ -129,6 +130,7 @@ export default class CoinInformation extends React.Component {
 
     navigation.setParams({
       title: wallet.symbol,
+      showTitleOnScroll: true,
       leftAction: 'back',
     });
     getCurrencyHistory(wallet.symbol, {
@@ -188,6 +190,8 @@ export default class CoinInformation extends React.Component {
       wallet: this.props.wallet.id,
     });
   };
+
+  handleScroll = e => updateHeaderFromScroll(e, this.props.navigation);
 
   renderHeader = () => {
     const { pricing, wallet, isSignedIn, contactTransactions } = this.props;
@@ -383,6 +387,8 @@ export default class CoinInformation extends React.Component {
         <FlatList
           style={[styles.flex, styles.scrollView]}
           ListHeaderComponent={this.renderHeader}
+          initialNumToRender={5}
+          onScroll={this.handleScroll}
           data={transactions}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderTradeItem}
@@ -400,8 +406,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   container: {
-    paddingTop: 40,
-    padding: 15,
+    padding: 20,
     flexDirection: 'column',
   },
   heading: {
@@ -411,23 +416,29 @@ const styles = StyleSheet.create({
   image: {
     width: 25,
     height: 25,
-    marginBottom: 5,
+    marginBottom: 8.5,
     resizeMode: 'contain',
   },
   actionButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: 15,
+    marginTop: 20,
   },
   actionButton: {
-    flex: 1,
     justifyContent: 'center',
+    marginHorizontal: 25,
   },
   actionButtonView: {
     alignItems: 'center',
   },
   actionButtonText: {
-    color: '#707c98',
+    fontSize: 11,
+    fontWeight: '500',
+    fontStyle: 'normal',
+    lineHeight: 13,
+    letterSpacing: 0,
+    textAlign: 'center',
+    color: '#ffffff',
   },
   contactTransactionsContainer: {
     marginHorizontal: -15,
@@ -486,4 +497,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'white',
   },
+  sectionHeader: {},
 });

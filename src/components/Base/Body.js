@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   ScrollView,
@@ -7,46 +7,54 @@ import {
   ViewPropTypes,
   Platform,
 } from 'react-native';
+import { withNavigation } from 'react-navigation';
+import { updateHeaderFromScroll } from 'components/Base/Navigation';
 
-const Body = ({ style, children, navigationOffset, ...otherProps }) => {
-  if (otherProps.scrollable) {
-    const dismissKeyboard = otherProps.dismissKeyboard;
-    const dismissMode = Platform.OS === 'ios' ? 'on-drag' : 'none';
-    return (
-      <View
-        style={[
-          styles.body,
-          {
-            marginTop: navigationOffset ? -navigationOffset : 0,
-          },
-        ]}
-        {...otherProps}
-      >
-        <ScrollView
-          contentOffset={{ x: 0, y: 0 }}
-          bounces={otherProps.bounces}
-          keyboardShouldPersistTaps={dismissKeyboard ? 'always' : 'handled'}
-          keyboardDismissMode={dismissMode}
-          contentContainerStyle={[
-            style,
+class Body extends Component {
+  handleScroll = e => updateHeaderFromScroll(e, this.props.navigation);
+
+  render() {
+    const { style, children, navigationOffset, ...otherProps } = this.props;
+    if (otherProps.scrollable) {
+      const dismissKeyboard = otherProps.dismissKeyboard;
+      const dismissMode = Platform.OS === 'ios' ? 'on-drag' : 'none';
+      return (
+        <View
+          style={[
+            styles.body,
             {
-              flexGrow: 1,
-              paddingTop: navigationOffset ? navigationOffset : 0,
+              marginTop: navigationOffset ? -navigationOffset : 0,
             },
           ]}
+          {...otherProps}
         >
+          <ScrollView
+            contentOffset={{ x: 0, y: 0 }}
+            bounces={otherProps.bounces}
+            keyboardShouldPersistTaps={dismissKeyboard ? 'always' : 'handled'}
+            keyboardDismissMode={dismissMode}
+            onScroll={otherProps.onScroll || this.handleScroll}
+            contentContainerStyle={[
+              style,
+              {
+                flexGrow: 1,
+                paddingTop: navigationOffset ? navigationOffset : 0,
+              },
+            ]}
+          >
+            {children}
+          </ScrollView>
+        </View>
+      );
+    } else {
+      return (
+        <View style={[styles.body, style]} {...otherProps}>
           {children}
-        </ScrollView>
-      </View>
-    );
-  } else {
-    return (
-      <View style={[styles.body, style]} {...otherProps}>
-        {children}
-      </View>
-    );
+        </View>
+      );
+    }
   }
-};
+}
 
 Body.propTypes = {
   children: PropTypes.oneOfType([
@@ -63,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Body;
+export default withNavigation(Body);

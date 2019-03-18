@@ -110,10 +110,10 @@ export default class InputList extends Component {
 
     return (
       <Layout keyboard focusedInput={this.state.focusedInput}>
-        <T.Heading style={styles.headingStyle}>
-          {t('wallet.input_seed_phrase_heading')}
-        </T.Heading>
         <Body scrollable style={styles.bodyContainer} navigationOffset={80}>
+          <T.Heading style={styles.headingStyle}>
+            {t('wallet.input_seed_phrase_heading')}
+          </T.Heading>
           {RENDER_INPUTS}
           <View style={styles.footerContainer}>
             <T.Light
@@ -143,8 +143,7 @@ export default class InputList extends Component {
 
 const styles = StyleSheet.create({
   headingStyle: {
-    padding: 20,
-    paddingTop: 40,
+    paddingVertical: 20,
     color: '#ffffff',
   },
   bodyContainer: {

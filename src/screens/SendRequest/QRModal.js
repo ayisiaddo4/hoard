@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 import NavigatorService from 'lib/navigator';
 import Scanner from 'components/Camera/Scanner';
-import { Header } from 'components/Base/Navigation';
+import MenuHeader from 'components/Base/Navigation/MenuHeader';
 import { t } from 'translations/i18n';
 
 import { RECIPIENT_TYPE_ADDRESS } from 'screens/SendRequest/constants';
@@ -31,7 +31,7 @@ export default class QRModal extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header
+        <MenuHeader
           navigation={this.props.navigation}
           leftAction={'cancel'}
           title={t('send_request.scan_qr')}
