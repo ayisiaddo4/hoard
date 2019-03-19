@@ -4,7 +4,7 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  ScrollView,
+  FlatList,
   StyleSheet,
   View,
 } from 'react-native';
@@ -293,77 +293,85 @@ class Wallet extends React.Component {
     );
   }
 
+  renderBalanceCard = () => {
+    return (
+      <Card
+        colors={['#00A073', '#007982']}
+        title={t('wallet.my_balance')}
+        subtitle={`$${this.props.totalHoldings.toFixed(2)}`}
+        walletsToChart={this.props.wallets}
+        style={styles.card}
+      />
+    );
+  };
+
+  renderWalletItem = ({ item: wallet }) => {
+    const {
+      balance,
+      balance_requesting,
+      balance_successful,
+      symbol,
+      publicAddress,
+      id,
+      imported,
+    } = wallet;
+
+    const {
+      requesting: price_requesting,
+      successful: price_successful,
+      price,
+    } = this.props.prices[symbol];
+
+    const balanceStatus = balance_requesting
+      ? ENTRY_STATUS.LOADING
+      : balance_successful
+      ? ENTRY_STATUS.SUCCESSFUL
+      : ENTRY_STATUS.ERROR;
+    const priceStatus = price_requesting
+      ? ENTRY_STATUS.LOADING
+      : price_successful
+      ? ENTRY_STATUS.SUCCESSFUL
+      : ENTRY_STATUS.ERROR;
+
+    return (
+      <SwipableItem
+        key={id}
+        wallet_id={id}
+        imported={imported}
+        onSwipeStart={this.handleWalletSwipe}
+        deleteWallet={this.props.deleteWallet}
+        isSignedIn={this.props.isSignedIn}
+      >
+        <WalletListEntry
+          name={getCoinMetadata(symbol).fullName}
+          symbol={symbol}
+          balance={balance}
+          balanceStatus={balanceStatus}
+          change={'0%'}
+          price={price}
+          priceStatus={priceStatus}
+          publicAddress={publicAddress}
+          imported={imported}
+          onPress={this.handleNavigateToCoinInfo(id, symbol)}
+        />
+      </SwipableItem>
+    );
+  };
+
+  keyExtractor = wallet => wallet.id;
+
   render() {
     return (
       <Layout preload={true}>
-        <Card
-          colors={['#00A073', '#007982']}
-          title={t('wallet.my_balance')}
-          subtitle={`$${this.props.totalHoldings.toFixed(2)}`}
-          walletsToChart={this.props.wallets}
-          style={{
-            maxHeight: 180,
-            margin: 20,
-          }}
-        />
-        <ScrollView
-          contentContainerStyle={styles.scrollview}
+        <FlatList
+          ListHeaderComponent={this.renderBalanceCard}
+          style={styles.scrollView}
           onScroll={this.handleScroll}
           bounces={false}
-        >
-          {this.props.wallets.map(wallet => {
-            const {
-              balance,
-              balance_requesting,
-              balance_successful,
-              symbol,
-              publicAddress,
-              id,
-              imported,
-            } = wallet;
-
-            const {
-              requesting: price_requesting,
-              successful: price_successful,
-              price,
-            } = this.props.prices[symbol];
-
-            const balanceStatus = balance_requesting
-              ? ENTRY_STATUS.LOADING
-              : balance_successful
-              ? ENTRY_STATUS.SUCCESSFUL
-              : ENTRY_STATUS.ERROR;
-            const priceStatus = price_requesting
-              ? ENTRY_STATUS.LOADING
-              : price_successful
-              ? ENTRY_STATUS.SUCCESSFUL
-              : ENTRY_STATUS.ERROR;
-
-            return (
-              <SwipableItem
-                key={id}
-                wallet_id={id}
-                imported={imported}
-                onSwipeStart={this.handleWalletSwipe}
-                deleteWallet={this.props.deleteWallet}
-                isSignedIn={this.props.isSignedIn}
-              >
-                <WalletListEntry
-                  name={getCoinMetadata(symbol).fullName}
-                  symbol={symbol}
-                  balance={balance}
-                  balanceStatus={balanceStatus}
-                  change={'0%'}
-                  price={price}
-                  priceStatus={priceStatus}
-                  publicAddress={publicAddress}
-                  imported={imported}
-                  onPress={this.handleNavigateToCoinInfo(id, symbol)}
-                />
-              </SwipableItem>
-            );
-          })}
-        </ScrollView>
+          keyExtractor={this.keyExtractor}
+          data={this.props.wallets}
+          renderItem={this.renderWalletItem}
+        />
       </Layout>
     );
   }
@@ -371,7 +379,10 @@ class Wallet extends React.Component {
 
 const styles = StyleSheet.create({
   scrollview: {
-    flexGrow: 1,
+    flex: 1,
+  },
+  card: {
+    margin: 20,
   },
   footerContainer: {
     marginTop: 'auto',
